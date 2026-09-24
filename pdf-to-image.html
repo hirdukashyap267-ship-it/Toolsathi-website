@@ -1,0 +1,1051 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>PDF to Image Converter | Tool Sathi</title>
+
+<meta name="description"
+content="PDF को JPG या PNG images में convert करें। Free online PDF to Image Converter - Tool Sathi.">
+
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+<!-- PDF.js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+
+<!-- JSZip -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+
+<style>
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body{
+    font-family:"Noto Sans Devanagari",Arial,sans-serif;
+    background:#f4f8ff;
+    color:#142b61;
+}
+
+/* ================= NAVBAR ================= */
+
+.navbar{
+    background:linear-gradient(135deg,#073b78,#0753a5);
+    min-height:72px;
+    padding:10px 5%;
+    display:flex;
+    align-items:center;
+    gap:15px;
+}
+
+.logo{
+    flex:1;
+    color:white;
+    font-size:27px;
+    font-weight:800;
+}
+
+.logo span{
+    color:#ffd83d;
+}
+
+.home-btn{
+    text-decoration:none;
+    background:#168cff;
+    color:white;
+    padding:10px 18px;
+    border-radius:9px;
+    font-weight:700;
+}
+
+/* ================= HERO ================= */
+
+.hero{
+    background:linear-gradient(120deg,#1264e8,#168eea,#464de8);
+    color:white;
+    text-align:center;
+    padding:42px 20px;
+}
+
+.hero h1{
+    font-size:40px;
+    margin-bottom:10px;
+}
+
+.hero p{
+    font-size:17px;
+}
+
+/* ================= CONTAINER ================= */
+
+.container{
+    max-width:1000px;
+    margin:35px auto;
+    padding:0 15px;
+}
+
+/* ================= MAIN BOX ================= */
+
+.converter{
+    background:white;
+    border-radius:22px;
+    padding:30px;
+    box-shadow:0 10px 35px rgba(20,55,120,.12);
+}
+
+/* ================= UPLOAD ================= */
+
+.upload-area{
+    display:block;
+    border:3px dashed #3990f5;
+    background:#eef7ff;
+    border-radius:18px;
+    padding:42px 20px;
+    text-align:center;
+    cursor:pointer;
+    transition:.2s;
+}
+
+.upload-area:hover{
+    background:#e3f2ff;
+}
+
+.upload-icon{
+    font-size:55px;
+    margin-bottom:8px;
+}
+
+.upload-area h2{
+    font-size:22px;
+    margin-bottom:7px;
+}
+
+.upload-area p{
+    color:#60759b;
+    font-size:14px;
+}
+
+.choose-btn{
+    display:inline-block;
+    margin-top:17px;
+    background:#126de7;
+    color:white;
+    padding:12px 25px;
+    border-radius:10px;
+    font-weight:700;
+}
+
+#fileInput{
+    display:none;
+}
+
+/* ================= FILE INFO ================= */
+
+.file-info{
+    display:none;
+    margin-top:20px;
+    background:#f1f6ff;
+    border-radius:12px;
+    padding:15px;
+    line-height:1.8;
+    font-size:14px;
+}
+
+/* ================= SETTINGS ================= */
+
+.settings{
+    display:none;
+    margin-top:20px;
+    padding:20px;
+    background:#f8faff;
+    border:1px solid #dce8fa;
+    border-radius:15px;
+}
+
+.settings-title{
+    font-size:18px;
+    font-weight:800;
+    margin-bottom:15px;
+}
+
+.setting-row{
+    display:flex;
+    flex-wrap:wrap;
+    gap:15px;
+    align-items:center;
+}
+
+.setting-item{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    font-size:15px;
+}
+
+select{
+    border:1px solid #bdd1ed;
+    border-radius:8px;
+    padding:9px 12px;
+    background:white;
+    color:#142b61;
+    font-size:14px;
+}
+
+/* ================= CONVERT BUTTON ================= */
+
+.convert-btn{
+    display:none;
+    width:100%;
+    margin-top:20px;
+    border:none;
+    background:linear-gradient(135deg,#126de7,#0753a5);
+    color:white;
+    padding:14px;
+    border-radius:11px;
+    font-size:17px;
+    font-weight:800;
+    cursor:pointer;
+}
+
+.convert-btn:disabled{
+    opacity:.6;
+    cursor:not-allowed;
+}
+
+/* ================= PROGRESS ================= */
+
+.progress-box{
+    display:none;
+    margin-top:20px;
+}
+
+.progress-text{
+    text-align:center;
+    margin-bottom:8px;
+    font-size:14px;
+    font-weight:700;
+}
+
+.progress-bg{
+    height:12px;
+    background:#e3ebf8;
+    border-radius:20px;
+    overflow:hidden;
+}
+
+.progress-bar{
+    height:100%;
+    width:0%;
+    background:linear-gradient(90deg,#126de7,#12a8e8);
+    transition:.2s;
+}
+
+/* ================= RESULTS ================= */
+
+.results{
+    display:none;
+    margin-top:28px;
+}
+
+.results-title{
+    text-align:center;
+    font-size:24px;
+    margin-bottom:20px;
+}
+
+.page-grid{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:18px;
+}
+
+.page-card{
+    background:#f8faff;
+    border:1px solid #dce7f7;
+    border-radius:15px;
+    padding:12px;
+    text-align:center;
+}
+
+.page-number{
+    font-weight:800;
+    margin-bottom:10px;
+}
+
+.page-card img{
+    width:100%;
+    max-height:330px;
+    object-fit:contain;
+    background:white;
+    border-radius:8px;
+    border:1px solid #e1e7f0;
+}
+
+.page-download{
+    display:block;
+    margin-top:10px;
+    text-decoration:none;
+    background:#0a9b59;
+    color:white;
+    padding:9px;
+    border-radius:8px;
+    font-size:13px;
+    font-weight:700;
+}
+
+/* ================= DOWNLOAD ALL ================= */
+
+.download-all{
+    display:none;
+    text-align:center;
+    margin-top:25px;
+}
+
+.zip-btn{
+    border:none;
+    background:linear-gradient(135deg,#0caf60,#087c47);
+    color:white;
+    padding:14px 27px;
+    border-radius:11px;
+    font-size:16px;
+    font-weight:800;
+    cursor:pointer;
+}
+
+.zip-btn:disabled{
+    opacity:.6;
+}
+
+/* ================= NOTE ================= */
+
+.note{
+    margin-top:25px;
+    background:#fff8dc;
+    border-left:5px solid #f4bd19;
+    padding:15px;
+    border-radius:10px;
+    font-size:14px;
+    line-height:1.8;
+}
+
+.note b{
+    color:#805f00;
+}
+
+/* ================= FOOTER ================= */
+
+.footer{
+    margin-top:40px;
+    background:#073568;
+    color:white;
+    text-align:center;
+    padding:25px 15px;
+}
+
+.footer strong{
+    color:#ffd83d;
+}
+
+.footer p{
+    margin-top:7px;
+    color:#dcecff;
+    font-size:13px;
+}
+
+/* ================= MOBILE ================= */
+
+@media(max-width:700px){
+
+    .navbar{
+        padding:9px 15px;
+    }
+
+    .logo{
+        font-size:22px;
+    }
+
+    .home-btn{
+        padding:8px 12px;
+        font-size:13px;
+    }
+
+    .hero{
+        padding:35px 15px;
+    }
+
+    .hero h1{
+        font-size:29px;
+    }
+
+    .hero p{
+        font-size:14px;
+    }
+
+    .converter{
+        padding:18px;
+    }
+
+    .upload-area{
+        padding:35px 12px;
+    }
+
+    .upload-icon{
+        font-size:45px;
+    }
+
+    .setting-row{
+        flex-direction:column;
+        align-items:flex-start;
+    }
+
+    .page-grid{
+        grid-template-columns:repeat(2,1fr);
+        gap:12px;
+    }
+
+}
+
+@media(max-width:430px){
+
+    .page-grid{
+        grid-template-columns:1fr;
+    }
+
+}
+
+</style>
+</head>
+
+<body>
+
+
+<!-- ================= NAVBAR ================= -->
+
+<header class="navbar">
+
+    <div class="logo">
+        🔧 Tool <span>Sathi</span>
+    </div>
+
+    <a href="index.html" class="home-btn">
+        🏠 Home
+    </a>
+
+</header>
+
+
+<!-- ================= HERO ================= -->
+
+<section class="hero">
+
+    <h1>📄 PDF to Image Converter</h1>
+
+    <p>
+        PDF की pages को आसानी से JPG या PNG images में बदलें
+    </p>
+
+</section>
+
+
+<!-- ================= MAIN ================= -->
+
+<main class="container">
+
+<div class="converter">
+
+
+    <!-- UPLOAD -->
+
+    <label for="fileInput" class="upload-area">
+
+        <div class="upload-icon">
+            📤
+        </div>
+
+        <h2>अपनी PDF यहाँ चुनें</h2>
+
+        <p>
+            PDF file select करें और उसकी pages को images में बदलें
+        </p>
+
+        <span class="choose-btn">
+            📁 PDF चुनें
+        </span>
+
+    </label>
+
+    <input
+        type="file"
+        id="fileInput"
+        accept="application/pdf,.pdf"
+    >
+
+
+    <!-- FILE INFO -->
+
+    <div class="file-info" id="fileInfo"></div>
+
+
+    <!-- SETTINGS -->
+
+    <div class="settings" id="settings">
+
+        <div class="settings-title">
+            ⚙️ Conversion Settings
+        </div>
+
+        <div class="setting-row">
+
+            <div class="setting-item">
+
+                <label for="format">
+                    Format:
+                </label>
+
+                <select id="format">
+
+                    <option value="png">
+                        PNG
+                    </option>
+
+                    <option value="jpeg">
+                        JPG
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <div class="setting-item">
+
+                <label for="quality">
+                    Quality:
+                </label>
+
+                <select id="quality">
+
+                    <option value="1">
+                        High
+                    </option>
+
+                    <option value="0.8">
+                        Medium
+                    </option>
+
+                    <option value="0.6">
+                        Low
+                    </option>
+
+                </select>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- CONVERT -->
+
+    <button
+        class="convert-btn"
+        id="convertBtn"
+        onclick="convertPDF()"
+    >
+        🔄 PDF को Image में Convert करें
+    </button>
+
+
+    <!-- PROGRESS -->
+
+    <div class="progress-box" id="progressBox">
+
+        <div class="progress-text" id="progressText">
+            Conversion शुरू हो रहा है...
+        </div>
+
+        <div class="progress-bg">
+
+            <div
+                class="progress-bar"
+                id="progressBar">
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- RESULTS -->
+
+    <div class="results" id="results">
+
+        <div class="results-title">
+            🖼️ Converted Images
+        </div>
+
+        <div
+            class="page-grid"
+            id="pageGrid">
+        </div>
+
+        <div class="download-all" id="downloadAll">
+
+            <button
+                class="zip-btn"
+                id="zipBtn"
+                onclick="downloadZIP()"
+            >
+                📦 सभी Images ZIP में Download करें
+            </button>
+
+        </div>
+
+    </div>
+
+
+    <!-- NOTE -->
+
+    <div class="note">
+
+        <b>💡 कैसे इस्तेमाल करें?</b><br>
+
+        1️⃣ ऊपर <b>PDF चुनें</b> पर क्लिक करें।<br>
+
+        2️⃣ PNG या JPG format चुनें।<br>
+
+        3️⃣ <b>PDF को Image में Convert करें</b> दबाएँ।<br>
+
+        4️⃣ हर page की image अलग-अलग download करें या
+        <b>सभी Images ZIP</b> में download करें।<br><br>
+
+        🔒 आपकी PDF किसी server पर upload नहीं होती।
+        Conversion आपके browser में ही होता है।
+
+    </div>
+
+
+</div>
+
+</main>
+
+
+<!-- ================= FOOTER ================= -->
+
+<footer class="footer">
+
+    <div>
+        ⚡ Fast &nbsp; | &nbsp;
+        🔒 Private &nbsp; | &nbsp;
+        🆓 <strong>100% Free</strong>
+    </div>
+
+    <p>
+        © 2026 Tool Sathi | सभी अधिकार सुरक्षित
+    </p>
+
+</footer>
+
+
+<script>
+
+/* ================= PDF.JS SETUP ================= */
+
+pdfjsLib.GlobalWorkerOptions.workerSrc =
+"https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js";
+
+
+let selectedPDF = null;
+let convertedImages = [];
+
+
+/* ================= FILE SELECT ================= */
+
+document.getElementById("fileInput").addEventListener("change", function(){
+
+    const file = this.files[0];
+
+    if(!file){
+        return;
+    }
+
+    if(file.type !== "application/pdf" &&
+       !file.name.toLowerCase().endsWith(".pdf")){
+
+        alert("कृपया केवल PDF file चुनें।");
+
+        this.value = "";
+
+        return;
+    }
+
+    selectedPDF = file;
+
+    convertedImages = [];
+
+    document.getElementById("results").style.display = "none";
+    document.getElementById("downloadAll").style.display = "none";
+    document.getElementById("pageGrid").innerHTML = "";
+
+    const sizeMB =
+        (file.size / (1024 * 1024)).toFixed(2);
+
+    document.getElementById("fileInfo").innerHTML =
+        "📄 File: <b>" + file.name + "</b><br>" +
+        "📦 Size: <b>" + sizeMB + " MB</b>";
+
+    document.getElementById("fileInfo").style.display = "block";
+
+    document.getElementById("settings").style.display = "block";
+
+    document.getElementById("convertBtn").style.display = "block";
+
+});
+
+
+/* ================= CONVERT PDF ================= */
+
+async function convertPDF(){
+
+    if(!selectedPDF){
+
+        alert("पहले PDF चुनें।");
+
+        return;
+    }
+
+    const convertBtn =
+        document.getElementById("convertBtn");
+
+    convertBtn.disabled = true;
+
+    convertBtn.innerText =
+        "⏳ Conversion हो रहा है...";
+
+    document.getElementById("progressBox").style.display =
+        "block";
+
+    document.getElementById("results").style.display =
+        "none";
+
+    document.getElementById("downloadAll").style.display =
+        "none";
+
+    document.getElementById("pageGrid").innerHTML = "";
+
+    convertedImages = [];
+
+    try{
+
+        const arrayBuffer =
+            await selectedPDF.arrayBuffer();
+
+        const pdf =
+            await pdfjsLib.getDocument({
+                data: arrayBuffer
+            }).promise;
+
+        const totalPages = pdf.numPages;
+
+        const format =
+            document.getElementById("format").value;
+
+        const quality =
+            parseFloat(
+                document.getElementById("quality").value
+            );
+
+        for(let pageNumber = 1; pageNumber <= totalPages; pageNumber++){
+
+            document.getElementById("progressText").innerText =
+                "Page " + pageNumber + " / " +
+                totalPages + " convert हो रहा है...";
+
+            const progress =
+                ((pageNumber - 1) / totalPages) * 100;
+
+            document.getElementById("progressBar").style.width =
+                progress + "%";
+
+
+            const page =
+                await pdf.getPage(pageNumber);
+
+
+            /*
+             Scale 2 = अच्छी quality
+            */
+
+            const scale = 2;
+
+            const viewport =
+                page.getViewport({
+                    scale:scale
+                });
+
+
+            const canvas =
+                document.createElement("canvas");
+
+            const context =
+                canvas.getContext("2d");
+
+            canvas.width =
+                viewport.width;
+
+            canvas.height =
+                viewport.height;
+
+
+            await page.render({
+
+                canvasContext:context,
+
+                viewport:viewport
+
+            }).promise;
+
+
+            let mimeType =
+                "image/png";
+
+            if(format === "jpeg"){
+                mimeType = "image/jpeg";
+            }
+
+
+            const blob =
+                await new Promise(resolve => {
+
+                    canvas.toBlob(
+                        resolve,
+                        mimeType,
+                        quality
+                    );
+
+                });
+
+
+            const extension =
+                format === "jpeg"
+                ? "jpg"
+                : "png";
+
+
+            const imageURL =
+                URL.createObjectURL(blob);
+
+
+            convertedImages.push({
+
+                blob:blob,
+
+                url:imageURL,
+
+                name:
+                    "page-" +
+                    pageNumber +
+                    "." +
+                    extension
+
+            });
+
+
+            /* CREATE CARD */
+
+            const card =
+                document.createElement("div");
+
+            card.className =
+                "page-card";
+
+
+            const title =
+                document.createElement("div");
+
+            title.className =
+                "page-number";
+
+            title.innerText =
+                "Page " + pageNumber;
+
+
+            const image =
+                document.createElement("img");
+
+            image.src =
+                imageURL;
+
+            image.alt =
+                "PDF Page " + pageNumber;
+
+
+            const download =
+                document.createElement("a");
+
+            download.className =
+                "page-download";
+
+            download.href =
+                imageURL;
+
+            download.download =
+                "page-" +
+                pageNumber +
+                "." +
+                extension;
+
+            download.innerText =
+                "⬇️ Download";
+
+
+            card.appendChild(title);
+
+            card.appendChild(image);
+
+            card.appendChild(download);
+
+            document
+                .getElementById("pageGrid")
+                .appendChild(card);
+
+        }
+
+
+        document.getElementById("progressBar").style.width =
+            "100%";
+
+        document.getElementById("progressText").innerText =
+            "✅ सभी " +
+            totalPages +
+            " pages convert हो गईं!";
+
+
+        document.getElementById("results").style.display =
+            "block";
+
+        document.getElementById("downloadAll").style.display =
+            "block";
+
+
+    }catch(error){
+
+        console.error(error);
+
+        alert(
+            "PDF convert करने में समस्या हुई। कृपया दूसरी PDF try करें।"
+        );
+
+    }
+
+
+    convertBtn.disabled = false;
+
+    convertBtn.innerText =
+        "🔄 PDF को Image में Convert करें";
+
+}
+
+
+/* ================= ZIP DOWNLOAD ================= */
+
+async function downloadZIP(){
+
+    if(convertedImages.length === 0){
+
+        alert("पहले PDF को convert करें।");
+
+        return;
+    }
+
+    const zipBtn =
+        document.getElementById("zipBtn");
+
+    zipBtn.disabled = true;
+
+    zipBtn.innerText =
+        "⏳ ZIP बन रही है...";
+
+
+    try{
+
+        const zip =
+            new JSZip();
+
+
+        convertedImages.forEach(function(item){
+
+            zip.file(
+                item.name,
+                item.blob
+            );
+
+        });
+
+
+        const zipBlob =
+            await zip.generateAsync({
+
+                type:"blob",
+
+                compression:"DEFLATE",
+
+                compressionOptions:{
+                    level:6
+                }
+
+            });
+
+
+        const url =
+            URL.createObjectURL(zipBlob);
+
+
+        const link =
+            document.createElement("a");
+
+        link.href =
+            url;
+
+        link.download =
+            selectedPDF.name
+                .replace(/\.pdf$/i,"")
+            + "-images.zip";
+
+
+        document.body.appendChild(link);
+
+        link.click();
+
+        document.body.removeChild(link);
+
+        URL.revokeObjectURL(url);
+
+
+    }catch(error){
+
+        console.error(error);
+
+        alert(
+            "ZIP बनाने में समस्या हुई।"
+        );
+
+    }
+
+
+    zipBtn.disabled = false;
+
+    zipBtn.innerText =
+        "📦 सभी Images ZIP में Download करें";
+
+}
+
+</script>
+
+</body>
+</html>
