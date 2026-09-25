@@ -1,0 +1,1126 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Image Compressor | Tool Sathi</title>
+
+<meta name="description"
+content="Image का file size कम करें। Free online Image Compressor - Tool Sathi.">
+
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+<style>
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body{
+    font-family:"Noto Sans Devanagari",Arial,sans-serif;
+    background:#f4f8ff;
+    color:#142b61;
+}
+
+/* NAVBAR */
+
+.navbar{
+    background:linear-gradient(135deg,#073b78,#0753a5);
+    min-height:72px;
+    padding:10px 5%;
+    display:flex;
+    align-items:center;
+    gap:15px;
+}
+
+.logo{
+    flex:1;
+    color:white;
+    font-size:27px;
+    font-weight:800;
+}
+
+.logo span{
+    color:#ffd83d;
+}
+
+.home-btn{
+    text-decoration:none;
+    background:#168cff;
+    color:white;
+    padding:10px 18px;
+    border-radius:9px;
+    font-weight:700;
+}
+
+/* HERO */
+
+.hero{
+    background:linear-gradient(120deg,#1264e8,#168eea,#464de8);
+    color:white;
+    text-align:center;
+    padding:42px 20px;
+}
+
+.hero h1{
+    font-size:40px;
+    margin-bottom:10px;
+}
+
+.hero p{
+    font-size:17px;
+}
+
+/* CONTAINER */
+
+.container{
+    max-width:950px;
+    margin:35px auto;
+    padding:0 15px;
+}
+
+.compressor{
+    background:white;
+    border-radius:22px;
+    padding:30px;
+    box-shadow:0 10px 35px rgba(20,55,120,.12);
+}
+
+/* UPLOAD */
+
+.upload-area{
+    display:block;
+    border:3px dashed #3990f5;
+    background:#eef7ff;
+    border-radius:18px;
+    padding:42px 20px;
+    text-align:center;
+    cursor:pointer;
+    transition:.2s;
+}
+
+.upload-area:hover{
+    background:#e3f2ff;
+}
+
+.upload-icon{
+    font-size:55px;
+    margin-bottom:8px;
+}
+
+.upload-area h2{
+    font-size:22px;
+    margin-bottom:7px;
+}
+
+.upload-area p{
+    color:#60759b;
+    font-size:14px;
+}
+
+.choose-btn{
+    display:inline-block;
+    margin-top:17px;
+    background:#126de7;
+    color:white;
+    padding:12px 25px;
+    border-radius:10px;
+    font-weight:700;
+}
+
+#fileInput{
+    display:none;
+}
+
+/* SETTINGS */
+
+.settings{
+    display:none;
+    margin-top:22px;
+    padding:20px;
+    background:#f7faff;
+    border:1px solid #dce8fa;
+    border-radius:15px;
+}
+
+.settings-title{
+    font-size:19px;
+    font-weight:800;
+    margin-bottom:16px;
+}
+
+.setting-row{
+    display:flex;
+    align-items:center;
+    gap:15px;
+    flex-wrap:wrap;
+}
+
+.quality-box{
+    flex:1;
+    min-width:220px;
+}
+
+.quality-label{
+    display:flex;
+    justify-content:space-between;
+    font-size:14px;
+    font-weight:700;
+    margin-bottom:7px;
+}
+
+input[type="range"]{
+    width:100%;
+}
+
+select{
+    border:1px solid #bfd1e9;
+    border-radius:9px;
+    padding:10px 12px;
+    background:white;
+    color:#142b61;
+    font-size:14px;
+}
+
+/* PREVIEW */
+
+.preview{
+    display:none;
+    margin-top:25px;
+}
+
+.preview-title{
+    font-size:20px;
+    font-weight:800;
+    margin-bottom:15px;
+}
+
+.preview-image-box{
+    text-align:center;
+    background:#f1f5fb;
+    padding:15px;
+    border-radius:15px;
+}
+
+#preview{
+    max-width:100%;
+    max-height:450px;
+    border-radius:10px;
+}
+
+/* INFO */
+
+.info-grid{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:12px;
+    margin-top:18px;
+}
+
+.info-box{
+    background:#f4f8ff;
+    border-radius:12px;
+    padding:14px;
+    text-align:center;
+}
+
+.info-box small{
+    display:block;
+    color:#60759b;
+    margin-bottom:4px;
+}
+
+.info-box strong{
+    font-size:17px;
+}
+
+/* PROGRESS */
+
+.progress-box{
+    display:none;
+    margin-top:20px;
+}
+
+.progress-text{
+    text-align:center;
+    font-size:14px;
+    font-weight:700;
+    margin-bottom:8px;
+}
+
+.progress-bg{
+    height:11px;
+    background:#e2eaf6;
+    border-radius:20px;
+    overflow:hidden;
+}
+
+.progress-bar{
+    width:0;
+    height:100%;
+    background:linear-gradient(90deg,#126de7,#10a8df);
+    transition:.3s;
+}
+
+/* BUTTON */
+
+.compress-btn{
+    display:none;
+    width:100%;
+    margin-top:20px;
+    border:none;
+    background:linear-gradient(135deg,#126de7,#0753a5);
+    color:white;
+    padding:14px;
+    border-radius:11px;
+    font-size:17px;
+    font-weight:800;
+    cursor:pointer;
+}
+
+.compress-btn:disabled{
+    opacity:.6;
+}
+
+.download-btn{
+    display:none;
+    width:100%;
+    margin-top:18px;
+    border:none;
+    background:linear-gradient(135deg,#0caf60,#087c47);
+    color:white;
+    padding:14px;
+    border-radius:11px;
+    font-size:17px;
+    font-weight:800;
+    cursor:pointer;
+}
+
+/* NOTE */
+
+.note{
+    margin-top:25px;
+    background:#fff8dc;
+    border-left:5px solid #f4bd19;
+    padding:15px;
+    border-radius:10px;
+    font-size:14px;
+    line-height:1.8;
+}
+
+.note b{
+    color:#805f00;
+}
+
+/* FOOTER */
+
+.footer{
+    margin-top:40px;
+    background:#073568;
+    color:white;
+    text-align:center;
+    padding:25px 15px;
+}
+
+.footer strong{
+    color:#ffd83d;
+}
+
+.footer p{
+    margin-top:7px;
+    color:#dcecff;
+    font-size:13px;
+}
+
+/* MOBILE */
+
+@media(max-width:700px){
+
+    .navbar{
+        padding:9px 15px;
+    }
+
+    .logo{
+        font-size:22px;
+    }
+
+    .home-btn{
+        padding:8px 12px;
+        font-size:13px;
+    }
+
+    .hero{
+        padding:35px 15px;
+    }
+
+    .hero h1{
+        font-size:29px;
+    }
+
+    .hero p{
+        font-size:14px;
+    }
+
+    .compressor{
+        padding:18px;
+    }
+
+    .upload-area{
+        padding:35px 12px;
+    }
+
+    .upload-icon{
+        font-size:45px;
+    }
+
+    .info-grid{
+        grid-template-columns:1fr;
+    }
+
+}
+
+</style>
+</head>
+
+<body>
+
+<!-- NAVBAR -->
+
+<header class="navbar">
+
+    <div class="logo">
+        🔧 Tool <span>Sathi</span>
+    </div>
+
+    <a href="index.html" class="home-btn">
+        🏠 Home
+    </a>
+
+</header>
+
+
+<!-- HERO -->
+
+<section class="hero">
+
+    <h1>🗜️ Image Compressor</h1>
+
+    <p>
+        Image का size कम करें और storage बचाएँ
+    </p>
+
+</section>
+
+
+<!-- MAIN -->
+
+<main class="container">
+
+<div class="compressor">
+
+
+    <!-- UPLOAD -->
+
+    <label for="fileInput" class="upload-area">
+
+        <div class="upload-icon">
+            🖼️
+        </div>
+
+        <h2>अपनी Image यहाँ चुनें</h2>
+
+        <p>
+            JPG, JPEG, PNG, WEBP आदि image select करें
+        </p>
+
+        <span class="choose-btn">
+            📁 Image चुनें
+        </span>
+
+    </label>
+
+    <input
+        type="file"
+        id="fileInput"
+        accept="image/*"
+    >
+
+
+    <!-- SETTINGS -->
+
+    <div class="settings" id="settings">
+
+        <div class="settings-title">
+            ⚙️ Compression Settings
+        </div>
+
+        <div class="setting-row">
+
+            <div class="quality-box">
+
+                <div class="quality-label">
+
+                    <span>Image Quality</span>
+
+                    <span>
+                        <span id="qualityValue">70</span>%
+                    </span>
+
+                </div>
+
+                <input
+                    type="range"
+                    id="quality"
+                    min="10"
+                    max="100"
+                    value="70"
+                >
+
+            </div>
+
+
+            <div>
+
+                <div class="quality-label">
+                    Format
+                </div>
+
+                <select id="format">
+
+                    <option value="image/jpeg">
+                        JPG
+                    </option>
+
+                    <option value="image/webp">
+                        WEBP
+                    </option>
+
+                    <option value="image/png">
+                        PNG
+                    </option>
+
+                </select>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- PREVIEW -->
+
+    <div class="preview" id="previewBox">
+
+        <div class="preview-title">
+            👀 Original Image
+        </div>
+
+        <div class="preview-image-box">
+
+            <img
+                id="preview"
+                alt="Image Preview"
+            >
+
+        </div>
+
+
+        <!-- INFO -->
+
+        <div class="info-grid">
+
+            <div class="info-box">
+
+                <small>Original Size</small>
+
+                <strong id="originalSize">
+                    -
+                </strong>
+
+            </div>
+
+            <div class="info-box">
+
+                <small>Image Type</small>
+
+                <strong id="imageType">
+                    -
+                </strong>
+
+            </div>
+
+            <div class="info-box">
+
+                <small>Image Dimensions</small>
+
+                <strong id="dimensions">
+                    -
+                </strong>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- COMPRESS BUTTON -->
+
+    <button
+        class="compress-btn"
+        id="compressBtn"
+        onclick="compressImage()"
+    >
+        🗜️ Image Compress करें
+    </button>
+
+
+    <!-- PROGRESS -->
+
+    <div
+        class="progress-box"
+        id="progressBox"
+    >
+
+        <div
+            class="progress-text"
+            id="progressText"
+        >
+            Compression हो रही है...
+        </div>
+
+        <div class="progress-bg">
+
+            <div
+                class="progress-bar"
+                id="progressBar"
+            ></div>
+
+        </div>
+
+    </div>
+
+
+    <!-- RESULT INFO -->
+
+    <div
+        class="info-grid"
+        id="resultInfo"
+        style="display:none;margin-top:20px;"
+    >
+
+        <div class="info-box">
+
+            <small>Original Size</small>
+
+            <strong id="beforeSize">
+                -
+            </strong>
+
+        </div>
+
+        <div class="info-box">
+
+            <small>Compressed Size</small>
+
+            <strong id="afterSize">
+                -
+            </strong>
+
+        </div>
+
+        <div class="info-box">
+
+            <small>Size Reduced</small>
+
+            <strong id="savedSize">
+                -
+            </strong>
+
+        </div>
+
+    </div>
+
+
+    <!-- DOWNLOAD -->
+
+    <button
+        class="download-btn"
+        id="downloadBtn"
+        onclick="downloadCompressed()"
+    >
+        ⬇️ Compressed Image Download करें
+    </button>
+
+
+    <!-- NOTE -->
+
+    <div class="note">
+
+        <b>💡 कैसे इस्तेमाल करें?</b><br>
+
+        1️⃣ अपनी image चुनें।<br>
+        2️⃣ Quality को अपनी जरूरत के अनुसार सेट करें।<br>
+        3️⃣ JPG, WEBP या PNG format चुनें।<br>
+        4️⃣ <b>Image Compress करें</b> दबाएँ।<br>
+        5️⃣ Compressed image download करें।<br><br>
+
+        🔒 आपकी image किसी server पर upload नहीं होती।
+        Compression आपके browser में ही होता है।
+
+    </div>
+
+</div>
+
+</main>
+
+
+<!-- FOOTER -->
+
+<footer class="footer">
+
+    <div>
+        ⚡ Fast &nbsp; | &nbsp;
+        🔒 Private &nbsp; | &nbsp;
+        🆓 <strong>100% Free</strong>
+    </div>
+
+    <p>
+        © 2026 Tool Sathi | सभी अधिकार सुरक्षित
+    </p>
+
+</footer>
+
+
+<script>
+
+let selectedFile = null;
+let compressedBlob = null;
+
+
+/* ================= FILE SELECT ================= */
+
+document
+.getElementById("fileInput")
+.addEventListener("change", function(){
+
+    const file = this.files[0];
+
+    if(!file){
+        return;
+    }
+
+    if(!file.type.startsWith("image/")){
+
+        alert("कृपया केवल image file चुनें।");
+
+        this.value = "";
+
+        return;
+    }
+
+    selectedFile = file;
+    compressedBlob = null;
+
+
+    /* FILE INFO */
+
+    document
+    .getElementById("originalSize")
+    .innerText = formatBytes(file.size);
+
+
+    document
+    .getElementById("imageType")
+    .innerText = file.type
+        .replace("image/","")
+        .toUpperCase();
+
+
+    const reader =
+        new FileReader();
+
+
+    reader.onload = function(e){
+
+        const img =
+            new Image();
+
+
+        img.onload = function(){
+
+            document
+            .getElementById("dimensions")
+            .innerText =
+                img.naturalWidth +
+                " × " +
+                img.naturalHeight +
+                " px";
+
+        };
+
+
+        img.src = e.target.result;
+
+
+        document
+        .getElementById("preview")
+        .src = e.target.result;
+
+
+        document
+        .getElementById("previewBox")
+        .style.display = "block";
+
+
+        document
+        .getElementById("settings")
+        .style.display = "block";
+
+
+        document
+        .getElementById("compressBtn")
+        .style.display = "block";
+
+
+        document
+        .getElementById("downloadBtn")
+        .style.display = "none";
+
+
+        document
+        .getElementById("resultInfo")
+        .style.display = "none";
+
+    };
+
+
+    reader.readAsDataURL(file);
+
+});
+
+
+/* ================= QUALITY ================= */
+
+document
+.getElementById("quality")
+.addEventListener("input", function(){
+
+    document
+    .getElementById("qualityValue")
+    .innerText = this.value;
+
+});
+
+
+/* ================= COMPRESS ================= */
+
+function compressImage(){
+
+    if(!selectedFile){
+
+        alert("पहले image चुनें।");
+
+        return;
+    }
+
+
+    const quality =
+        parseInt(
+            document
+            .getElementById("quality")
+            .value
+        ) / 100;
+
+
+    const format =
+        document
+        .getElementById("format")
+        .value;
+
+
+    const reader =
+        new FileReader();
+
+
+    document
+    .getElementById("progressBox")
+    .style.display = "block";
+
+
+    document
+    .getElementById("progressBar")
+    .style.width = "25%";
+
+
+    document
+    .getElementById("progressText")
+    .innerText =
+        "Image process हो रही है...";
+
+
+    reader.onload = function(e){
+
+        const img =
+            new Image();
+
+
+        img.onload = function(){
+
+            document
+            .getElementById("progressBar")
+            .style.width = "60%";
+
+
+            const canvas =
+                document.createElement("canvas");
+
+
+            canvas.width =
+                img.naturalWidth;
+
+            canvas.height =
+                img.naturalHeight;
+
+
+            const ctx =
+                canvas.getContext("2d");
+
+
+            /*
+             PNG transparency के लिए
+             background नहीं भरते।
+             JPG में white background देते हैं।
+            */
+
+            if(format === "image/jpeg"){
+
+                ctx.fillStyle = "#ffffff";
+
+                ctx.fillRect(
+                    0,
+                    0,
+                    canvas.width,
+                    canvas.height
+                );
+
+            }
+
+
+            ctx.drawImage(
+                img,
+                0,
+                0
+            );
+
+
+            canvas.toBlob(
+                function(blob){
+
+                    if(!blob){
+
+                        alert(
+                            "Compression में समस्या हुई।"
+                        );
+
+                        return;
+                    }
+
+
+                    compressedBlob =
+                        blob;
+
+
+                    document
+                    .getElementById("progressBar")
+                    .style.width = "100%";
+
+
+                    document
+                    .getElementById("progressText")
+                    .innerText =
+                        "✅ Image successfully compressed!";
+
+
+                    /* RESULT */
+
+                    document
+                    .getElementById("resultInfo")
+                    .style.display =
+                        "grid";
+
+
+                    document
+                    .getElementById("beforeSize")
+                    .innerText =
+                        formatBytes(
+                            selectedFile.size
+                        );
+
+
+                    document
+                    .getElementById("afterSize")
+                    .innerText =
+                        formatBytes(
+                            blob.size
+                        );
+
+
+                    let saved =
+                        ((selectedFile.size - blob.size)
+                        / selectedFile.size) * 100;
+
+
+                    /*
+                     अगर compressed file
+                     original से बड़ी हो
+                    */
+
+                    if(saved < 0){
+
+                        document
+                        .getElementById("savedSize")
+                        .innerText =
+                            "Size बढ़ा";
+
+                    }else{
+
+                        document
+                        .getElementById("savedSize")
+                        .innerText =
+                            saved.toFixed(1) + "%";
+
+                    }
+
+
+                    document
+                    .getElementById("downloadBtn")
+                    .style.display =
+                        "block";
+
+                },
+                format,
+                quality
+            );
+
+        };
+
+
+        img.src = e.target.result;
+
+    };
+
+
+    reader.readAsDataURL(selectedFile);
+
+}
+
+
+/* ================= DOWNLOAD ================= */
+
+function downloadCompressed(){
+
+    if(!compressedBlob){
+
+        alert(
+            "पहले image को compress करें।"
+        );
+
+        return;
+    }
+
+
+    const format =
+        document
+        .getElementById("format")
+        .value;
+
+
+    let extension = "jpg";
+
+
+    if(format === "image/png"){
+        extension = "png";
+    }
+
+    if(format === "image/webp"){
+        extension = "webp";
+    }
+
+
+    const url =
+        URL.createObjectURL(
+            compressedBlob
+        );
+
+
+    const link =
+        document.createElement("a");
+
+
+    link.href = url;
+
+    link.download =
+        selectedFile.name
+        .replace(/\.[^/.]+$/,"")
+        + "-compressed."
+        + extension;
+
+
+    document.body.appendChild(link);
+
+    link.click();
+
+    document.body.removeChild(link);
+
+    URL.revokeObjectURL(url);
+
+}
+
+
+/* ================= FILE SIZE ================= */
+
+function formatBytes(bytes){
+
+    if(bytes === 0){
+        return "0 Bytes";
+    }
+
+
+    const units =
+        [
+            "Bytes",
+            "KB",
+            "MB",
+            "GB"
+        ];
+
+
+    const index =
+        Math.floor(
+            Math.log(bytes) /
+            Math.log(1024)
+        );
+
+
+    return (
+        parseFloat(
+            (
+                bytes /
+                Math.pow(1024,index)
+            ).toFixed(2)
+        )
+        + " "
+        + units[index]
+    );
+
+}
+
+</script>
+
+</body>
+</html>
