@@ -1,0 +1,1062 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Text to Image Converter | Tool Sathi</title>
+
+<meta name="description"
+content="अपने text को सुंदर image में बदलें। Free Text to Image Generator - Tool Sathi.">
+
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+<style>
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body{
+    font-family:"Noto Sans Devanagari",Arial,sans-serif;
+    background:#f4f8ff;
+    color:#142b61;
+}
+
+/* ================= NAVBAR ================= */
+
+.navbar{
+    background:linear-gradient(135deg,#073b78,#0753a5);
+    min-height:72px;
+    padding:10px 5%;
+    display:flex;
+    align-items:center;
+    gap:15px;
+}
+
+.logo{
+    flex:1;
+    color:white;
+    font-size:27px;
+    font-weight:800;
+}
+
+.logo span{
+    color:#ffd83d;
+}
+
+.home-btn{
+    text-decoration:none;
+    background:#168cff;
+    color:white;
+    padding:10px 18px;
+    border-radius:9px;
+    font-weight:700;
+}
+
+/* ================= HERO ================= */
+
+.hero{
+    background:linear-gradient(120deg,#1264e8,#168eea,#464de8);
+    color:white;
+    text-align:center;
+    padding:42px 20px;
+}
+
+.hero h1{
+    font-size:40px;
+    margin-bottom:10px;
+}
+
+.hero p{
+    font-size:17px;
+}
+
+/* ================= CONTAINER ================= */
+
+.container{
+    max-width:1100px;
+    margin:35px auto;
+    padding:0 15px;
+}
+
+.generator{
+    background:white;
+    border-radius:22px;
+    padding:25px;
+    box-shadow:0 10px 35px rgba(20,55,120,.12);
+}
+
+/* ================= TEXT AREA ================= */
+
+.input-title{
+    font-size:20px;
+    font-weight:800;
+    margin-bottom:10px;
+}
+
+textarea{
+    width:100%;
+    min-height:160px;
+    resize:vertical;
+    border:2px solid #d4e2f5;
+    border-radius:14px;
+    padding:16px;
+    font-family:"Noto Sans Devanagari",Arial,sans-serif;
+    font-size:17px;
+    color:#142b61;
+    outline:none;
+}
+
+textarea:focus{
+    border-color:#168cff;
+    box-shadow:0 0 0 3px rgba(22,140,255,.1);
+}
+
+/* ================= SETTINGS ================= */
+
+.settings{
+    margin-top:20px;
+    padding:20px;
+    background:#f7faff;
+    border:1px solid #dce8fa;
+    border-radius:15px;
+}
+
+.settings-title{
+    font-size:19px;
+    font-weight:800;
+    margin-bottom:16px;
+}
+
+.setting-grid{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:15px;
+}
+
+.setting-box label{
+    display:block;
+    font-size:14px;
+    font-weight:700;
+    margin-bottom:7px;
+}
+
+select,
+input[type="color"],
+input[type="range"]{
+    width:100%;
+}
+
+select{
+    border:1px solid #bfd1e9;
+    border-radius:9px;
+    padding:10px;
+    background:white;
+    color:#142b61;
+    font-size:14px;
+}
+
+input[type="color"]{
+    height:43px;
+    border:1px solid #bfd1e9;
+    border-radius:9px;
+    padding:3px;
+    background:white;
+}
+
+.range-value{
+    font-size:13px;
+    color:#52698f;
+    margin-top:4px;
+}
+
+/* ================= BACKGROUNDS ================= */
+
+.bg-buttons{
+    display:flex;
+    flex-wrap:wrap;
+    gap:8px;
+}
+
+.bg-btn{
+    border:2px solid transparent;
+    width:45px;
+    height:40px;
+    border-radius:9px;
+    cursor:pointer;
+}
+
+.bg-btn.active{
+    border-color:#142b61;
+    box-shadow:0 0 0 2px white inset;
+}
+
+.bg-white{
+    background:white;
+}
+
+.bg-black{
+    background:#111827;
+}
+
+.bg-blue{
+    background:linear-gradient(135deg,#1264e8,#464de8);
+}
+
+.bg-purple{
+    background:linear-gradient(135deg,#7c3aed,#ec4899);
+}
+
+.bg-sunset{
+    background:linear-gradient(135deg,#ff7b00,#ff247f);
+}
+
+.bg-green{
+    background:linear-gradient(135deg,#059669,#84cc16);
+}
+
+.bg-yellow{
+    background:linear-gradient(135deg,#facc15,#fb923c);
+}
+
+.bg-pink{
+    background:linear-gradient(135deg,#f9a8d4,#c084fc);
+}
+
+/* ================= PREVIEW ================= */
+
+.preview-title{
+    font-size:20px;
+    font-weight:800;
+    margin-top:25px;
+    margin-bottom:12px;
+}
+
+.canvas-wrap{
+    width:100%;
+    overflow:auto;
+    background:#eaf0f8;
+    border-radius:15px;
+    padding:15px;
+    text-align:center;
+}
+
+canvas{
+    max-width:100%;
+    height:auto;
+    border-radius:8px;
+    box-shadow:0 5px 20px rgba(0,0,0,.15);
+}
+
+/* ================= BUTTONS ================= */
+
+.buttons{
+    display:flex;
+    gap:12px;
+    margin-top:20px;
+}
+
+.generate-btn,
+.download-btn{
+    flex:1;
+    border:none;
+    color:white;
+    padding:14px;
+    border-radius:11px;
+    font-size:16px;
+    font-weight:800;
+    cursor:pointer;
+}
+
+.generate-btn{
+    background:linear-gradient(135deg,#126de7,#0753a5);
+}
+
+.download-btn{
+    background:linear-gradient(135deg,#0caf60,#087c47);
+}
+
+/* ================= NOTE ================= */
+
+.note{
+    margin-top:25px;
+    background:#fff8dc;
+    border-left:5px solid #f4bd19;
+    padding:15px;
+    border-radius:10px;
+    font-size:14px;
+    line-height:1.8;
+}
+
+.note b{
+    color:#805f00;
+}
+
+/* ================= FOOTER ================= */
+
+.footer{
+    margin-top:40px;
+    background:#073568;
+    color:white;
+    text-align:center;
+    padding:25px 15px;
+}
+
+.footer strong{
+    color:#ffd83d;
+}
+
+.footer p{
+    margin-top:7px;
+    color:#dcecff;
+    font-size:13px;
+}
+
+/* ================= MOBILE ================= */
+
+@media(max-width:700px){
+
+    .navbar{
+        padding:9px 15px;
+    }
+
+    .logo{
+        font-size:22px;
+    }
+
+    .home-btn{
+        padding:8px 12px;
+        font-size:13px;
+    }
+
+    .hero{
+        padding:35px 15px;
+    }
+
+    .hero h1{
+        font-size:29px;
+    }
+
+    .hero p{
+        font-size:14px;
+    }
+
+    .generator{
+        padding:17px;
+    }
+
+    .setting-grid{
+        grid-template-columns:1fr;
+    }
+
+    .buttons{
+        flex-direction:column;
+    }
+
+}
+
+</style>
+</head>
+
+<body>
+
+<!-- ================= NAVBAR ================= -->
+
+<header class="navbar">
+
+    <div class="logo">
+        🔧 Tool <span>Sathi</span>
+    </div>
+
+    <a href="index.html" class="home-btn">
+        🏠 Home
+    </a>
+
+</header>
+
+
+<!-- ================= HERO ================= -->
+
+<section class="hero">
+
+    <h1>📝 Text to Image</h1>
+
+    <p>
+        अपने Text को सुंदर और stylish Image में बदलें
+    </p>
+
+</section>
+
+
+<!-- ================= MAIN ================= -->
+
+<main class="container">
+
+<div class="generator">
+
+    <div class="input-title">
+        ✍️ अपना Text लिखें
+    </div>
+
+    <textarea
+        id="textInput"
+        placeholder="यहाँ अपना text लिखें...&#10;&#10;उदाहरण:&#10;Tool Sathi&#10;काम आसान, समय की बचत"
+    >Tool Sathi
+काम आसान, समय की बचत</textarea>
+
+
+    <!-- SETTINGS -->
+
+    <div class="settings">
+
+        <div class="settings-title">
+            🎨 Image को Customize करें
+        </div>
+
+        <div class="setting-grid">
+
+
+            <!-- FONT SIZE -->
+
+            <div class="setting-box">
+
+                <label>
+                    🔠 Text Size
+                </label>
+
+                <input
+                    type="range"
+                    id="fontSize"
+                    min="20"
+                    max="100"
+                    value="48"
+                >
+
+                <div class="range-value">
+                    Size:
+                    <span id="fontSizeValue">48</span> px
+                </div>
+
+            </div>
+
+
+            <!-- TEXT COLOR -->
+
+            <div class="setting-box">
+
+                <label>
+                    🎨 Text Color
+                </label>
+
+                <input
+                    type="color"
+                    id="textColor"
+                    value="#ffffff"
+                >
+
+            </div>
+
+
+            <!-- ALIGNMENT -->
+
+            <div class="setting-box">
+
+                <label>
+                    ↔️ Text Alignment
+                </label>
+
+                <select id="textAlign">
+
+                    <option value="center">
+                        Center
+                    </option>
+
+                    <option value="left">
+                        Left
+                    </option>
+
+                    <option value="right">
+                        Right
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <!-- FORMAT -->
+
+            <div class="setting-box">
+
+                <label>
+                    📁 Download Format
+                </label>
+
+                <select id="format">
+
+                    <option value="png">
+                        PNG
+                    </option>
+
+                    <option value="jpeg">
+                        JPG
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <!-- BACKGROUND -->
+
+            <div class="setting-box" style="grid-column:1/-1;">
+
+                <label>
+                    🌈 Background
+                </label>
+
+                <div class="bg-buttons">
+
+                    <button
+                        class="bg-btn bg-white"
+                        data-bg="white"
+                        title="White">
+                    </button>
+
+                    <button
+                        class="bg-btn bg-black active"
+                        data-bg="black"
+                        title="Black">
+                    </button>
+
+                    <button
+                        class="bg-btn bg-blue"
+                        data-bg="blue"
+                        title="Blue">
+                    </button>
+
+                    <button
+                        class="bg-btn bg-purple"
+                        data-bg="purple"
+                        title="Purple">
+                    </button>
+
+                    <button
+                        class="bg-btn bg-sunset"
+                        data-bg="sunset"
+                        title="Sunset">
+                    </button>
+
+                    <button
+                        class="bg-btn bg-green"
+                        data-bg="green"
+                        title="Green">
+                    </button>
+
+                    <button
+                        class="bg-btn bg-yellow"
+                        data-bg="yellow"
+                        title="Yellow">
+                    </button>
+
+                    <button
+                        class="bg-btn bg-pink"
+                        data-bg="pink"
+                        title="Pink">
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- PREVIEW -->
+
+    <div class="preview-title">
+        👀 Preview
+    </div>
+
+    <div class="canvas-wrap">
+
+        <canvas
+            id="canvas"
+            width="1200"
+            height="700">
+        </canvas>
+
+    </div>
+
+
+    <!-- BUTTONS -->
+
+    <div class="buttons">
+
+        <button
+            class="generate-btn"
+            onclick="generateImage()">
+            ✨ Image बनाएं
+        </button>
+
+        <button
+            class="download-btn"
+            onclick="downloadImage()">
+            ⬇️ Download करें
+        </button>
+
+    </div>
+
+
+    <!-- NOTE -->
+
+    <div class="note">
+
+        <b>💡 कैसे इस्तेमाल करें?</b><br>
+
+        1️⃣ अपना Text लिखें।<br>
+        2️⃣ Text size और color चुनें।<br>
+        3️⃣ अपनी पसंद का background चुनें।<br>
+        4️⃣ <b>Image बनाएं</b> दबाएँ।<br>
+        5️⃣ फिर PNG/JPG में image download करें।<br><br>
+
+        🔒 आपका Text किसी server पर upload नहीं होता।
+        Image आपके browser में ही बनती है।
+
+    </div>
+
+</div>
+
+</main>
+
+
+<!-- ================= FOOTER ================= -->
+
+<footer class="footer">
+
+    <div>
+        ⚡ Fast &nbsp; | &nbsp;
+        🔒 Private &nbsp; | &nbsp;
+        🆓 <strong>100% Free</strong>
+    </div>
+
+    <p>
+        © 2026 Tool Sathi | सभी अधिकार सुरक्षित
+    </p>
+
+</footer>
+
+
+<script>
+
+/* ================= VARIABLES ================= */
+
+const canvas =
+    document.getElementById("canvas");
+
+const ctx =
+    canvas.getContext("2d");
+
+let selectedBackground = "black";
+
+
+/* ================= FONT SIZE ================= */
+
+document
+.getElementById("fontSize")
+.addEventListener("input", function(){
+
+    document
+    .getElementById("fontSizeValue")
+    .innerText = this.value;
+
+    generateImage();
+
+});
+
+
+/* ================= OTHER CONTROLS ================= */
+
+document
+.getElementById("textInput")
+.addEventListener("input", generateImage);
+
+document
+.getElementById("textColor")
+.addEventListener("input", generateImage);
+
+document
+.getElementById("textAlign")
+.addEventListener("change", generateImage);
+
+
+/* ================= BACKGROUND BUTTONS ================= */
+
+document
+.querySelectorAll(".bg-btn")
+.forEach(function(button){
+
+    button.addEventListener("click", function(){
+
+        document
+        .querySelectorAll(".bg-btn")
+        .forEach(function(btn){
+
+            btn.classList.remove("active");
+
+        });
+
+        this.classList.add("active");
+
+        selectedBackground =
+            this.dataset.bg;
+
+        generateImage();
+
+    });
+
+});
+
+
+/* ================= BACKGROUND ================= */
+
+function drawBackground(){
+
+    let gradient;
+
+    if(selectedBackground === "white"){
+
+        ctx.fillStyle = "#ffffff";
+        ctx.fillRect(0,0,canvas.width,canvas.height);
+
+    }
+
+    else if(selectedBackground === "black"){
+
+        ctx.fillStyle = "#111827";
+        ctx.fillRect(0,0,canvas.width,canvas.height);
+
+    }
+
+    else if(selectedBackground === "blue"){
+
+        gradient =
+            ctx.createLinearGradient(
+                0,0,
+                canvas.width,
+                canvas.height
+            );
+
+        gradient.addColorStop(0,"#1264e8");
+        gradient.addColorStop(1,"#464de8");
+
+        ctx.fillStyle = gradient;
+
+        ctx.fillRect(
+            0,
+            0,
+            canvas.width,
+            canvas.height
+        );
+
+    }
+
+    else if(selectedBackground === "purple"){
+
+        gradient =
+            ctx.createLinearGradient(
+                0,0,
+                canvas.width,
+                canvas.height
+            );
+
+        gradient.addColorStop(0,"#7c3aed");
+        gradient.addColorStop(1,"#ec4899");
+
+        ctx.fillStyle = gradient;
+
+        ctx.fillRect(
+            0,
+            0,
+            canvas.width,
+            canvas.height
+        );
+
+    }
+
+    else if(selectedBackground === "sunset"){
+
+        gradient =
+            ctx.createLinearGradient(
+                0,0,
+                canvas.width,
+                canvas.height
+            );
+
+        gradient.addColorStop(0,"#ff7b00");
+        gradient.addColorStop(1,"#ff247f");
+
+        ctx.fillStyle = gradient;
+
+        ctx.fillRect(
+            0,
+            0,
+            canvas.width,
+            canvas.height
+        );
+
+    }
+
+    else if(selectedBackground === "green"){
+
+        gradient =
+            ctx.createLinearGradient(
+                0,0,
+                canvas.width,
+                canvas.height
+            );
+
+        gradient.addColorStop(0,"#059669");
+        gradient.addColorStop(1,"#84cc16");
+
+        ctx.fillStyle = gradient;
+
+        ctx.fillRect(
+            0,
+            0,
+            canvas.width,
+            canvas.height
+        );
+
+    }
+
+    else if(selectedBackground === "yellow"){
+
+        gradient =
+            ctx.createLinearGradient(
+                0,0,
+                canvas.width,
+                canvas.height
+            );
+
+        gradient.addColorStop(0,"#facc15");
+        gradient.addColorStop(1,"#fb923c");
+
+        ctx.fillStyle = gradient;
+
+        ctx.fillRect(
+            0,
+            0,
+            canvas.width,
+            canvas.height
+        );
+
+    }
+
+    else if(selectedBackground === "pink"){
+
+        gradient =
+            ctx.createLinearGradient(
+                0,0,
+                canvas.width,
+                canvas.height
+            );
+
+        gradient.addColorStop(0,"#f9a8d4");
+        gradient.addColorStop(1,"#c084fc");
+
+        ctx.fillStyle = gradient;
+
+        ctx.fillRect(
+            0,
+            0,
+            canvas.width,
+            canvas.height
+        );
+
+    }
+
+}
+
+
+/* ================= DRAW TEXT ================= */
+
+function generateImage(){
+
+    drawBackground();
+
+
+    const text =
+        document
+        .getElementById("textInput")
+        .value
+        .trim();
+
+
+    if(!text){
+
+        return;
+
+    }
+
+
+    const fontSize =
+        parseInt(
+            document
+            .getElementById("fontSize")
+            .value
+        );
+
+
+    const color =
+        document
+        .getElementById("textColor")
+        .value;
+
+
+    const align =
+        document
+        .getElementById("textAlign")
+        .value;
+
+
+    ctx.fillStyle = color;
+
+    ctx.font =
+        "700 " +
+        fontSize +
+        "px 'Noto Sans Devanagari', Arial";
+
+
+    ctx.textAlign =
+        align;
+
+    ctx.textBaseline =
+        "middle";
+
+
+    let x;
+
+    if(align === "left"){
+        x = 70;
+    }
+
+    else if(align === "right"){
+        x = canvas.width - 70;
+    }
+
+    else{
+        x = canvas.width / 2;
+    }
+
+
+    /*
+       Text को lines में बाँटना
+    */
+
+    const lines =
+        text.split("\n");
+
+
+    const lineHeight =
+        fontSize * 1.5;
+
+
+    const totalHeight =
+        lines.length * lineHeight;
+
+
+    let startY =
+        (canvas.height - totalHeight) / 2
+        + lineHeight / 2;
+
+
+    lines.forEach(function(line){
+
+        ctx.fillText(
+            line,
+            x,
+            startY
+        );
+
+        startY += lineHeight;
+
+    });
+
+}
+
+
+/* ================= DOWNLOAD ================= */
+
+function downloadImage(){
+
+    const format =
+        document
+        .getElementById("format")
+        .value;
+
+
+    let mimeType;
+
+    let extension;
+
+
+    if(format === "jpeg"){
+
+        mimeType = "image/jpeg";
+        extension = "jpg";
+
+    }else{
+
+        mimeType = "image/png";
+        extension = "png";
+
+    }
+
+
+    canvas.toBlob(function(blob){
+
+        const url =
+            URL.createObjectURL(blob);
+
+
+        const link =
+            document.createElement("a");
+
+
+        link.href = url;
+
+        link.download =
+            "tool-sathi-text." +
+            extension;
+
+
+        document.body.appendChild(link);
+
+        link.click();
+
+        document.body.removeChild(link);
+
+        URL.revokeObjectURL(url);
+
+    },mimeType,0.95);
+
+}
+
+
+/* ================= INITIAL ================= */
+
+window.addEventListener(
+    "load",
+    generateImage
+);
+
+</script>
+
+</body>
+</html>
