@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>QR Code Generator | Tool Sathi</title>
+  <meta name="description" content="Tool Sathi का Free QR Code Generator - Text, Link, WhatsApp और अन्य जानकारी का QR Code बनाएं।">
+
+  <style>
+    *{
+      margin:0;
+      padding:0;
+      box-sizing:border-box;
+      font-family:Arial,"Noto Sans Devanagari",sans-serif;
+    }
+
+    body{
+      background:#f4f7ff;
+      color:#172033;
+    }
+
+    /* NAVBAR */
+    .navbar{
+      background:linear-gradient(135deg,#1237a6,#246bdb);
+      padding:15px 20px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      color:white;
+      box-shadow:0 4px 15px rgba(0,0,0,.12);
+    }
+
+    .logo{
+      font-size:23px;
+      font-weight:800;
+    }
+
+    .home-btn{
+      text-decoration:none;
+      color:#1237a6;
+      background:white;
+      padding:9px 17px;
+      border-radius:25px;
+      font-weight:700;
+      font-size:14px;
+    }
+
+    /* HERO */
+    .hero{
+      padding:40px 20px 30px;
+      text-align:center;
+      background:linear-gradient(135deg,#e8f0ff,#f9eaff);
+    }
+
+    .hero h1{
+      font-size:32px;
+      color:#173b9e;
+      margin-bottom:10px;
+    }
+
+    .hero p{
+      color:#596579;
+      font-size:16px;
+      line-height:1.6;
+    }
+
+    /* MAIN */
+    .container{
+      max-width:900px;
+      margin:25px auto;
+      padding:0 15px;
+    }
+
+    .tool-card{
+      background:white;
+      border-radius:24px;
+      padding:25px;
+      box-shadow:0 8px 30px rgba(30,60,120,.12);
+    }
+
+    .input-title{
+      font-size:16px;
+      font-weight:700;
+      margin-bottom:9px;
+      color:#26365c;
+    }
+
+    textarea{
+      width:100%;
+      min-height:130px;
+      border:2px solid #dbe3f5;
+      border-radius:15px;
+      padding:15px;
+      font-size:16px;
+      outline:none;
+      resize:vertical;
+      transition:.2s;
+    }
+
+    textarea:focus{
+      border-color:#3575e5;
+      box-shadow:0 0 0 4px rgba(53,117,229,.10);
+    }
+
+    .options{
+      display:grid;
+      grid-template-columns:repeat(2,1fr);
+      gap:15px;
+      margin-top:20px;
+    }
+
+    .option-box{
+      background:#f7f9ff;
+      border:1px solid #e2e8f7;
+      padding:15px;
+      border-radius:15px;
+    }
+
+    .option-box label{
+      display:block;
+      font-size:14px;
+      font-weight:700;
+      margin-bottom:8px;
+    }
+
+    select,
+    input[type="color"]{
+      width:100%;
+      height:45px;
+      border:1px solid #d6def0;
+      border-radius:10px;
+      background:white;
+      padding:5px 10px;
+      font-size:15px;
+    }
+
+    input[type="color"]{
+      padding:4px;
+      cursor:pointer;
+    }
+
+    .generate-btn{
+      width:100%;
+      margin-top:22px;
+      border:0;
+      border-radius:14px;
+      padding:15px;
+      background:linear-gradient(135deg,#1769e8,#733cff);
+      color:white;
+      font-size:17px;
+      font-weight:800;
+      cursor:pointer;
+      box-shadow:0 7px 18px rgba(72,76,220,.25);
+    }
+
+    .generate-btn:active{
+      transform:scale(.98);
+    }
+
+    /* QR RESULT */
+    .result{
+      display:none;
+      margin-top:25px;
+      text-align:center;
+      border-top:1px solid #e5eaf4;
+      padding-top:25px;
+    }
+
+    .result h2{
+      color:#243a78;
+      font-size:21px;
+      margin-bottom:15px;
+    }
+
+    #qrBox{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      padding:18px;
+      background:white;
+      border-radius:18px;
+      box-shadow:0 5px 20px rgba(0,0,0,.08);
+    }
+
+    #qrCanvas{
+      max-width:100%;
+      height:auto;
+    }
+
+    .download-btn{
+      display:inline-block;
+      margin-top:20px;
+      text-decoration:none;
+      background:#13a66b;
+      color:white;
+      padding:13px 24px;
+      border-radius:12px;
+      font-weight:800;
+      font-size:16px;
+    }
+
+    .download-btn:hover{
+      background:#0d8d5b;
+    }
+
+    .hint{
+      margin-top:15px;
+      color:#707b91;
+      font-size:13px;
+    }
+
+    /* INFO */
+    .info{
+      margin-top:20px;
+      background:linear-gradient(135deg,#fff8e8,#fff);
+      border:1px solid #ffe3a3;
+      border-radius:18px;
+      padding:18px;
+    }
+
+    .info h3{
+      color:#9b6700;
+      margin-bottom:8px;
+      font-size:17px;
+    }
+
+    .info p{
+      color:#6b6670;
+      line-height:1.6;
+      font-size:14px;
+    }
+
+    /* FOOTER */
+    footer{
+      margin-top:40px;
+      background:#101c3d;
+      color:white;
+      text-align:center;
+      padding:25px 15px;
+    }
+
+    .features{
+      display:flex;
+      justify-content:center;
+      flex-wrap:wrap;
+      gap:18px;
+      margin-bottom:15px;
+      font-size:14px;
+    }
+
+    footer p{
+      color:#b9c4dc;
+      font-size:13px;
+    }
+
+    /* MOBILE */
+    @media(max-width:600px){
+      .hero h1{
+        font-size:27px;
+      }
+
+      .hero p{
+        font-size:14px;
+      }
+
+      .tool-card{
+        padding:18px;
+        border-radius:20px;
+      }
+
+      .options{
+        grid-template-columns:1fr;
+      }
+
+      .navbar{
+        padding:13px 15px;
+      }
+
+      .logo{
+        font-size:20px;
+      }
+
+      .home-btn{
+        padding:8px 13px;
+        font-size:13px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- NAVBAR -->
+  <nav class="navbar">
+    <div class="logo">🔧 Tool Sathi</div>
+    <a href="index.html" class="home-btn">🏠 Home</a>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <h1>📱 QR Code Generator</h1>
+    <p>
+      Text, Link, WhatsApp या किसी भी जानकारी का QR Code बनाएं।
+      <br>
+      बिल्कुल Free और बिना किसी Server Upload के।
+    </p>
+  </section>
+
+  <!-- TOOL -->
+  <main class="container">
+
+    <div class="tool-card">
+
+      <div class="input-title">✍️ अपनी जानकारी डालें</div>
+
+      <textarea
+        id="qrText"
+        placeholder="यहाँ Text, Website Link, WhatsApp Number या कोई भी जानकारी लिखें..."></textarea>
+
+      <div class="options">
+
+        <div class="option-box">
+          <label>📏 QR Size</label>
+          <select id="qrSize">
+            <option value="200">200 × 200</option>
+            <option value="300" selected>300 × 300</option>
+            <option value="400">400 × 400</option>
+            <option value="500">500 × 500</option>
+          </select>
+        </div>
+
+        <div class="option-box">
+          <label>🎨 QR Color</label>
+          <input type="color" id="qrColor" value="#000000">
+        </div>
+
+        <div class="option-box">
+          <label>⬜ Background Color</label>
+          <input type="color" id="bgColor" value="#ffffff">
+        </div>
+
+        <div class="option-box">
+          <label>🖼️ Image Format</label>
+          <select id="qrFormat">
+            <option value="png">PNG</option>
+            <option value="jpg">JPG</option>
+          </select>
+        </div>
+
+      </div>
+
+      <button class="generate-btn" onclick="generateQR()">
+        ✨ QR Code बनाएं
+      </button>
+
+      <!-- RESULT -->
+      <div class="result" id="result">
+
+        <h2>✅ आपका QR Code तैयार है</h2>
+
+        <div id="qrBox">
+          <canvas id="qrCanvas"></canvas>
+        </div>
+
+        <br>
+
+        <a id="downloadBtn" class="download-btn" href="#" download="tool-sathi-qr-code.png">
+          ⬇️ QR Code Download करें
+        </a>
+
+        <div class="hint">
+          QR Code को Scan करके आपकी दी गई जानकारी खोली जा सकती है।
+        </div>
+
+      </div>
+
+      <!-- INFO -->
+      <div class="info">
+        <h3>💡 QR Code का उपयोग कहाँ करें?</h3>
+        <p>
+          Website Link, WhatsApp, Contact Information, Payment Link,
+          YouTube Link, Social Media Profile, दुकान की जानकारी,
+          नोट्स और कई अन्य चीजों के लिए QR Code बनाया जा सकता है।
+        </p>
+      </div>
+
+    </div>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="features">
+      <span>⚡ Fast</span>
+      <span>🔒 Private</span>
+      <span>🆓 100% Free</span>
+      <span>📱 Mobile Friendly</span>
+    </div>
+
+    <p>© 2026 Tool Sathi | Free Online Tools</p>
+  </footer>
+
+
+  <!-- QR LIBRARY -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrious/4.0.2/qrious.min.js"></script>
+
+  <script>
+
+    function generateQR(){
+
+      const text = document.getElementById("qrText").value.trim();
+
+      if(!text){
+        alert("⚠️ पहले कोई Text या Link डालें।");
+        return;
+      }
+
+      const size = parseInt(document.getElementById("qrSize").value);
+      const color = document.getElementById("qrColor").value;
+      const background = document.getElementById("bgColor").value;
+      const format = document.getElementById("qrFormat").value;
+
+      const canvas = document.getElementById("qrCanvas");
+
+      new QRious({
+        element: canvas,
+        value: text,
+        size: size,
+        foreground: color,
+        background: background,
+        level: "H"
+      });
+
+      document.getElementById("result").style.display = "block";
+
+      let imageData;
+
+      if(format === "jpg"){
+        imageData = canvas.toDataURL("image/jpeg", 0.95);
+      }else{
+        imageData = canvas.toDataURL("image/png");
+      }
+
+      const downloadBtn = document.getElementById("downloadBtn");
+
+      downloadBtn.href = imageData;
+      downloadBtn.download = "tool-sathi-qr-code." + format;
+
+      document.getElementById("result").scrollIntoView({
+        behavior:"smooth",
+        block:"center"
+      });
+    }
+
+  </script>
+
+</body>
+</html>
