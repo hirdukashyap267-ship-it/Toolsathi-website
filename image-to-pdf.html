@@ -1,0 +1,780 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Image to PDF | Tool Sathi</title>
+<meta name="description" content="JPG, PNG और WEBP images को PDF में बदलें।">
+
+<style>
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+  font-family:Arial,"Noto Sans Devanagari",sans-serif;
+}
+
+body{
+  background:#f4f7ff;
+  color:#172033;
+}
+
+.navbar{
+  background:linear-gradient(135deg,#1237a6,#246bdb);
+  padding:15px 20px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  color:white;
+}
+
+.logo{
+  font-size:23px;
+  font-weight:800;
+}
+
+.home-btn{
+  text-decoration:none;
+  background:white;
+  color:#1237a6;
+  padding:9px 17px;
+  border-radius:25px;
+  font-weight:bold;
+}
+
+.hero{
+  text-align:center;
+  padding:40px 20px 30px;
+  background:linear-gradient(135deg,#e8f0ff,#f9eaff);
+}
+
+.hero h1{
+  font-size:32px;
+  color:#173b9e;
+  margin-bottom:10px;
+}
+
+.hero p{
+  color:#596579;
+  line-height:1.6;
+}
+
+.container{
+  max-width:950px;
+  margin:25px auto;
+  padding:0 15px;
+}
+
+.tool-card{
+  background:white;
+  padding:25px;
+  border-radius:24px;
+  box-shadow:0 8px 30px rgba(30,60,120,.12);
+}
+
+.upload-box{
+  display:block;
+  text-align:center;
+  border:2px dashed #7192e8;
+  border-radius:20px;
+  padding:35px 15px;
+  background:#f8faff;
+  cursor:pointer;
+}
+
+.upload-icon{
+  font-size:50px;
+}
+
+.upload-box h2{
+  color:#2348a0;
+  margin:10px 0;
+}
+
+.upload-box p{
+  color:#68748a;
+  margin-bottom:15px;
+}
+
+.choose-btn{
+  display:inline-block;
+  padding:12px 22px;
+  border-radius:12px;
+  color:white;
+  font-weight:bold;
+  background:linear-gradient(135deg,#1769e8,#733cff);
+}
+
+#imageInput{
+  display:none;
+}
+
+.options{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:15px;
+  margin-top:22px;
+}
+
+.option{
+  background:#f7f9ff;
+  border:1px solid #e1e7f5;
+  border-radius:15px;
+  padding:15px;
+}
+
+.option label{
+  display:block;
+  font-weight:bold;
+  margin-bottom:8px;
+}
+
+select{
+  width:100%;
+  height:43px;
+  border:1px solid #d3dcef;
+  border-radius:10px;
+  padding:0 10px;
+  background:white;
+}
+
+.image-list{
+  margin-top:25px;
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:15px;
+}
+
+.image-card{
+  position:relative;
+  border:1px solid #e1e6f1;
+  border-radius:15px;
+  overflow:hidden;
+  background:white;
+}
+
+.image-card img{
+  width:100%;
+  height:180px;
+  object-fit:contain;
+  background:#f5f6fa;
+  display:block;
+}
+
+.image-number{
+  padding:9px;
+  font-size:13px;
+  font-weight:bold;
+}
+
+.remove-btn{
+  position:absolute;
+  right:8px;
+  top:8px;
+  width:32px;
+  height:32px;
+  border:0;
+  border-radius:50%;
+  background:#e63946;
+  color:white;
+  font-size:20px;
+  cursor:pointer;
+}
+
+.pdf-btn{
+  width:100%;
+  margin-top:25px;
+  padding:16px;
+  border:0;
+  border-radius:14px;
+  background:linear-gradient(135deg,#e52d27,#b31217);
+  color:white;
+  font-size:17px;
+  font-weight:bold;
+  cursor:pointer;
+}
+
+.clear-btn{
+  width:100%;
+  margin-top:10px;
+  padding:12px;
+  border:2px solid #dce2ef;
+  border-radius:12px;
+  background:white;
+  color:#48546d;
+  font-weight:bold;
+}
+
+.status{
+  display:none;
+  margin-top:18px;
+  padding:14px;
+  border-radius:12px;
+  background:#eef7ff;
+  color:#2456a6;
+  text-align:center;
+  font-weight:bold;
+}
+
+.info{
+  margin-top:20px;
+  padding:18px;
+  border-radius:18px;
+  background:#fff8e8;
+  border:1px solid #ffe3a3;
+}
+
+.info h3{
+  color:#9b6700;
+  margin-bottom:8px;
+}
+
+.info p{
+  color:#6b6670;
+  line-height:1.6;
+  font-size:14px;
+}
+
+footer{
+  margin-top:40px;
+  background:#101c3d;
+  color:white;
+  text-align:center;
+  padding:25px 15px;
+}
+
+.features{
+  display:flex;
+  justify-content:center;
+  flex-wrap:wrap;
+  gap:18px;
+  margin-bottom:15px;
+}
+
+footer p{
+  color:#b9c4dc;
+  font-size:13px;
+}
+
+@media(max-width:700px){
+
+  .hero h1{
+    font-size:27px;
+  }
+
+  .tool-card{
+    padding:18px;
+  }
+
+  .options{
+    grid-template-columns:1fr;
+  }
+
+  .image-list{
+    grid-template-columns:repeat(2,1fr);
+  }
+
+  .image-card img{
+    height:145px;
+  }
+
+  .logo{
+    font-size:20px;
+  }
+}
+
+@media(max-width:400px){
+
+  .image-list{
+    grid-template-columns:1fr;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<nav class="navbar">
+  <div class="logo">🔧 Tool Sathi</div>
+  <a href="index.html" class="home-btn">🏠 Home</a>
+</nav>
+
+<section class="hero">
+  <h1>📄 Image to PDF</h1>
+  <p>
+    JPG, PNG और WEBP Images को एक PDF में बदलें।
+    <br>
+    Multiple Images एक ही PDF में जोड़ें।
+  </p>
+</section>
+
+<main class="container">
+
+<div class="tool-card">
+
+<label class="upload-box" for="imageInput">
+
+  <div class="upload-icon">🖼️</div>
+
+  <h2>Images चुनें</h2>
+
+  <p>एक या एक से अधिक Images Select करें</p>
+
+  <span class="choose-btn">📁 Images चुनें</span>
+
+</label>
+
+<input
+  type="file"
+  id="imageInput"
+  accept="image/jpeg,image/png,image/webp"
+  multiple
+>
+
+<div class="options">
+
+  <div class="option">
+    <label>📄 Page Size</label>
+    <select id="pageSize">
+      <option value="a4">A4</option>
+      <option value="letter">Letter</option>
+    </select>
+  </div>
+
+  <div class="option">
+    <label>📐 Orientation</label>
+    <select id="orientation">
+      <option value="auto">Auto</option>
+      <option value="portrait">Portrait</option>
+      <option value="landscape">Landscape</option>
+    </select>
+  </div>
+
+  <div class="option">
+    <label>🖼️ Image Fit</label>
+    <select id="imageFit">
+      <option value="contain">Fit in Page</option>
+      <option value="cover">Fill Page</option>
+    </select>
+  </div>
+
+</div>
+
+<div class="image-list" id="imageList"></div>
+
+<button class="pdf-btn" onclick="createPDF()">
+  📄 PDF बनाएं और Download करें
+</button>
+
+<button class="clear-btn" onclick="clearAll()">
+  🗑️ सभी Images हटाएं
+</button>
+
+<div class="status" id="status"></div>
+
+<div class="info">
+  <h3>🔒 आपकी Images Private हैं</h3>
+  <p>
+    Images किसी Server पर Upload नहीं होतीं।
+    PDF आपके Browser में ही तैयार होती है।
+  </p>
+</div>
+
+</div>
+</main>
+
+<footer>
+
+<div class="features">
+  <span>⚡ Fast</span>
+  <span>🔒 Private</span>
+  <span>🆓 100% Free</span>
+  <span>📱 Mobile Friendly</span>
+</div>
+
+<p>© 2026 Tool Sathi | Free Online Tools</p>
+
+</footer>
+
+
+<!-- PDF LIBRARY -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+<script>
+
+let images = [];
+
+const imageInput = document.getElementById("imageInput");
+const imageList = document.getElementById("imageList");
+
+imageInput.addEventListener("change", function(){
+
+  const files = Array.from(this.files);
+
+  files.forEach(file => {
+
+    if(!file.type.startsWith("image/")) return;
+
+    const reader = new FileReader();
+
+    reader.onload = function(e){
+
+      images.push({
+        src:e.target.result,
+        name:file.name
+      });
+
+      displayImages();
+
+    };
+
+    reader.readAsDataURL(file);
+
+  });
+
+  this.value = "";
+
+});
+
+
+function displayImages(){
+
+  imageList.innerHTML = "";
+
+  images.forEach((image,index)=>{
+
+    const card = document.createElement("div");
+
+    card.className = "image-card";
+
+    card.innerHTML = `
+      <button class="remove-btn"
+      onclick="removeImage(${index})">×</button>
+
+      <img src="${image.src}">
+
+      <div class="image-number">
+        📄 Image ${index + 1}
+      </div>
+    `;
+
+    imageList.appendChild(card);
+
+  });
+
+}
+
+
+function removeImage(index){
+
+  images.splice(index,1);
+
+  displayImages();
+
+}
+
+
+function clearAll(){
+
+  images = [];
+
+  imageList.innerHTML = "";
+
+  document.getElementById("status").style.display = "none";
+
+}
+
+
+function loadImage(src){
+
+  return new Promise((resolve,reject)=>{
+
+    const img = new Image();
+
+    img.onload = function(){
+      resolve(img);
+    };
+
+    img.onerror = function(){
+      reject(new Error("Image load failed"));
+    };
+
+    img.src = src;
+
+  });
+
+}
+
+
+async function createPDF(){
+
+  if(images.length === 0){
+
+    alert("⚠️ पहले कम से कम एक Image चुनें।");
+
+    return;
+  }
+
+  const status = document.getElementById("status");
+
+  status.style.display = "block";
+
+  status.innerText = "⏳ PDF तैयार हो रही है...";
+
+  try{
+
+    const { jsPDF } = window.jspdf;
+
+    const pageSize =
+      document.getElementById("pageSize").value;
+
+    const orientation =
+      document.getElementById("orientation").value;
+
+    const imageFit =
+      document.getElementById("imageFit").value;
+
+
+    /* पहली image देखकर orientation तय करें */
+
+    let firstImg = await loadImage(images[0].src);
+
+    let firstOrientation;
+
+    if(orientation === "auto"){
+
+      firstOrientation =
+        firstImg.width >= firstImg.height
+        ? "landscape"
+        : "portrait";
+
+    }else{
+
+      firstOrientation = orientation;
+
+    }
+
+
+    /* PDF बनाएं */
+
+    const pdf = new jsPDF({
+
+      orientation:firstOrientation,
+
+      unit:"mm",
+
+      format:pageSize
+
+    });
+
+
+    for(let i=0;i<images.length;i++){
+
+      status.innerText =
+        "⏳ PDF तैयार हो रही है... " +
+        (i+1) +
+        " / " +
+        images.length;
+
+
+      const img = await loadImage(images[i].src);
+
+
+      /* पहली image के बाद नए page */
+
+      if(i > 0){
+
+        let pageOrientation;
+
+        if(orientation === "auto"){
+
+          pageOrientation =
+            img.width >= img.height
+            ? "landscape"
+            : "portrait";
+
+        }else{
+
+          pageOrientation = orientation;
+
+        }
+
+        pdf.addPage(
+          pageSize,
+          pageOrientation
+        );
+
+      }
+
+
+      const pageWidth =
+        pdf.internal.pageSize.getWidth();
+
+      const pageHeight =
+        pdf.internal.pageSize.getHeight();
+
+
+      const margin = 10;
+
+      const maxWidth =
+        pageWidth - (margin * 2);
+
+      const maxHeight =
+        pageHeight - (margin * 2);
+
+
+      let width = img.width;
+      let height = img.height;
+
+
+      /* Image को page में fit करें */
+
+      const ratio =
+        Math.min(
+          maxWidth / width,
+          maxHeight / height
+        );
+
+
+      if(imageFit === "contain"){
+
+        width *= ratio;
+        height *= ratio;
+
+      }else{
+
+        const coverRatio =
+          Math.max(
+            maxWidth / width,
+            maxHeight / height
+          );
+
+        width *= coverRatio;
+        height *= coverRatio;
+
+      }
+
+
+      const x =
+        (pageWidth - width) / 2;
+
+      const y =
+        (pageHeight - height) / 2;
+
+
+      /*
+       * PNG/JPG दोनों को JPEG में convert करके
+       * PDF में add किया जा रहा है।
+       */
+
+      const canvas =
+        document.createElement("canvas");
+
+      canvas.width = img.naturalWidth || img.width;
+      canvas.height = img.naturalHeight || img.height;
+
+      const ctx =
+        canvas.getContext("2d");
+
+      ctx.fillStyle = "#ffffff";
+
+      ctx.fillRect(
+        0,
+        0,
+        canvas.width,
+        canvas.height
+      );
+
+      ctx.drawImage(
+        img,
+        0,
+        0,
+        canvas.width,
+        canvas.height
+      );
+
+
+      const jpegData =
+        canvas.toDataURL(
+          "image/jpeg",
+          0.88
+        );
+
+
+      pdf.addImage(
+        jpegData,
+        "JPEG",
+        x,
+        y,
+        width,
+        height,
+        undefined,
+        "MEDIUM"
+      );
+
+    }
+
+
+    status.innerText =
+      "📥 PDF Download हो रही है...";
+
+
+    /*
+     * Blob के जरिए reliable download
+     */
+
+    const pdfBlob =
+      pdf.output("blob");
+
+
+    const downloadUrl =
+      URL.createObjectURL(pdfBlob);
+
+
+    const link =
+      document.createElement("a");
+
+    link.href = downloadUrl;
+
+    link.download =
+      "tool-sathi-image-to-pdf.pdf";
+
+    document.body.appendChild(link);
+
+    link.click();
+
+    document.body.removeChild(link);
+
+
+    setTimeout(function(){
+
+      URL.revokeObjectURL(downloadUrl);
+
+    },3000);
+
+
+    status.innerText =
+      "✅ PDF तैयार हो गई! Download शुरू हो गया है।";
+
+
+  }catch(error){
+
+    console.error(error);
+
+    status.innerText =
+      "❌ PDF बनाने में समस्या हुई।";
+
+    alert(
+      "PDF नहीं बन पाई। कृपया images कम करके दोबारा कोशिश करें।"
+    );
+
+  }
+
+}
+
+
+</script>
+
+</body>
+</html>
