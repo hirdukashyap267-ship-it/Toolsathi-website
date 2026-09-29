@@ -1,0 +1,1053 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Image Resize | Tool Sathi</title>
+<meta name="description" content="Tool Sathi Free Image Resizer - फोटो की Width और Height बदलें।">
+
+<style>
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+  font-family:Arial,"Noto Sans Devanagari",sans-serif;
+}
+
+body{
+  background:#f4f7ff;
+  color:#172033;
+}
+
+/* NAVBAR */
+.navbar{
+  background:linear-gradient(135deg,#1237a6,#246bdb);
+  padding:15px 20px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  color:white;
+  box-shadow:0 4px 15px rgba(0,0,0,.12);
+}
+
+.logo{
+  font-size:23px;
+  font-weight:800;
+}
+
+.home-btn{
+  text-decoration:none;
+  background:white;
+  color:#1237a6;
+  padding:9px 17px;
+  border-radius:25px;
+  font-weight:bold;
+  font-size:14px;
+}
+
+/* HERO */
+.hero{
+  text-align:center;
+  padding:40px 20px 30px;
+  background:linear-gradient(135deg,#e8f0ff,#f9eaff);
+}
+
+.hero h1{
+  font-size:32px;
+  color:#173b9e;
+  margin-bottom:10px;
+}
+
+.hero p{
+  color:#596579;
+  line-height:1.6;
+}
+
+/* CONTAINER */
+.container{
+  max-width:900px;
+  margin:25px auto;
+  padding:0 15px;
+}
+
+.tool-card{
+  background:white;
+  padding:25px;
+  border-radius:24px;
+  box-shadow:0 8px 30px rgba(30,60,120,.12);
+}
+
+/* UPLOAD */
+.upload-box{
+  display:block;
+  text-align:center;
+  border:2px dashed #7192e8;
+  border-radius:20px;
+  padding:35px 15px;
+  background:#f8faff;
+  cursor:pointer;
+}
+
+.upload-icon{
+  font-size:50px;
+}
+
+.upload-box h2{
+  color:#2348a0;
+  margin:10px 0;
+  font-size:21px;
+}
+
+.upload-box p{
+  color:#68748a;
+  margin-bottom:15px;
+  font-size:14px;
+}
+
+.choose-btn{
+  display:inline-block;
+  padding:12px 22px;
+  border-radius:12px;
+  color:white;
+  font-weight:bold;
+  background:linear-gradient(135deg,#1769e8,#733cff);
+}
+
+#imageInput{
+  display:none;
+}
+
+/* ORIGINAL INFO */
+.original-info{
+  display:none;
+  margin-top:20px;
+  padding:15px;
+  border-radius:15px;
+  background:#eef5ff;
+  border:1px solid #d7e5ff;
+}
+
+.original-info strong{
+  color:#244b9e;
+}
+
+/* PREVIEW */
+.preview-area{
+  display:none;
+  margin-top:20px;
+  text-align:center;
+}
+
+.preview-area h3{
+  color:#263d78;
+  margin-bottom:12px;
+}
+
+.preview-box{
+  background:#f5f6fa;
+  border:1px solid #e1e6f1;
+  border-radius:15px;
+  padding:15px;
+  min-height:180px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+
+#preview{
+  max-width:100%;
+  max-height:350px;
+  object-fit:contain;
+}
+
+/* SETTINGS */
+.settings{
+  display:none;
+  margin-top:22px;
+}
+
+.settings-title{
+  font-size:18px;
+  font-weight:bold;
+  color:#26385f;
+  margin-bottom:15px;
+}
+
+.input-row{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:15px;
+}
+
+.input-box{
+  background:#f7f9ff;
+  border:1px solid #e1e7f5;
+  border-radius:15px;
+  padding:15px;
+}
+
+.input-box label{
+  display:block;
+  font-size:14px;
+  font-weight:bold;
+  margin-bottom:8px;
+}
+
+.input-box input{
+  width:100%;
+  height:45px;
+  border:1px solid #d1d9eb;
+  border-radius:10px;
+  padding:0 12px;
+  font-size:16px;
+  outline:none;
+}
+
+.input-box input:focus{
+  border-color:#3575e5;
+  box-shadow:0 0 0 3px rgba(53,117,229,.10);
+}
+
+/* LOCK */
+.lock-row{
+  margin-top:15px;
+  background:#f7f9ff;
+  border:1px solid #e1e7f5;
+  padding:13px;
+  border-radius:12px;
+}
+
+.lock-row label{
+  display:flex;
+  align-items:center;
+  gap:9px;
+  font-weight:bold;
+  font-size:14px;
+  cursor:pointer;
+}
+
+.lock-row input{
+  width:18px;
+  height:18px;
+}
+
+/* FORMAT */
+.format-box{
+  margin-top:15px;
+  background:#f7f9ff;
+  border:1px solid #e1e7f5;
+  border-radius:15px;
+  padding:15px;
+}
+
+.format-box label{
+  display:block;
+  font-size:14px;
+  font-weight:bold;
+  margin-bottom:8px;
+}
+
+.format-box select{
+  width:100%;
+  height:43px;
+  border:1px solid #d3dcef;
+  border-radius:10px;
+  background:white;
+  padding:0 10px;
+  font-size:14px;
+}
+
+/* QUALITY */
+.quality{
+  margin-top:15px;
+}
+
+.quality label{
+  display:flex;
+  justify-content:space-between;
+  font-weight:bold;
+  font-size:14px;
+  margin-bottom:8px;
+}
+
+.quality input{
+  width:100%;
+  accent-color:#386ee5;
+}
+
+/* BUTTON */
+.resize-btn{
+  width:100%;
+  margin-top:22px;
+  padding:16px;
+  border:0;
+  border-radius:14px;
+  background:linear-gradient(135deg,#1769e8,#733cff);
+  color:white;
+  font-size:17px;
+  font-weight:800;
+  cursor:pointer;
+  box-shadow:0 7px 18px rgba(72,76,220,.22);
+}
+
+.resize-btn:active{
+  transform:scale(.98);
+}
+
+/* RESULT */
+.result{
+  display:none;
+  margin-top:25px;
+  border-top:1px solid #e5eaf4;
+  padding-top:25px;
+  text-align:center;
+}
+
+.result h2{
+  color:#198754;
+  font-size:21px;
+  margin-bottom:15px;
+}
+
+.result-info{
+  background:#f0fff7;
+  border:1px solid #c8f0dc;
+  border-radius:15px;
+  padding:15px;
+  line-height:1.8;
+  color:#35634d;
+  font-size:14px;
+}
+
+.download-btn{
+  display:inline-block;
+  margin-top:18px;
+  text-decoration:none;
+  background:#13a66b;
+  color:white;
+  padding:13px 24px;
+  border-radius:12px;
+  font-weight:800;
+}
+
+.download-btn:hover{
+  background:#0d8d5b;
+}
+
+/* INFO */
+.info{
+  margin-top:20px;
+  padding:18px;
+  border-radius:18px;
+  background:#fff8e8;
+  border:1px solid #ffe3a3;
+}
+
+.info h3{
+  color:#9b6700;
+  margin-bottom:8px;
+}
+
+.info p{
+  color:#6b6670;
+  line-height:1.6;
+  font-size:14px;
+}
+
+/* FOOTER */
+footer{
+  margin-top:40px;
+  background:#101c3d;
+  color:white;
+  text-align:center;
+  padding:25px 15px;
+}
+
+.features{
+  display:flex;
+  justify-content:center;
+  flex-wrap:wrap;
+  gap:18px;
+  margin-bottom:15px;
+}
+
+footer p{
+  color:#b9c4dc;
+  font-size:13px;
+}
+
+/* MOBILE */
+@media(max-width:600px){
+
+  .hero h1{
+    font-size:27px;
+  }
+
+  .tool-card{
+    padding:18px;
+  }
+
+  .input-row{
+    grid-template-columns:1fr;
+  }
+
+  .navbar{
+    padding:13px 15px;
+  }
+
+  .logo{
+    font-size:20px;
+  }
+
+  .home-btn{
+    padding:8px 13px;
+    font-size:13px;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar">
+  <div class="logo">🔧 Tool Sathi</div>
+  <a href="index.html" class="home-btn">🏠 Home</a>
+</nav>
+
+
+<!-- HERO -->
+<section class="hero">
+  <h1>📐 Image Resize</h1>
+  <p>
+    अपनी फोटो की Width और Height आसानी से बदलें।
+    <br>
+    Quality और Format भी चुनें।
+  </p>
+</section>
+
+
+<main class="container">
+
+<div class="tool-card">
+
+  <!-- UPLOAD -->
+  <label class="upload-box" for="imageInput">
+
+    <div class="upload-icon">🖼️</div>
+
+    <h2>Image चुनें</h2>
+
+    <p>
+      JPG, PNG या WEBP Image चुनें
+    </p>
+
+    <span class="choose-btn">
+      📁 Image Select करें
+    </span>
+
+  </label>
+
+  <input
+    type="file"
+    id="imageInput"
+    accept="image/jpeg,image/png,image/webp"
+  >
+
+
+  <!-- ORIGINAL INFO -->
+  <div class="original-info" id="originalInfo"></div>
+
+
+  <!-- PREVIEW -->
+  <div class="preview-area" id="previewArea">
+
+    <h3>👀 Image Preview</h3>
+
+    <div class="preview-box">
+      <img id="preview" alt="Preview">
+    </div>
+
+  </div>
+
+
+  <!-- SETTINGS -->
+  <div class="settings" id="settings">
+
+    <div class="settings-title">
+      ⚙️ Resize Settings
+    </div>
+
+
+    <div class="input-row">
+
+      <div class="input-box">
+
+        <label>↔️ Width (px)</label>
+
+        <input
+          type="number"
+          id="width"
+          min="1"
+          placeholder="Width"
+        >
+
+      </div>
+
+
+      <div class="input-box">
+
+        <label>↕️ Height (px)</label>
+
+        <input
+          type="number"
+          id="height"
+          min="1"
+          placeholder="Height"
+        >
+
+      </div>
+
+    </div>
+
+
+    <!-- LOCK -->
+    <div class="lock-row">
+
+      <label>
+
+        <input
+          type="checkbox"
+          id="lockRatio"
+          checked
+        >
+
+        🔒 Aspect Ratio Lock रखें
+
+      </label>
+
+    </div>
+
+
+    <!-- FORMAT -->
+    <div class="format-box">
+
+      <label>🖼️ Output Format</label>
+
+      <select id="format">
+
+        <option value="image/jpeg">
+          JPG
+        </option>
+
+        <option value="image/png">
+          PNG
+        </option>
+
+        <option value="image/webp">
+          WEBP
+        </option>
+
+      </select>
+
+    </div>
+
+
+    <!-- QUALITY -->
+    <div class="quality">
+
+      <label>
+        <span>✨ Quality</span>
+        <span id="qualityValue">90%</span>
+      </label>
+
+      <input
+        type="range"
+        id="quality"
+        min="10"
+        max="100"
+        value="90"
+      >
+
+    </div>
+
+
+    <!-- RESIZE -->
+    <button
+      class="resize-btn"
+      onclick="resizeImage()"
+    >
+      ✨ Image Resize करें
+    </button>
+
+  </div>
+
+
+  <!-- RESULT -->
+  <div class="result" id="result">
+
+    <h2>✅ Image तैयार है</h2>
+
+    <div class="result-info" id="resultInfo"></div>
+
+    <a
+      id="downloadBtn"
+      class="download-btn"
+      href="#"
+      download="tool-sathi-resized-image.jpg"
+    >
+      ⬇️ Resized Image Download करें
+    </a>
+
+  </div>
+
+
+  <!-- INFO -->
+  <div class="info">
+
+    <h3>🔒 आपकी Image Private है</h3>
+
+    <p>
+      आपकी Image किसी Server पर Upload नहीं होती।
+      Resize आपके Browser में ही होता है।
+      इसलिए आपकी फोटो Private रहती है।
+    </p>
+
+  </div>
+
+</div>
+
+</main>
+
+
+<!-- FOOTER -->
+<footer>
+
+  <div class="features">
+    <span>⚡ Fast</span>
+    <span>🔒 Private</span>
+    <span>🆓 100% Free</span>
+    <span>📱 Mobile Friendly</span>
+  </div>
+
+  <p>
+    © 2026 Tool Sathi | Free Online Tools
+  </p>
+
+</footer>
+
+
+<script>
+
+let originalImage = null;
+let originalWidth = 0;
+let originalHeight = 0;
+
+
+/* IMAGE SELECT */
+
+document.getElementById("imageInput").addEventListener(
+  "change",
+  function(){
+
+    const file = this.files[0];
+
+    if(!file){
+      return;
+    }
+
+    if(!file.type.startsWith("image/")){
+
+      alert("⚠️ कृपया Image File चुनें।");
+
+      return;
+    }
+
+
+    const reader = new FileReader();
+
+
+    reader.onload = function(e){
+
+      originalImage = new Image();
+
+      originalImage.onload = function(){
+
+        originalWidth = originalImage.width;
+        originalHeight = originalImage.height;
+
+
+        /* Preview */
+
+        document.getElementById("preview").src =
+          e.target.result;
+
+        document.getElementById("previewArea")
+          .style.display = "block";
+
+
+        /* Original Info */
+
+        document.getElementById("originalInfo")
+          .style.display = "block";
+
+        document.getElementById("originalInfo").innerHTML =
+
+          "📏 <strong>Original Size:</strong> " +
+          originalWidth +
+          " × " +
+          originalHeight +
+          " px" +
+          "<br>" +
+          "💾 <strong>File Size:</strong> " +
+          formatBytes(file.size) +
+          "<br>" +
+          "🖼️ <strong>Format:</strong> " +
+          file.type;
+
+
+        /* Width Height */
+
+        document.getElementById("width").value =
+          originalWidth;
+
+        document.getElementById("height").value =
+          originalHeight;
+
+
+        document.getElementById("settings")
+          .style.display = "block";
+
+
+        document.getElementById("result")
+          .style.display = "none";
+
+      };
+
+
+      originalImage.src = e.target.result;
+
+    };
+
+
+    reader.readAsDataURL(file);
+
+  }
+);
+
+
+/* WIDTH CHANGE */
+
+document.getElementById("width").addEventListener(
+  "input",
+  function(){
+
+    if(
+      !document.getElementById("lockRatio").checked ||
+      !originalWidth ||
+      !originalHeight
+    ){
+      return;
+    }
+
+    const newWidth =
+      parseInt(this.value);
+
+    if(!newWidth){
+      return;
+    }
+
+    const newHeight =
+      Math.round(
+        newWidth *
+        originalHeight /
+        originalWidth
+      );
+
+    document.getElementById("height").value =
+      newHeight;
+
+  }
+);
+
+
+/* HEIGHT CHANGE */
+
+document.getElementById("height").addEventListener(
+  "input",
+  function(){
+
+    if(
+      !document.getElementById("lockRatio").checked ||
+      !originalWidth ||
+      !originalHeight
+    ){
+      return;
+    }
+
+    const newHeight =
+      parseInt(this.value);
+
+    if(!newHeight){
+      return;
+    }
+
+    const newWidth =
+      Math.round(
+        newHeight *
+        originalWidth /
+        originalHeight
+      );
+
+    document.getElementById("width").value =
+      newWidth;
+
+  }
+);
+
+
+/* QUALITY */
+
+document.getElementById("quality").addEventListener(
+  "input",
+  function(){
+
+    document.getElementById("qualityValue")
+      .innerText =
+      this.value + "%";
+
+  }
+);
+
+
+/* RESIZE */
+
+function resizeImage(){
+
+  if(!originalImage){
+
+    alert("⚠️ पहले Image चुनें।");
+
+    return;
+  }
+
+
+  const width =
+    parseInt(
+      document.getElementById("width").value
+    );
+
+  const height =
+    parseInt(
+      document.getElementById("height").value
+    );
+
+
+  if(!width || !height || width < 1 || height < 1){
+
+    alert("⚠️ Width और Height सही डालें।");
+
+    return;
+  }
+
+
+  if(width > 10000 || height > 10000){
+
+    alert(
+      "⚠️ Maximum size 10000 × 10000 px तक रखें।"
+    );
+
+    return;
+  }
+
+
+  const format =
+    document.getElementById("format").value;
+
+
+  const quality =
+    parseInt(
+      document.getElementById("quality").value
+    ) / 100;
+
+
+  /* Canvas */
+
+  const canvas =
+    document.createElement("canvas");
+
+  canvas.width = width;
+  canvas.height = height;
+
+
+  const ctx =
+    canvas.getContext("2d");
+
+
+  /* PNG के लिए transparent background */
+
+  if(format === "image/png"){
+
+    ctx.clearRect(
+      0,
+      0,
+      width,
+      height
+    );
+
+  }else{
+
+    ctx.fillStyle = "#ffffff";
+
+    ctx.fillRect(
+      0,
+      0,
+      width,
+      height
+    );
+
+  }
+
+
+  /* Image Draw */
+
+  ctx.drawImage(
+    originalImage,
+    0,
+    0,
+    width,
+    height
+  );
+
+
+  /* Convert */
+
+  canvas.toBlob(
+    function(blob){
+
+      if(!blob){
+
+        alert(
+          "❌ Image तैयार नहीं हो पाई।"
+        );
+
+        return;
+      }
+
+
+      const url =
+        URL.createObjectURL(blob);
+
+
+      const downloadBtn =
+        document.getElementById("downloadBtn");
+
+
+      downloadBtn.href = url;
+
+
+      let extension = "jpg";
+
+      if(format === "image/png"){
+        extension = "png";
+      }
+
+      if(format === "image/webp"){
+        extension = "webp";
+      }
+
+
+      downloadBtn.download =
+        "tool-sathi-resized-image." +
+        extension;
+
+
+      /* Result Info */
+
+      document.getElementById("resultInfo")
+        .innerHTML =
+
+        "📐 <strong>New Size:</strong> " +
+        width +
+        " × " +
+        height +
+        " px" +
+        "<br>" +
+        "💾 <strong>File Size:</strong> " +
+        formatBytes(blob.size) +
+        "<br>" +
+        "🖼️ <strong>Format:</strong> " +
+        extension.toUpperCase();
+
+
+      document.getElementById("result")
+        .style.display = "block";
+
+
+      document.getElementById("result")
+        .scrollIntoView({
+          behavior:"smooth",
+          block:"center"
+        });
+
+
+      /*
+       * पुराना Object URL हटाने के लिए
+       * थोड़ी देर बाद revoke करेंगे।
+       */
+
+      setTimeout(function(){
+
+        URL.revokeObjectURL(url);
+
+      },60000);
+
+    },
+
+    format,
+
+    quality
+
+  );
+
+}
+
+
+/* FILE SIZE */
+
+function formatBytes(bytes){
+
+  if(bytes === 0){
+    return "0 Bytes";
+  }
+
+  const units = [
+    "Bytes",
+    "KB",
+    "MB",
+    "GB"
+  ];
+
+  const i =
+    Math.floor(
+      Math.log(bytes) /
+      Math.log(1024)
+    );
+
+  return (
+    parseFloat(
+      (bytes /
+      Math.pow(1024,i))
+      .toFixed(2)
+    ) +
+    " " +
+    units[i]
+  );
+
+}
+
+</script>
+
+</body>
+</html>
