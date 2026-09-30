@@ -1,0 +1,972 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Color Picker | Tool Sathi</title>
+
+<style>
+*{
+  box-sizing:border-box;
+  margin:0;
+  padding:0;
+}
+
+body{
+  font-family:Arial,"Noto Sans Devanagari",sans-serif;
+  background:#eef4ff;
+  color:#172033;
+}
+
+/* HEADER */
+header{
+  background:linear-gradient(135deg,#1769e0,#7138e8);
+  color:white;
+  padding:18px 20px;
+  box-shadow:0 5px 20px rgba(0,0,0,.15);
+}
+
+.header-box{
+  max-width:1100px;
+  margin:auto;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:15px;
+}
+
+.logo{
+  display:flex;
+  align-items:center;
+  gap:12px;
+}
+
+.logo-icon{
+  width:55px;
+  height:55px;
+  border-radius:16px;
+  background:white;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:30px;
+  box-shadow:0 5px 15px rgba(0,0,0,.18);
+}
+
+.logo h1{
+  font-size:27px;
+}
+
+.logo p{
+  font-size:13px;
+  margin-top:3px;
+  opacity:.9;
+}
+
+.home-btn{
+  text-decoration:none;
+  color:#fff;
+  background:rgba(255,255,255,.18);
+  padding:13px 20px;
+  border-radius:14px;
+  font-weight:bold;
+  border:1px solid rgba(255,255,255,.25);
+}
+
+.home-btn:hover{
+  background:white;
+  color:#1769e0;
+}
+
+/* MAIN */
+.container{
+  max-width:1100px;
+  margin:auto;
+  padding:25px 15px 50px;
+}
+
+.title{
+  text-align:center;
+  margin-bottom:22px;
+}
+
+.title h2{
+  font-size:32px;
+  color:#173d8f;
+}
+
+.title p{
+  margin-top:7px;
+  color:#63708a;
+}
+
+/* PICKER BOX */
+.picker-card{
+  background:white;
+  border-radius:25px;
+  padding:22px;
+  box-shadow:0 12px 35px rgba(31,55,100,.12);
+  margin-bottom:22px;
+}
+
+.color-preview{
+  width:100%;
+  height:220px;
+  border-radius:20px;
+  background:#2878f0;
+  border:5px solid #fff;
+  box-shadow:0 7px 20px rgba(0,0,0,.15);
+  display:flex;
+  align-items:flex-end;
+  justify-content:center;
+  padding:15px;
+  transition:.25s;
+}
+
+.preview-code{
+  background:rgba(0,0,0,.55);
+  color:white;
+  padding:10px 20px;
+  border-radius:30px;
+  font-weight:bold;
+  font-size:18px;
+  backdrop-filter:blur(5px);
+}
+
+.color-input-box{
+  margin-top:20px;
+  display:flex;
+  justify-content:center;
+}
+
+#colorPicker{
+  width:150px;
+  height:80px;
+  border:none;
+  padding:0;
+  background:none;
+  cursor:pointer;
+}
+
+/* VALUES */
+.values{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:15px;
+  margin-top:20px;
+}
+
+.value-box{
+  background:#f5f8ff;
+  border:2px solid #e3eaff;
+  padding:15px;
+  border-radius:16px;
+}
+
+.value-box label{
+  display:block;
+  font-size:13px;
+  color:#65728c;
+  margin-bottom:7px;
+  font-weight:bold;
+}
+
+.value-row{
+  display:flex;
+  gap:7px;
+}
+
+.value-row input{
+  width:100%;
+  border:0;
+  outline:0;
+  background:white;
+  padding:11px;
+  border-radius:10px;
+  font-weight:bold;
+  color:#1d315e;
+  font-size:15px;
+}
+
+.copy-btn{
+  border:0;
+  background:#1769e0;
+  color:white;
+  padding:0 13px;
+  border-radius:10px;
+  cursor:pointer;
+  font-weight:bold;
+}
+
+.copy-btn:hover{
+  transform:scale(1.04);
+}
+
+/* BUTTONS */
+.buttons{
+  display:flex;
+  flex-wrap:wrap;
+  justify-content:center;
+  gap:12px;
+  margin-top:22px;
+}
+
+.action-btn{
+  border:0;
+  padding:13px 20px;
+  border-radius:14px;
+  cursor:pointer;
+  font-size:15px;
+  font-weight:bold;
+  color:white;
+  transition:.2s;
+}
+
+.action-btn:hover{
+  transform:translateY(-2px);
+}
+
+.random{
+  background:linear-gradient(135deg,#ff4d6d,#ff8a00);
+}
+
+.copy-all{
+  background:linear-gradient(135deg,#1769e0,#7138e8);
+}
+
+.clear{
+  background:#172033;
+}
+
+/* SHADES */
+.section-title{
+  text-align:center;
+  margin:30px 0 15px;
+  color:#173d8f;
+  font-size:23px;
+}
+
+.shades{
+  display:grid;
+  grid-template-columns:repeat(8,1fr);
+  gap:8px;
+}
+
+.shade{
+  height:70px;
+  border-radius:12px;
+  cursor:pointer;
+  display:flex;
+  align-items:flex-end;
+  justify-content:center;
+  padding-bottom:7px;
+  color:white;
+  font-size:11px;
+  font-weight:bold;
+  text-shadow:0 1px 3px #000;
+  transition:.2s;
+}
+
+.shade:hover{
+  transform:scale(1.05);
+}
+
+/* HISTORY */
+.history{
+  display:grid;
+  grid-template-columns:repeat(10,1fr);
+  gap:9px;
+}
+
+.history-color{
+  height:55px;
+  border-radius:12px;
+  cursor:pointer;
+  border:2px solid white;
+  box-shadow:0 2px 8px rgba(0,0,0,.12);
+}
+
+/* COLOR INFO */
+.info{
+  margin-top:25px;
+  background:linear-gradient(135deg,#e9f0ff,#f7edff);
+  border-radius:20px;
+  padding:20px;
+  text-align:center;
+}
+
+.info h3{
+  color:#173d8f;
+  margin-bottom:8px;
+}
+
+.info p{
+  color:#65708a;
+  line-height:1.7;
+}
+
+/* FOOTER */
+footer{
+  text-align:center;
+  padding:25px;
+  color:#65708a;
+}
+
+/* MOBILE */
+@media(max-width:700px){
+
+  .header-box{
+    align-items:flex-start;
+  }
+
+  .logo h1{
+    font-size:22px;
+  }
+
+  .logo-icon{
+    width:48px;
+    height:48px;
+    font-size:25px;
+  }
+
+  .home-btn{
+    padding:10px 13px;
+    font-size:13px;
+  }
+
+  .title h2{
+    font-size:27px;
+  }
+
+  .color-preview{
+    height:190px;
+  }
+
+  .values{
+    grid-template-columns:1fr;
+  }
+
+  .shades{
+    grid-template-columns:repeat(4,1fr);
+  }
+
+  .history{
+    grid-template-columns:repeat(5,1fr);
+  }
+}
+
+@media(max-width:420px){
+
+  .header-box{
+    flex-direction:column;
+  }
+
+  .home-btn{
+    width:100%;
+    text-align:center;
+  }
+
+  .color-preview{
+    height:170px;
+  }
+
+  .picker-card{
+    padding:15px;
+  }
+
+  .shades{
+    grid-template-columns:repeat(4,1fr);
+  }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <div class="header-box">
+
+    <div class="logo">
+      <div class="logo-icon">🎨</div>
+
+      <div>
+        <h1>Tool Sathi</h1>
+        <p>काम आसान • समय की बचत</p>
+      </div>
+    </div>
+
+    <a href="index.html" class="home-btn">
+      🏠 Home
+    </a>
+
+  </div>
+</header>
+
+
+<main class="container">
+
+  <div class="title">
+    <h2>🎨 Color Picker</h2>
+    <p>अपनी पसंद का Color चुनें और उसका HEX, RGB तथा HSL Code पाएं</p>
+  </div>
+
+
+  <section class="picker-card">
+
+    <div class="color-preview" id="colorPreview">
+      <div class="preview-code" id="previewCode">
+        #2878F0
+      </div>
+    </div>
+
+
+    <div class="color-input-box">
+      <input
+        type="color"
+        id="colorPicker"
+        value="#2878F0"
+        title="Color चुनें">
+    </div>
+
+
+    <div class="values">
+
+      <!-- HEX -->
+      <div class="value-box">
+
+        <label>🔢 HEX COLOR</label>
+
+        <div class="value-row">
+          <input
+            id="hexValue"
+            value="#2878F0"
+            readonly>
+
+          <button
+            class="copy-btn"
+            onclick="copyValue('hexValue')">
+            Copy
+          </button>
+        </div>
+
+      </div>
+
+
+      <!-- RGB -->
+      <div class="value-box">
+
+        <label>🔴 RGB COLOR</label>
+
+        <div class="value-row">
+          <input
+            id="rgbValue"
+            value="rgb(40, 120, 240)"
+            readonly>
+
+          <button
+            class="copy-btn"
+            onclick="copyValue('rgbValue')">
+            Copy
+          </button>
+        </div>
+
+      </div>
+
+
+      <!-- HSL -->
+      <div class="value-box">
+
+        <label>🌈 HSL COLOR</label>
+
+        <div class="value-row">
+          <input
+            id="hslValue"
+            value="hsl(215, 87%, 55%)"
+            readonly>
+
+          <button
+            class="copy-btn"
+            onclick="copyValue('hslValue')">
+            Copy
+          </button>
+        </div>
+
+      </div>
+
+    </div>
+
+
+    <div class="buttons">
+
+      <button
+        class="action-btn random"
+        onclick="randomColor()">
+        🎲 Random Color
+      </button>
+
+      <button
+        class="action-btn copy-all"
+        onclick="copyAll()">
+        📋 Copy All Codes
+      </button>
+
+      <button
+        class="action-btn clear"
+        onclick="resetColor()">
+        🔄 Reset
+      </button>
+
+    </div>
+
+  </section>
+
+
+  <!-- SHADES -->
+
+  <h3 class="section-title">
+    🌈 Color Shades
+  </h3>
+
+  <section class="picker-card">
+
+    <div class="shades" id="shades"></div>
+
+  </section>
+
+
+  <!-- HISTORY -->
+
+  <h3 class="section-title">
+    🕘 Recent Colors
+  </h3>
+
+  <section class="picker-card">
+
+    <div class="history" id="history"></div>
+
+  </section>
+
+
+  <section class="info">
+
+    <h3>💡 Color Picker क्या है?</h3>
+
+    <p>
+      Color Picker की मदद से आप किसी भी पसंदीदा रंग को चुनकर
+      उसका HEX, RGB और HSL Code आसानी से प्राप्त कर सकते हैं।
+      इन Color Codes का उपयोग Website, App, Poster, Logo,
+      Photo Editing और Graphic Design में किया जा सकता है।
+    </p>
+
+  </section>
+
+</main>
+
+
+<footer>
+  © 2026 Tool Sathi • Free Online Tools
+</footer>
+
+
+<script>
+
+const colorPicker =
+  document.getElementById("colorPicker");
+
+const colorPreview =
+  document.getElementById("colorPreview");
+
+const previewCode =
+  document.getElementById("previewCode");
+
+const hexValue =
+  document.getElementById("hexValue");
+
+const rgbValue =
+  document.getElementById("rgbValue");
+
+const hslValue =
+  document.getElementById("hslValue");
+
+const shades =
+  document.getElementById("shades");
+
+const history =
+  document.getElementById("history");
+
+
+/* COLOR CHANGE */
+
+colorPicker.addEventListener("input", function(){
+
+  updateColor(this.value);
+
+});
+
+
+/* UPDATE COLOR */
+
+function updateColor(hex){
+
+  hex = hex.toUpperCase();
+
+  const rgb = hexToRgb(hex);
+
+  const hsl = rgbToHsl(
+    rgb.r,
+    rgb.g,
+    rgb.b
+  );
+
+  colorPreview.style.background = hex;
+
+  previewCode.textContent = hex;
+
+  hexValue.value = hex;
+
+  rgbValue.value =
+    `rgb(${rgb.r}, ${rgb.g}, ${rgb.b})`;
+
+  hslValue.value =
+    `hsl(${hsl.h}, ${hsl.s}%, ${hsl.l}%)`;
+
+  createShades(hex);
+
+  addHistory(hex);
+
+}
+
+
+/* HEX TO RGB */
+
+function hexToRgb(hex){
+
+  hex = hex.replace("#","");
+
+  return {
+    r:parseInt(hex.substring(0,2),16),
+    g:parseInt(hex.substring(2,4),16),
+    b:parseInt(hex.substring(4,6),16)
+  };
+
+}
+
+
+/* RGB TO HSL */
+
+function rgbToHsl(r,g,b){
+
+  r/=255;
+  g/=255;
+  b/=255;
+
+  const max =
+    Math.max(r,g,b);
+
+  const min =
+    Math.min(r,g,b);
+
+  let h = 0;
+  let s = 0;
+
+  const l =
+    (max + min) / 2;
+
+  if(max !== min){
+
+    const d = max - min;
+
+    s =
+      l > 0.5
+      ? d / (2 - max - min)
+      : d / (max + min);
+
+    switch(max){
+
+      case r:
+        h =
+          (g-b)/d +
+          (g < b ? 6 : 0);
+        break;
+
+      case g:
+        h =
+          (b-r)/d + 2;
+        break;
+
+      case b:
+        h =
+          (r-g)/d + 4;
+        break;
+
+    }
+
+    h/=6;
+
+  }
+
+  return {
+    h:Math.round(h*360),
+    s:Math.round(s*100),
+    l:Math.round(l*100)
+  };
+
+}
+
+
+/* RANDOM COLOR */
+
+function randomColor(){
+
+  const letters =
+    "0123456789ABCDEF";
+
+  let color = "#";
+
+  for(let i=0;i<6;i++){
+
+    color +=
+      letters[
+        Math.floor(
+          Math.random()*16
+        )
+      ];
+
+  }
+
+  colorPicker.value = color;
+
+  updateColor(color);
+
+}
+
+
+/* SHADES */
+
+function createShades(hex){
+
+  shades.innerHTML = "";
+
+  const rgb =
+    hexToRgb(hex);
+
+  for(let i=0;i<8;i++){
+
+    const amount =
+      -100 + i*28;
+
+    let r =
+      Math.round(
+        rgb.r +
+        (255-rgb.r)*(amount/100)
+      );
+
+    let g =
+      Math.round(
+        rgb.g +
+        (255-rgb.g)*(amount/100)
+      );
+
+    let b =
+      Math.round(
+        rgb.b +
+        (255-rgb.b)*(amount/100)
+      );
+
+    r=Math.max(0,Math.min(255,r));
+    g=Math.max(0,Math.min(255,g));
+    b=Math.max(0,Math.min(255,b));
+
+    const shade =
+      rgbToHex(r,g,b);
+
+    const div =
+      document.createElement("div");
+
+    div.className =
+      "shade";
+
+    div.style.background =
+      shade;
+
+    div.textContent =
+      shade;
+
+    div.onclick = function(){
+
+      colorPicker.value =
+        shade;
+
+      updateColor(shade);
+
+    };
+
+    shades.appendChild(div);
+
+  }
+
+}
+
+
+/* RGB TO HEX */
+
+function rgbToHex(r,g,b){
+
+  return "#" +
+    [r,g,b]
+    .map(x =>
+      x.toString(16)
+       .padStart(2,"0")
+    )
+    .join("")
+    .toUpperCase();
+
+}
+
+
+/* COPY */
+
+function copyValue(id){
+
+  const input =
+    document.getElementById(id);
+
+  navigator.clipboard.writeText(
+    input.value
+  ).then(function(){
+
+    alert("✅ Color Code Copy हो गया!");
+
+  }).catch(function(){
+
+    input.select();
+
+    document.execCommand("copy");
+
+    alert("✅ Color Code Copy हो गया!");
+
+  });
+
+}
+
+
+/* COPY ALL */
+
+function copyAll(){
+
+  const text =
+`HEX: ${hexValue.value}
+RGB: ${rgbValue.value}
+HSL: ${hslValue.value}`;
+
+  navigator.clipboard.writeText(text)
+  .then(function(){
+
+    alert("✅ सभी Color Codes Copy हो गए!");
+
+  });
+
+}
+
+
+/* HISTORY */
+
+function addHistory(color){
+
+  let colors =
+    JSON.parse(
+      localStorage.getItem(
+        "toolSathiColorHistory"
+      ) || "[]"
+    );
+
+  colors =
+    colors.filter(
+      c => c !== color
+    );
+
+  colors.unshift(color);
+
+  colors =
+    colors.slice(0,10);
+
+  localStorage.setItem(
+    "toolSathiColorHistory",
+    JSON.stringify(colors)
+  );
+
+  showHistory();
+
+}
+
+
+/* SHOW HISTORY */
+
+function showHistory(){
+
+  history.innerHTML = "";
+
+  let colors =
+    JSON.parse(
+      localStorage.getItem(
+        "toolSathiColorHistory"
+      ) || "[]"
+    );
+
+  colors.forEach(function(color){
+
+    const div =
+      document.createElement("div");
+
+    div.className =
+      "history-color";
+
+    div.style.background =
+      color;
+
+    div.title =
+      color;
+
+    div.onclick =
+      function(){
+
+        colorPicker.value =
+          color;
+
+        updateColor(color);
+
+      };
+
+    history.appendChild(div);
+
+  });
+
+}
+
+
+/* RESET */
+
+function resetColor(){
+
+  const color =
+    "#2878F0";
+
+  colorPicker.value =
+    color;
+
+  updateColor(color);
+
+}
+
+
+/* START */
+
+updateColor("#2878F0");
+
+showHistory();
+
+</script>
+
+</body>
+</html>
