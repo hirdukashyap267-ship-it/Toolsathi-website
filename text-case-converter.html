@@ -1,0 +1,831 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Text Case Converter | Tool Sathi</title>
+
+<style>
+*{
+  box-sizing:border-box;
+  margin:0;
+  padding:0;
+}
+
+body{
+  font-family:Arial,"Noto Sans Devanagari",sans-serif;
+  background:#eef4ff;
+  color:#172033;
+}
+
+/* HEADER */
+header{
+  background:linear-gradient(135deg,#1769e0,#7138e8);
+  color:white;
+  padding:18px 20px;
+  box-shadow:0 5px 20px rgba(0,0,0,.15);
+}
+
+.header-box{
+  max-width:1100px;
+  margin:auto;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:15px;
+}
+
+.logo{
+  display:flex;
+  align-items:center;
+  gap:12px;
+}
+
+.logo-icon{
+  width:55px;
+  height:55px;
+  border-radius:16px;
+  background:white;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:30px;
+  box-shadow:0 5px 15px rgba(0,0,0,.18);
+}
+
+.logo h1{
+  font-size:27px;
+}
+
+.logo p{
+  font-size:13px;
+  margin-top:3px;
+  opacity:.9;
+}
+
+.home-btn{
+  text-decoration:none;
+  color:#fff;
+  background:rgba(255,255,255,.18);
+  padding:13px 20px;
+  border-radius:14px;
+  font-weight:bold;
+  border:1px solid rgba(255,255,255,.25);
+}
+
+.home-btn:hover{
+  background:white;
+  color:#1769e0;
+}
+
+/* MAIN */
+.container{
+  max-width:1100px;
+  margin:auto;
+  padding:28px 15px 50px;
+}
+
+.title{
+  text-align:center;
+  margin-bottom:22px;
+}
+
+.title h2{
+  font-size:32px;
+  color:#173d8f;
+}
+
+.title p{
+  margin-top:7px;
+  color:#63708a;
+}
+
+/* CARD */
+.card{
+  background:white;
+  border-radius:25px;
+  padding:22px;
+  box-shadow:0 12px 35px rgba(31,55,100,.12);
+}
+
+/* TEXT AREA */
+.text-box{
+  position:relative;
+}
+
+textarea{
+  width:100%;
+  min-height:300px;
+  resize:vertical;
+  border:2px solid #dce5ff;
+  border-radius:18px;
+  padding:20px;
+  font-size:17px;
+  line-height:1.7;
+  outline:none;
+  color:#172033;
+  background:#f9fbff;
+  transition:.2s;
+}
+
+textarea:focus{
+  border-color:#5b6ff5;
+  box-shadow:0 0 0 4px rgba(91,111,245,.1);
+}
+
+.placeholder{
+  margin-top:8px;
+  color:#7b879e;
+  font-size:13px;
+}
+
+/* BUTTONS */
+.buttons{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:11px;
+  margin-top:20px;
+}
+
+.btn{
+  border:0;
+  padding:14px 10px;
+  border-radius:14px;
+  color:white;
+  font-weight:bold;
+  font-size:14px;
+  cursor:pointer;
+  transition:.2s;
+}
+
+.btn:hover{
+  transform:translateY(-2px);
+  box-shadow:0 7px 15px rgba(0,0,0,.12);
+}
+
+.upper{
+  background:linear-gradient(135deg,#1769e0,#304ffe);
+}
+
+.lower{
+  background:linear-gradient(135deg,#00a884,#00c853);
+}
+
+.titlecase{
+  background:linear-gradient(135deg,#7138e8,#a02ce8);
+}
+
+.sentence{
+  background:linear-gradient(135deg,#ff7a00,#ff3d68);
+}
+
+.capitalize{
+  background:linear-gradient(135deg,#0086c9,#00b8d4);
+}
+
+.alternate{
+  background:linear-gradient(135deg,#e91e63,#ff4081);
+}
+
+.reverse{
+  background:linear-gradient(135deg,#673ab7,#512da8);
+}
+
+.copy{
+  background:linear-gradient(135deg,#f57c00,#ffb300);
+}
+
+.clear{
+  background:#172033;
+}
+
+.extra{
+  background:linear-gradient(135deg,#455a64,#263238);
+}
+
+/* STATS */
+.stats{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:12px;
+  margin-top:20px;
+}
+
+.stat{
+  background:#f4f7ff;
+  border:2px solid #e4eaff;
+  padding:15px;
+  text-align:center;
+  border-radius:15px;
+}
+
+.stat strong{
+  display:block;
+  font-size:25px;
+  color:#3158d8;
+}
+
+.stat span{
+  font-size:12px;
+  color:#6d7890;
+}
+
+/* OUTPUT */
+.output-title{
+  margin:28px 0 12px;
+  font-size:22px;
+  color:#173d8f;
+}
+
+.output{
+  background:#f7f9ff;
+  border:2px dashed #cdd8f7;
+  border-radius:18px;
+  padding:18px;
+  min-height:100px;
+  white-space:pre-wrap;
+  word-break:break-word;
+  line-height:1.7;
+  font-size:16px;
+}
+
+/* INFO */
+.info{
+  margin-top:22px;
+  background:linear-gradient(135deg,#e9f0ff,#f8edff);
+  padding:20px;
+  border-radius:20px;
+  text-align:center;
+}
+
+.info h3{
+  color:#173d8f;
+  margin-bottom:8px;
+}
+
+.info p{
+  color:#66728b;
+  line-height:1.7;
+}
+
+/* FOOTER */
+footer{
+  text-align:center;
+  padding:25px;
+  color:#68748b;
+}
+
+/* MOBILE */
+@media(max-width:750px){
+
+  .header-box{
+    align-items:flex-start;
+  }
+
+  .logo h1{
+    font-size:22px;
+  }
+
+  .logo-icon{
+    width:48px;
+    height:48px;
+    font-size:25px;
+  }
+
+  .home-btn{
+    padding:10px 13px;
+    font-size:13px;
+  }
+
+  .title h2{
+    font-size:27px;
+  }
+
+  .buttons{
+    grid-template-columns:repeat(2,1fr);
+  }
+
+  .stats{
+    grid-template-columns:repeat(2,1fr);
+  }
+
+  textarea{
+    min-height:250px;
+  }
+}
+
+@media(max-width:430px){
+
+  .header-box{
+    flex-direction:column;
+  }
+
+  .home-btn{
+    width:100%;
+    text-align:center;
+  }
+
+  .card{
+    padding:15px;
+  }
+
+  .buttons{
+    grid-template-columns:1fr 1fr;
+  }
+
+  .btn{
+    font-size:13px;
+    padding:13px 6px;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+
+  <div class="header-box">
+
+    <div class="logo">
+
+      <div class="logo-icon">
+        🔤
+      </div>
+
+      <div>
+        <h1>Tool Sathi</h1>
+        <p>काम आसान • समय की बचत</p>
+      </div>
+
+    </div>
+
+    <a href="index.html" class="home-btn">
+      🏠 Home
+    </a>
+
+  </div>
+
+</header>
+
+
+<main class="container">
+
+  <div class="title">
+    <h2>🔤 Text Case Converter</h2>
+    <p>अपने Text को अलग-अलग Case में आसानी से बदलें</p>
+  </div>
+
+
+  <section class="card">
+
+    <div class="text-box">
+
+      <textarea
+        id="textInput"
+        placeholder="यहाँ अपना Text लिखें या Paste करें..."></textarea>
+
+      <div class="placeholder">
+        💡 Text डालते ही नीचे Character और Word Count दिखाई देगा।
+      </div>
+
+    </div>
+
+
+    <!-- BUTTONS -->
+
+    <div class="buttons">
+
+      <button class="btn upper" onclick="convertUpper()">
+        🔠 UPPERCASE
+      </button>
+
+      <button class="btn lower" onclick="convertLower()">
+        🔡 lowercase
+      </button>
+
+      <button class="btn titlecase" onclick="convertTitle()">
+        📝 Title Case
+      </button>
+
+      <button class="btn sentence" onclick="convertSentence()">
+        ✍️ Sentence Case
+      </button>
+
+      <button class="btn capitalize" onclick="capitalizeWords()">
+        🔤 Capitalize Words
+      </button>
+
+      <button class="btn alternate" onclick="alternateCase()">
+        🔀 aLtErNaTiNg
+      </button>
+
+      <button class="btn reverse" onclick="reverseText()">
+        🔄 Reverse Text
+      </button>
+
+      <button class="btn copy" onclick="copyText()">
+        📋 Copy Text
+      </button>
+
+      <button class="btn extra" onclick="downloadText()">
+        📥 Download
+      </button>
+
+      <button class="btn clear" onclick="clearText()">
+        🗑️ Clear
+      </button>
+
+    </div>
+
+
+    <!-- STATS -->
+
+    <div class="stats">
+
+      <div class="stat">
+        <strong id="charCount">0</strong>
+        <span>Characters</span>
+      </div>
+
+      <div class="stat">
+        <strong id="wordCount">0</strong>
+        <span>Words</span>
+      </div>
+
+      <div class="stat">
+        <strong id="lineCount">0</strong>
+        <span>Lines</span>
+      </div>
+
+      <div class="stat">
+        <strong id="spaceCount">0</strong>
+        <span>Spaces</span>
+      </div>
+
+    </div>
+
+
+    <!-- OUTPUT -->
+
+    <h3 class="output-title">
+      👀 Preview
+    </h3>
+
+    <div class="output" id="output">
+      आपका converted text यहाँ दिखाई देगा...
+    </div>
+
+  </section>
+
+
+  <section class="info">
+
+    <h3>💡 Text Case Converter क्या है?</h3>
+
+    <p>
+      इस Tool की मदद से आप किसी भी Text को UPPERCASE,
+      lowercase, Title Case, Sentence Case और अन्य कई
+      formats में बदल सकते हैं। यह Students, Bloggers,
+      Writers और रोज़ाना Text काम करने वाले सभी Users के लिए
+      उपयोगी है।
+    </p>
+
+  </section>
+
+</main>
+
+
+<footer>
+  © 2026 Tool Sathi • Free Online Tools
+</footer>
+
+
+<script>
+
+const input =
+  document.getElementById("textInput");
+
+const output =
+  document.getElementById("output");
+
+const charCount =
+  document.getElementById("charCount");
+
+const wordCount =
+  document.getElementById("wordCount");
+
+const lineCount =
+  document.getElementById("lineCount");
+
+const spaceCount =
+  document.getElementById("spaceCount");
+
+
+/* INPUT EVENT */
+
+input.addEventListener("input", updateStats);
+
+
+/* STATS */
+
+function updateStats(){
+
+  const text = input.value;
+
+  charCount.textContent =
+    text.length;
+
+  const words =
+    text.trim()
+    ? text.trim().split(/\s+/).length
+    : 0;
+
+  wordCount.textContent =
+    words;
+
+  lineCount.textContent =
+    text ? text.split("\n").length : 0;
+
+  spaceCount.textContent =
+    (text.match(/ /g) || []).length;
+
+}
+
+
+/* SHOW */
+
+function showResult(text){
+
+  output.textContent =
+    text || "आपका converted text यहाँ दिखाई देगा...";
+
+}
+
+
+/* UPPERCASE */
+
+function convertUpper(){
+
+  const text =
+    input.value.toUpperCase();
+
+  input.value = text;
+
+  showResult(text);
+
+  updateStats();
+
+}
+
+
+/* LOWERCASE */
+
+function convertLower(){
+
+  const text =
+    input.value.toLowerCase();
+
+  input.value = text;
+
+  showResult(text);
+
+  updateStats();
+
+}
+
+
+/* TITLE CASE */
+
+function convertTitle(){
+
+  const text =
+    input.value.toLowerCase()
+    .replace(
+      /\b\w/g,
+      function(char){
+        return char.toUpperCase();
+      }
+    );
+
+  input.value = text;
+
+  showResult(text);
+
+  updateStats();
+
+}
+
+
+/* SENTENCE CASE */
+
+function convertSentence(){
+
+  let text =
+    input.value.toLowerCase();
+
+  text =
+    text.replace(
+      /(^\s*\w|[.!?]\s+\w)/g,
+      function(char){
+        return char.toUpperCase();
+      }
+    );
+
+  input.value = text;
+
+  showResult(text);
+
+  updateStats();
+
+}
+
+
+/* CAPITALIZE WORDS */
+
+function capitalizeWords(){
+
+  const text =
+    input.value
+    .toLowerCase()
+    .split(" ")
+    .map(function(word){
+
+      if(!word) return "";
+
+      return word.charAt(0).toUpperCase()
+        + word.slice(1);
+
+    })
+    .join(" ");
+
+  input.value = text;
+
+  showResult(text);
+
+  updateStats();
+
+}
+
+
+/* ALTERNATING */
+
+function alternateCase(){
+
+  let index = 0;
+
+  const text =
+    input.value
+    .split("")
+    .map(function(char){
+
+      if(/[a-zA-Z]/.test(char)){
+
+        const result =
+          index % 2 === 0
+          ? char.toLowerCase()
+          : char.toUpperCase();
+
+        index++;
+
+        return result;
+
+      }
+
+      return char;
+
+    })
+    .join("");
+
+  input.value = text;
+
+  showResult(text);
+
+  updateStats();
+
+}
+
+
+/* REVERSE */
+
+function reverseText(){
+
+  const text =
+    input.value
+    .split("")
+    .reverse()
+    .join("");
+
+  input.value = text;
+
+  showResult(text);
+
+  updateStats();
+
+}
+
+
+/* COPY */
+
+function copyText(){
+
+  const text =
+    input.value;
+
+  if(!text){
+
+    alert("⚠️ पहले कुछ Text लिखें।");
+
+    return;
+
+  }
+
+  navigator.clipboard.writeText(text)
+  .then(function(){
+
+    alert("✅ Text Copy हो गया!");
+
+  })
+  .catch(function(){
+
+    input.select();
+
+    document.execCommand("copy");
+
+    alert("✅ Text Copy हो गया!");
+
+  });
+
+}
+
+
+/* CLEAR */
+
+function clearText(){
+
+  input.value = "";
+
+  output.textContent =
+    "आपका converted text यहाँ दिखाई देगा...";
+
+  updateStats();
+
+  input.focus();
+
+}
+
+
+/* DOWNLOAD */
+
+function downloadText(){
+
+  const text =
+    input.value;
+
+  if(!text){
+
+    alert("⚠️ Download करने के लिए पहले Text लिखें।");
+
+    return;
+
+  }
+
+  const blob =
+    new Blob(
+      [text],
+      {
+        type:"text/plain;charset=utf-8"
+      }
+    );
+
+  const url =
+    URL.createObjectURL(blob);
+
+  const a =
+    document.createElement("a");
+
+  a.href = url;
+
+  a.download =
+    "tool-sathi-text.txt";
+
+  document.body.appendChild(a);
+
+  a.click();
+
+  document.body.removeChild(a);
+
+  URL.revokeObjectURL(url);
+
+}
+
+
+/* START */
+
+updateStats();
+
+</script>
+
+</body>
+</html>
