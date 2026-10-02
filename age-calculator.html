@@ -1,0 +1,1223 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+>
+
+<title>
+Age Calculator | Toolsathi
+</title>
+
+<meta
+    name="description"
+    content="Free online Age Calculator. Calculate your exact age in years, months and days."
+>
+
+<meta
+    name="robots"
+    content="index, follow"
+>
+
+<style>
+
+/* =========================
+   RESET
+========================= */
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body{
+
+    font-family:
+    Arial,
+    sans-serif;
+
+    min-height:100vh;
+
+    color:#172033;
+
+    background:
+    linear-gradient(
+        135deg,
+        #eef5ff,
+        #f8f3ff,
+        #effcff
+    );
+}
+
+
+/* =========================
+   HEADER
+========================= */
+
+.header{
+
+    width:100%;
+
+    padding:
+    14px 5%;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:space-between;
+
+    background:
+    rgba(255,255,255,.9);
+
+    border-bottom:
+    1px solid #e5e7eb;
+
+    backdrop-filter:
+    blur(12px);
+}
+
+.logo{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:10px;
+
+    color:#111827;
+
+    text-decoration:none;
+
+    font-size:21px;
+
+    font-weight:800;
+}
+
+.logo-icon{
+
+    width:42px;
+
+    height:42px;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    border-radius:12px;
+
+    color:#fff;
+
+    background:
+    linear-gradient(
+        135deg,
+        #2563eb,
+        #7c3aed
+    );
+
+    box-shadow:
+    0 8px 20px
+    rgba(37,99,235,.25);
+}
+
+.back-btn{
+
+    padding:
+    9px 14px;
+
+    border-radius:10px;
+
+    color:#2563eb;
+
+    background:#eff6ff;
+
+    text-decoration:none;
+
+    font-size:11px;
+
+    font-weight:700;
+}
+
+
+/* =========================
+   MAIN
+========================= */
+
+.main{
+
+    width:100%;
+
+    max-width:850px;
+
+    margin:auto;
+
+    padding:
+    45px 18px;
+}
+
+
+/* =========================
+   TITLE
+========================= */
+
+.title-box{
+
+    text-align:center;
+
+    margin-bottom:25px;
+}
+
+.badge{
+
+    display:inline-block;
+
+    padding:
+    7px 13px;
+
+    margin-bottom:10px;
+
+    border-radius:30px;
+
+    color:#6366f1;
+
+    background:#eef2ff;
+
+    font-size:10px;
+
+    font-weight:800;
+}
+
+.title-box h1{
+
+    font-size:
+    clamp(30px,6vw,45px);
+
+    line-height:1.15;
+
+    font-weight:850;
+}
+
+.title-box h1 span{
+
+    background:
+    linear-gradient(
+        90deg,
+        #2563eb,
+        #7c3aed,
+        #db2777
+    );
+
+    -webkit-background-clip:text;
+
+    background-clip:text;
+
+    color:transparent;
+}
+
+.title-box p{
+
+    margin-top:10px;
+
+    color:#64748b;
+
+    font-size:13px;
+
+    line-height:1.6;
+}
+
+
+/* =========================
+   CALCULATOR CARD
+========================= */
+
+.calculator-card{
+
+    padding:25px;
+
+    border:
+    1px solid #e2e8f0;
+
+    border-radius:22px;
+
+    background:
+    rgba(255,255,255,.95);
+
+    box-shadow:
+    0 15px 45px
+    rgba(37,99,235,.10);
+}
+      
+/* =========================
+   INPUT AREA
+========================= */
+
+.input-title{
+
+    margin-bottom:15px;
+
+    color:#172033;
+
+    font-size:15px;
+
+    font-weight:800;
+}
+
+.date-grid{
+
+    display:grid;
+
+    grid-template-columns:
+    repeat(3,1fr);
+
+    gap:12px;
+
+    margin-bottom:20px;
+}
+
+.date-box label{
+
+    display:block;
+
+    margin-bottom:7px;
+
+    color:#475569;
+
+    font-size:10px;
+
+    font-weight:700;
+}
+
+.date-box input{
+
+    width:100%;
+
+    height:48px;
+
+    padding:0 12px;
+
+    outline:none;
+
+    border:
+    1px solid #dbe3ef;
+
+    border-radius:11px;
+
+    color:#172033;
+
+    background:#f8fafc;
+
+    font-size:13px;
+
+    transition:.2s;
+}
+
+.date-box input:focus{
+
+    border-color:#6366f1;
+
+    background:#fff;
+
+    box-shadow:
+    0 0 0 3px
+    rgba(99,102,241,.10);
+}
+
+
+/* =========================
+   CALCULATE BUTTON
+========================= */
+
+.calculate-btn{
+
+    width:100%;
+
+    height:52px;
+
+    border:0;
+
+    border-radius:13px;
+
+    color:#fff;
+
+    background:
+    linear-gradient(
+        135deg,
+        #2563eb,
+        #7c3aed,
+        #db2777
+    );
+
+    font-size:13px;
+
+    font-weight:800;
+
+    cursor:pointer;
+
+    box-shadow:
+    0 10px 25px
+    rgba(99,102,241,.22);
+
+    transition:.25s;
+}
+
+.calculate-btn:hover{
+
+    transform:
+    translateY(-2px);
+
+    box-shadow:
+    0 14px 30px
+    rgba(99,102,241,.30);
+}
+
+
+/* =========================
+   RESULT
+========================= */
+
+.result-box{
+
+    display:none;
+
+    margin-top:22px;
+
+    padding:20px;
+
+    text-align:center;
+
+    border:
+    1px solid #ddd6fe;
+
+    border-radius:17px;
+
+    background:
+    linear-gradient(
+        135deg,
+        #f5f3ff,
+        #eff6ff
+    );
+}
+
+.result-box.show{
+
+    display:block;
+
+    animation:
+    resultShow .35s ease;
+}
+
+@keyframes resultShow{
+
+    from{
+        opacity:0;
+        transform:translateY(8px);
+    }
+
+    to{
+        opacity:1;
+        transform:translateY(0);
+    }
+}
+
+.result-title{
+
+    margin-bottom:14px;
+
+    color:#6366f1;
+
+    font-size:11px;
+
+    font-weight:800;
+}
+
+.result-age{
+
+    color:#172033;
+
+    font-size:
+    clamp(24px,6vw,36px);
+
+    font-weight:850;
+}
+
+.result-age span{
+
+    color:#7c3aed;
+}
+  /* =========================
+   RESULT DETAILS
+========================= */
+
+.result-details{
+
+    display:grid;
+
+    grid-template-columns:
+    repeat(3,1fr);
+
+    gap:10px;
+
+    margin-top:18px;
+}
+
+.result-item{
+
+    padding:15px 8px;
+
+    border-radius:13px;
+
+    background:#fff;
+
+    border:
+    1px solid #e2e8f0;
+
+    box-shadow:
+    0 5px 15px
+    rgba(15,23,42,.05);
+}
+
+.result-number{
+
+    display:block;
+
+    color:#2563eb;
+
+    font-size:24px;
+
+    font-weight:850;
+}
+
+.result-label{
+
+    display:block;
+
+    margin-top:4px;
+
+    color:#64748b;
+
+    font-size:9px;
+
+    font-weight:700;
+
+    text-transform:uppercase;
+}
+
+
+/* =========================
+   NEXT BIRTHDAY
+========================= */
+
+.next-birthday{
+
+    margin-top:18px;
+
+    padding:13px;
+
+    border-radius:12px;
+
+    color:#475569;
+
+    background:#fff;
+
+    font-size:11px;
+
+    line-height:1.5;
+}
+
+.next-birthday strong{
+
+    color:#7c3aed;
+}
+
+
+/* =========================
+   ERROR MESSAGE
+========================= */
+
+.error-message{
+
+    display:none;
+
+    margin-top:12px;
+
+    padding:10px;
+
+    text-align:center;
+
+    border-radius:10px;
+
+    color:#b91c1c;
+
+    background:#fef2f2;
+
+    font-size:10px;
+
+    font-weight:700;
+}
+
+.error-message.show{
+
+    display:block;
+}
+
+
+/* =========================
+   INFO SECTION
+========================= */
+
+.info-section{
+
+    margin-top:25px;
+
+    padding:20px;
+
+    border-radius:18px;
+
+    background:#fff;
+
+    border:
+    1px solid #e5e7eb;
+
+    box-shadow:
+    0 8px 25px
+    rgba(15,23,42,.05);
+}
+
+.info-section h2{
+
+    margin-bottom:8px;
+
+    color:#172033;
+
+    font-size:16px;
+}
+
+.info-section p{
+
+    color:#64748b;
+
+    font-size:11px;
+
+    line-height:1.7;
+}
+
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media(max-width:600px){
+
+    .main{
+
+        padding:
+        30px 12px;
+    }
+
+    .calculator-card{
+
+        padding:17px;
+
+        border-radius:18px;
+    }
+
+    .date-grid{
+
+        grid-template-columns:1fr;
+
+        gap:10px;
+    }
+
+    .date-box input{
+
+        height:46px;
+    }
+
+    .result-details{
+
+        gap:7px;
+    }
+
+    .result-item{
+
+        padding:13px 5px;
+    }
+
+    .result-number{
+
+        font-size:20px;
+    }
+
+    .result-label{
+
+        font-size:8px;
+    }
+
+}
+
+
+/* =========================
+   EXTRA SMALL
+========================= */
+
+@media(max-width:360px){
+
+    .header{
+
+        padding:
+        12px 3%;
+    }
+
+    .logo{
+
+        font-size:17px;
+    }
+
+    .logo-icon{
+
+        width:37px;
+
+        height:37px;
+    }
+
+    .back-btn{
+
+        padding:
+        8px 10px;
+
+        font-size:9px;
+    }
+}
+
+
+/* =========================
+   FOOTER
+========================= */
+
+.simple-footer{
+
+    margin-top:30px;
+
+    padding:20px;
+
+    text-align:center;
+
+    color:#64748b;
+
+    font-size:9px;
+}
+
+.simple-footer strong{
+
+    color:#6366f1;
+}
+
+</style>
+
+</head>
+
+<body>
+
+
+<header class="header">
+
+    <a
+        href="index.html"
+        class="logo"
+    >
+
+        <div class="logo-icon">
+            🎯
+        </div>
+
+        <span>
+            Toolsathi
+        </span>
+
+    </a>
+
+
+    <a
+        href="index.html"
+        class="back-btn"
+    >
+        ← Back to Tools
+    </a>
+
+</header>
+
+
+<main class="main">
+
+
+    <div class="title-box">
+
+        <span class="badge">
+            🧮 FREE ONLINE TOOL
+        </span>
+
+        <h1>
+            Age <span>Calculator</span>
+        </h1>
+
+        <p>
+            Calculate your exact age in
+            years, months and days.
+        </p>
+
+    </div>
+
+
+    <div class="calculator-card">
+
+
+        <h2 class="input-title">
+            📅 Enter Your Date of Birth
+        </h2>
+
+
+        <div class="date-grid">
+
+            <div class="date-box">
+
+                <label>
+                    Day
+                </label>
+
+                <input
+                    type="number"
+                    id="day"
+                    min="1"
+                    max="31"
+                    placeholder="DD"
+                >
+
+            </div>
+
+
+            <div class="date-box">
+
+                <label>
+                    Month
+                </label>
+
+                <input
+                    type="number"
+                    id="month"
+                    min="1"
+                    max="12"
+                    placeholder="MM"
+                >
+
+            </div>
+
+
+            <div class="date-box">
+
+                <label>
+                    Year
+                </label>
+
+                <input
+                    type="number"
+                    id="year"
+                    min="1900"
+                    placeholder="YYYY"
+                >
+
+            </div>
+
+        </div>
+
+
+        <button
+            class="calculate-btn"
+            onclick="calculateAge()"
+        >
+            🎯 Calculate My Age
+        </button>
+
+
+        <div
+            class="error-message"
+            id="errorMessage"
+        >
+            Please enter a valid date of birth.
+        </div>
+
+
+        <div
+            class="result-box"
+            id="resultBox"
+        >
+
+            <div class="result-title">
+                🎉 YOUR EXACT AGE
+            </div>
+
+            <div class="result-age">
+                <span id="ageYears">0</span>
+                Years
+            </div>
+
+
+            <div class="result-details">
+
+                <div class="result-item">
+
+                    <span
+                        class="result-number"
+                        id="ageMonths"
+                    >
+                        0
+                    </span>
+
+                    <span class="result-label">
+                        Months
+                    </span>
+
+                </div>
+
+
+                <div class="result-item">
+
+                    <span
+                        class="result-number"
+                        id="ageDays"
+                    >
+                        0
+                    </span>
+
+                    <span class="result-label">
+                        Days
+                    </span>
+
+                </div>
+
+
+                <div class="result-item">
+
+                    <span
+                        class="result-number"
+                        id="totalDays"
+                    >
+                        0
+                    </span>
+
+                    <span class="result-label">
+                        Total Days
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <div class="next-birthday">
+
+                🎂
+                <strong>
+                    Next Birthday:
+                </strong>
+
+                <span id="nextBirthday">
+                    -
+                </span>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <section class="info-section">
+
+        <h2>
+            📌 About Age Calculator
+        </h2>
+
+        <p>
+            Enter your date of birth to
+            calculate your current age
+            accurately. The calculator
+            shows years, months, days,
+            total days and your next
+            birthday.
+        </p>
+
+    </section>
+
+
+    <div class="simple-footer">
+
+        © 2026–27
+        <strong>Toolsathi</strong>.
+        All Rights Reserved.
+
+    </div>
+
+</main>
+<!-- =====================================
+     AGE CALCULATOR
+     PART 4 - JAVASCRIPT
+===================================== -->
+
+<script>
+
+function calculateAge(){
+
+    const day =
+        parseInt(
+            document.getElementById("day").value
+        );
+
+    const month =
+        parseInt(
+            document.getElementById("month").value
+        );
+
+    const year =
+        parseInt(
+            document.getElementById("year").value
+        );
+
+    const error =
+        document.getElementById("errorMessage");
+
+    const result =
+        document.getElementById("resultBox");
+
+
+    /* =========================
+       VALIDATION
+    ========================= */
+
+    if(
+        !day ||
+        !month ||
+        !year ||
+        month < 1 ||
+        month > 12 ||
+        day < 1 ||
+        day > 31 ||
+        year < 1900
+    ){
+
+        error.classList.add("show");
+
+        result.classList.remove("show");
+
+        return;
+
+    }
+
+
+    const birthDate =
+        new Date(
+            year,
+            month - 1,
+            day
+        );
+
+    const today =
+        new Date();
+
+
+    /* INVALID DATE CHECK */
+
+    if(
+        birthDate.getFullYear() !== year ||
+        birthDate.getMonth() !== month - 1 ||
+        birthDate.getDate() !== day ||
+        birthDate > today
+    ){
+
+        error.textContent =
+            "Please enter a valid past date.";
+
+        error.classList.add("show");
+
+        result.classList.remove("show");
+
+        return;
+
+    }
+
+
+    error.classList.remove("show");
+
+
+    /* =========================
+       EXACT AGE
+    ========================= */
+
+    let years =
+        today.getFullYear() -
+        birthDate.getFullYear();
+
+    let months =
+        today.getMonth() -
+        birthDate.getMonth();
+
+    let days =
+        today.getDate() -
+        birthDate.getDate();
+
+
+    if(days < 0){
+
+        months--;
+
+        const previousMonth =
+            new Date(
+                today.getFullYear(),
+                today.getMonth(),
+                0
+            );
+
+        days +=
+            previousMonth.getDate();
+
+    }
+
+
+    if(months < 0){
+
+        years--;
+
+        months += 12;
+
+    }
+
+
+    /* =========================
+       TOTAL DAYS
+    ========================= */
+
+    const difference =
+        today.getTime() -
+        birthDate.getTime();
+
+    const totalDays =
+        Math.floor(
+            difference /
+            (1000 * 60 * 60 * 24)
+        );
+
+
+    /* =========================
+       NEXT BIRTHDAY
+    ========================= */
+
+    let nextBirthday =
+        new Date(
+            today.getFullYear(),
+            month - 1,
+            day
+        );
+
+
+    if(nextBirthday < today){
+
+        nextBirthday =
+            new Date(
+                today.getFullYear() + 1,
+                month - 1,
+                day
+            );
+
+    }
+
+
+    const birthdayDifference =
+        nextBirthday.getTime() -
+        today.getTime();
+
+    const daysUntilBirthday =
+        Math.ceil(
+            birthdayDifference /
+            (1000 * 60 * 60 * 24)
+        );
+
+
+    /* =========================
+       SHOW RESULT
+    ========================= */
+
+    document.getElementById(
+        "ageYears"
+    ).textContent = years;
+
+
+    document.getElementById(
+        "ageMonths"
+    ).textContent = months;
+
+
+    document.getElementById(
+        "ageDays"
+    ).textContent = days;
+
+
+    document.getElementById(
+        "totalDays"
+    ).textContent =
+        totalDays.toLocaleString();
+
+
+    if(daysUntilBirthday === 0){
+
+        document.getElementById(
+            "nextBirthday"
+        ).textContent =
+            "🎉 Today is your birthday!";
+
+    }
+    else{
+
+        document.getElementById(
+            "nextBirthday"
+        ).textContent =
+            daysUntilBirthday +
+            " days remaining";
+
+    }
+
+
+    result.classList.add("show");
+
+}
+
+
+/* =========================
+   ENTER KEY
+========================= */
+
+document.addEventListener(
+    "keydown",
+    function(event){
+
+        if(event.key === "Enter"){
+
+            calculateAge();
+
+        }
+
+    }
+);
+
+</script>
+
+
+</body>
+
+</html>
