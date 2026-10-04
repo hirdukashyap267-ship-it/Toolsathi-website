@@ -1,0 +1,2060 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+
+<title>Bill Maker Pro | Tool Sathi</title>
+
+<style>
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+}
+
+body{
+    font-family:Arial,"Noto Sans Devanagari",sans-serif;
+    background:#eef3f9;
+    color:#172033;
+}
+
+.navbar{
+    background:linear-gradient(135deg,#075985,#2563eb,#7c3aed);
+    color:#fff;
+    padding:14px 18px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    position:sticky;
+    top:0;
+    z-index:100;
+    box-shadow:0 4px 18px #0002;
+}
+
+.logo{
+    font-size:21px;
+    font-weight:900;
+}
+
+.home{
+    color:#fff;
+    text-decoration:none;
+    background:#ffffff25;
+    padding:9px 15px;
+    border-radius:22px;
+    font-weight:bold;
+}
+
+.hero{
+    text-align:center;
+    padding:28px 15px;
+    background:linear-gradient(135deg,#e0f2fe,#eef2ff,#fae8ff);
+}
+
+.hero h1{
+    font-size:30px;
+    margin-bottom:7px;
+}
+
+.hero p{
+    color:#64748b;
+}
+
+.container{
+    max-width:1250px;
+    margin:auto;
+    padding:20px 14px 40px;
+}
+
+.editor{
+    display:grid;
+    grid-template-columns:370px 1fr;
+    gap:20px;
+}
+
+.controls,
+.preview-card{
+    background:#fff;
+    border-radius:20px;
+    padding:20px;
+    box-shadow:0 8px 25px #1e326419;
+}
+
+.controls h2,
+.preview-card h2{
+    margin-bottom:18px;
+}
+
+.section{
+    border-bottom:1px solid #e5e7eb;
+    padding-bottom:17px;
+    margin-bottom:17px;
+}
+
+.section-title{
+    color:#1d4ed8;
+    font-weight:800;
+    margin-bottom:12px;
+}
+
+.field{
+    margin-bottom:12px;
+}
+
+label{
+    display:block;
+    font-size:13px;
+    font-weight:bold;
+    margin-bottom:6px;
+}
+
+input,
+textarea,
+select{
+    width:100%;
+    padding:10px;
+    border:1px solid #d5dce8;
+    border-radius:9px;
+    outline:none;
+    font-size:14px;
+}
+
+textarea{
+    min-height:65px;
+    resize:vertical;
+}
+
+input:focus,
+textarea:focus,
+select:focus{
+    border-color:#2563eb;
+}
+
+.two{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:8px;
+}
+
+.logo-box{
+    padding:10px;
+    border:2px dashed #cbd5e1;
+    border-radius:10px;
+    background:#f8fafc;
+}
+
+.btn{
+    width:100%;
+    border:0;
+    color:#fff;
+    padding:13px;
+    border-radius:11px;
+    font-size:15px;
+    font-weight:bold;
+    cursor:pointer;
+    margin-top:7px;
+}
+
+.add{
+    background:linear-gradient(135deg,#2563eb,#7c3aed);
+}
+
+.print{
+    background:linear-gradient(135deg,#059669,#0d9488);
+}
+
+.reset{
+    background:#475569;
+}
+
+.bill-wrapper{
+    overflow:auto;
+    background:#e2e8f0;
+    padding:15px;
+    border-radius:13px;
+}
+
+/* ================= BILL ================= */
+
+.bill{
+    width:794px;
+    min-height:1123px;
+    margin:auto;
+    background:#fff;
+    padding:28px;
+    position:relative;
+    box-shadow:0 7px 25px #0002;
+}
+
+/* HEADER */
+
+.bill-header{
+    padding:15px 10px;
+    border-top:9px solid var(--primary);
+    border-bottom:4px solid var(--primary);
+}
+
+.header-flex{
+    display:flex;
+    align-items:center;
+    gap:15px;
+}
+
+.bill-logo{
+    width:85px;
+    height:85px;
+    object-fit:contain;
+    display:none;
+}
+
+.shop-info{
+    flex:1;
+    text-align:center;
+}
+
+.shop-name{
+    font-size:30px;
+    font-weight:900;
+    color:var(--primary);
+}
+
+.shop-address{
+    font-size:12px;
+    margin-top:5px;
+}
+
+.shop-contact{
+    font-size:12px;
+    margin-top:4px;
+}
+
+.bill-title{
+    display:inline-block;
+    margin-top:12px;
+    padding:8px 30px;
+    background:var(--primary);
+    color:#fff;
+    font-weight:bold;
+    border-radius:3px;
+}
+
+/* META */
+
+.meta{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    margin-top:13px;
+    font-size:13px;
+}
+
+.meta div:last-child{
+    text-align:right;
+}
+
+/* CUSTOMER */
+
+.customer{
+    border:1px solid #9ca3af;
+    margin-top:14px;
+    padding:10px;
+}
+
+.customer-heading{
+    color:var(--primary);
+    font-weight:bold;
+    margin-bottom:7px;
+}
+
+.customer-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:6px 15px;
+    font-size:13px;
+}
+
+/* TABLE */
+
+.items-table{
+    width:100%;
+    border-collapse:collapse;
+    margin-top:18px;
+    font-size:12px;
+}
+
+.items-table th{
+    background:var(--primary);
+    color:white;
+    padding:8px 5px;
+    border:1px solid var(--primary);
+}
+
+.items-table td{
+    border:1px solid #9ca3af;
+    padding:7px 5px;
+    vertical-align:top;
+    min-height:35px;
+}
+
+.center{
+    text-align:center;
+}
+
+.description{
+    white-space:pre-wrap;
+    word-break:break-word;
+}
+
+/* TOTAL */
+
+.total-wrap{
+    display:flex;
+    justify-content:flex-end;
+}
+
+.total-table{
+    width:320px;
+    border-collapse:collapse;
+    font-size:13px;
+}
+
+.total-table td{
+    border:1px solid #9ca3af;
+    padding:8px;
+}
+
+.total-table td:first-child{
+    font-weight:bold;
+    background:#f1f5f9;
+}
+
+.grand td{
+    background:var(--primary) !important;
+    color:#fff;
+    font-size:16px;
+    font-weight:bold;
+}
+
+/* WORD */
+
+.words{
+    border:1px solid #9ca3af;
+    margin-top:14px;
+    padding:10px;
+    font-size:13px;
+}
+
+/* SIGN */
+
+.signatures{
+    display:flex;
+    justify-content:space-between;
+    margin-top:65px;
+}
+
+.sign{
+    width:180px;
+    text-align:center;
+    border-top:1px solid #333;
+    padding-top:7px;
+    font-size:13px;
+}
+
+/* BOTTOM */
+
+.bottom-design{
+    position:absolute;
+    bottom:18px;
+    left:28px;
+    right:28px;
+    height:12px;
+    background:var(--primary);
+}
+
+.bottom-design:before{
+    content:"";
+    display:block;
+    width:28%;
+    height:12px;
+    background:var(--accent);
+    clip-path:polygon(0 0,100% 0,85% 100%,0 100%);
+}
+
+/* ================= DIFFERENT DESIGNS ================= */
+
+/* MOBILE */
+
+.design-mobile{
+    --primary:#075985;
+    --accent:#f59e0b;
+}
+
+.design-mobile .bill-header{
+    background:linear-gradient(90deg,#fff,#eff6ff);
+}
+
+.design-mobile .items-table th{
+    text-transform:uppercase;
+}
+
+/* GENERAL */
+
+.design-general{
+    --primary:#166534;
+    --accent:#facc15;
+}
+
+.design-general .bill-header{
+    border-top-width:14px;
+}
+
+.design-general .bill-title{
+    border-radius:20px;
+}
+
+/* ELECTRONICS */
+
+.design-electronics{
+    --primary:#4f46e5;
+    --accent:#06b6d4;
+}
+
+.design-electronics .bill-header{
+    border-radius:12px;
+    background:#eef2ff;
+}
+
+.design-electronics .items-table th{
+    background:#4f46e5;
+}
+
+/* CLOTHING */
+
+.design-clothing{
+    --primary:#be185d;
+    --accent:#f59e0b;
+}
+
+.design-clothing .bill-header{
+    border-radius:0 0 25px 25px;
+}
+
+.design-clothing .bill-title{
+    border-radius:25px;
+}
+
+/* REPAIR */
+
+.design-repair{
+    --primary:#b45309;
+    --accent:#dc2626;
+}
+
+.design-repair .bill-header{
+    border-left:10px solid #b45309;
+    border-top:0;
+}
+
+/* RESTAURANT */
+
+.design-restaurant{
+    --primary:#991b1b;
+    --accent:#f97316;
+}
+
+.design-restaurant .bill{
+    background:#fffaf5;
+}
+
+.design-restaurant .bill-header{
+    text-align:center;
+}
+
+/* MEDICAL */
+
+.design-medical{
+    --primary:#047857;
+    --accent:#ef4444;
+}
+
+.design-medical .bill-title:before{
+    content:"✚ ";
+}
+
+/* FURNITURE */
+
+.design-furniture{
+    --primary:#78350f;
+    --accent:#d97706;
+}
+
+.design-furniture .bill-header{
+    background:#fff7ed;
+}
+
+/* HARDWARE */
+
+.design-hardware{
+    --primary:#374151;
+    --accent:#eab308;
+}
+
+.design-hardware .bill-header{
+    border-top:14px solid #374151;
+}
+
+/* PURCHASE */
+
+.design-purchase{
+    --primary:#4338ca;
+    --accent:#22c55e;
+}
+
+.design-purchase .bill-title{
+    border-radius:0;
+}
+
+/* SERVICE */
+
+.design-service{
+    --primary:#0369a1;
+    --accent:#14b8a6;
+}
+
+.design-service .bill-header{
+    border-radius:15px;
+}
+
+/* MOBILE */
+
+@media(max-width:850px){
+
+    .editor{
+        grid-template-columns:1fr;
+    }
+
+    .bill-wrapper{
+        overflow-x:auto;
+    }
+
+}
+
+@media print{
+
+    body{
+        background:#fff;
+    }
+
+    .navbar,
+    .hero,
+    .controls,
+    .preview-card>h2{
+        display:none!important;
+    }
+
+    .container{
+        padding:0;
+    }
+
+    .preview-card{
+        padding:0;
+        box-shadow:none;
+    }
+
+    .bill-wrapper{
+        padding:0;
+        background:#fff;
+    }
+
+    .bill{
+        box-shadow:none;
+        width:210mm;
+        min-height:297mm;
+        margin:0;
+    }
+
+    @page{
+        size:A4;
+        margin:0;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<nav class="navbar">
+    <div class="logo">🧾 Tool Sathi — Bill Maker</div>
+    <a href="index.html" class="home">🏠 Home</a>
+</nav>
+
+<section class="hero">
+    <h1>🧾 Bill & Invoice Maker</h1>
+    <p>अलग-अलग दुकानों के लिए अलग Professional Bill बनाएं</p>
+</section>
+
+<div class="container">
+
+<div class="editor">
+
+<!-- ================= CONTROLS ================= -->
+
+<div class="controls">
+
+<h2>🛠️ Bill बनाएं</h2>
+
+<div class="section">
+
+<div class="section-title">📋 Bill Type चुनें</div>
+
+<select id="billType">
+
+<option value="mobile">📱 Mobile Shop Bill</option>
+<option value="general">🛒 General Shop Bill</option>
+<option value="electronics">💻 Electronics Bill</option>
+<option value="clothing">👕 Clothing Shop Bill</option>
+<option value="repair">🔧 Repairing Bill</option>
+<option value="restaurant">🍔 Restaurant Bill</option>
+<option value="medical">💊 Medical Shop Bill</option>
+<option value="furniture">🪑 Furniture Bill</option>
+<option value="hardware">🧰 Hardware Bill</option>
+<option value="purchase">📦 Purchase Bill</option>
+<option value="service">🛠️ Service Bill</option>
+<option value="invoice">🧾 General Invoice</option>
+
+</select>
+
+</div>
+
+
+<!-- BUSINESS -->
+
+<div class="section">
+
+<div class="section-title">🏪 आपकी दुकान / Company</div>
+
+<div class="field">
+<label>Company / Shop Name</label>
+<input id="shopName" value="YOUR SHOP NAME">
+</div>
+
+<div class="field">
+<label>Logo लगाएँ</label>
+
+<div class="logo-box">
+<input type="file" id="logoInput" accept="image/*">
+</div>
+
+</div>
+
+<div class="field">
+<label>पूरा Address</label>
+<textarea id="shopAddress"
+placeholder="Shop Address"></textarea>
+</div>
+
+<div class="two">
+
+<div class="field">
+<label>Mobile</label>
+<input id="shopMobile" placeholder="9876543210">
+</div>
+
+<div class="field">
+<label>Email</label>
+<input id="shopEmail" placeholder="example@gmail.com">
+</div>
+
+</div>
+
+<div class="field">
+<label>GSTIN</label>
+<input id="gstin" placeholder="Optional">
+</div>
+
+</div>
+
+
+<!-- CUSTOMER -->
+
+<div class="section">
+
+<div class="section-title">👤 Customer Details</div>
+
+<div class="field">
+<label>Customer Name</label>
+<input id="customerName" placeholder="ग्राहक का नाम">
+</div>
+
+<div class="field">
+<label>Customer Address</label>
+<textarea id="customerAddress"></textarea>
+</div>
+
+<div class="two">
+
+<div class="field">
+<label>Mobile</label>
+<input id="customerMobile">
+</div>
+
+<div class="field">
+<label>Email</label>
+<input id="customerEmail">
+</div>
+
+</div>
+
+</div>
+
+
+<!-- BILL -->
+
+<div class="section">
+
+<div class="section-title">🔢 Bill Details</div>
+
+<div class="two">
+
+<div class="field">
+<label>Bill No.</label>
+<input id="billNo" value="INV-001">
+</div>
+
+<div class="field">
+<label>Date</label>
+<input type="date" id="billDate">
+</div>
+
+</div>
+
+</div>
+
+
+<!-- ITEMS -->
+
+<div class="section">
+
+<div class="section-title">🛍️ सामान / Items</div>
+
+<p style="font-size:12px;color:#64748b;margin-bottom:10px">
+नीचे हर सामान का पूरा नाम/विवरण लिखें। जितना सामान जोड़ेंगे, Sr. No. अपने-आप बढ़ता जाएगा।
+</p>
+
+<div id="itemControls"></div>
+
+<button class="btn add" onclick="addItem()">
+➕ नया सामान जोड़ें
+</button>
+
+</div>
+
+
+<!-- PAYMENT -->
+
+<div class="section">
+
+<div class="section-title">💰 Payment</div>
+
+<div class="two">
+
+<div class="field">
+<label>Discount</label>
+<input type="number" id="discount" value="0">
+</div>
+
+<div class="field">
+<label>GST %</label>
+<input type="number" id="gst" value="0">
+</div>
+
+</div>
+
+<div class="field">
+<label>Advance / Paid</label>
+<input type="number" id="advance" value="0">
+</div>
+
+</div>
+
+
+<button class="btn print" onclick="window.print()">
+🖨️ Print / Save PDF
+</button>
+
+<button class="btn reset" onclick="resetAll()">
+🔄 Reset
+</button>
+
+</div>
+
+
+<!-- ================= PREVIEW ================= -->
+
+<div class="preview-card">
+
+<h2 style="text-align:center">👀 Live Bill Preview</h2>
+
+<div class="bill-wrapper">
+
+<div class="bill design-mobile" id="bill">
+
+<div class="bill-header">
+
+<div class="header-flex">
+
+<img id="billLogo" class="bill-logo">
+
+<div class="shop-info">
+
+<div class="shop-name" id="pShopName">
+YOUR SHOP NAME
+</div>
+
+<div class="shop-address" id="pAddress"></div>
+
+<div class="shop-contact" id="pContact"></div>
+
+<div class="shop-contact" id="pGST"></div>
+
+<div class="bill-title" id="pBillTitle">
+MOBILE SHOP BILL
+</div>
+
+</div>
+
+</div>
+
+<div class="meta">
+
+<div>
+<strong>Bill No:</strong>
+<span id="pBillNo">INV-001</span>
+</div>
+
+<div>
+<strong>Date:</strong>
+<span id="pDate">-</span>
+</div>
+
+</div>
+
+</div>
+
+
+<!-- CUSTOMER -->
+
+<div class="customer">
+
+<div class="customer-heading">
+👤 Customer Details
+</div>
+
+<div class="customer-grid">
+
+<div>
+<strong>Name:</strong>
+<span id="pCustomer"></span>
+</div>
+
+<div>
+<strong>Mobile:</strong>
+<span id="pCustomerMobile"></span>
+</div>
+
+<div>
+<strong>Address:</strong>
+<span id="pCustomerAddress"></span>
+</div>
+
+<div>
+<strong>Email:</strong>
+<span id="pCustomerEmail"></span>
+</div>
+
+</div>
+
+</div>
+
+
+<!-- TABLE -->
+
+<table class="items-table">
+
+<thead id="tableHead"></thead>
+
+<tbody id="billItems"></tbody>
+
+</table>
+
+
+<!-- TOTAL -->
+
+<div class="total-wrap">
+
+<table class="total-table">
+
+<tr>
+<td>Subtotal</td>
+<td id="pSubtotal">₹0.00</td>
+</tr>
+
+<tr>
+<td>Discount</td>
+<td id="pDiscount">₹0.00</td>
+</tr>
+
+<tr>
+<td>GST</td>
+<td id="pGSTAmount">₹0.00</td>
+</tr>
+
+<tr class="grand">
+<td>Total</td>
+<td id="pTotal">₹0.00</td>
+</tr>
+
+<tr>
+<td>Paid</td>
+<td id="pAdvance">₹0.00</td>
+</tr>
+
+<tr>
+<td>Due</td>
+<td id="pDue">₹0.00</td>
+</tr>
+
+</table>
+
+</div>
+
+
+<div class="words">
+<strong>Amount in Words:</strong>
+<span id="pWords">Zero Rupees Only</span>
+</div>
+
+
+<div class="signatures">
+
+<div class="sign">
+Received By
+</div>
+
+<div class="sign">
+Authorized By
+</div>
+
+</div>
+
+
+<div class="bottom-design"></div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+
+<footer>
+⚡ Fast &nbsp; | &nbsp;
+🔒 Private &nbsp; | &nbsp;
+🆓 Free &nbsp; | &nbsp;
+📱 Mobile Friendly
+
+<div style="margin-top:7px;color:#9ca3af;font-size:13px">
+© 2026 Tool Sathi — All Rights Reserved
+</div>
+</footer>
+
+
+<script>
+
+/* ===================================
+   BILL CONFIGURATION
+=================================== */
+
+const configs = {
+
+mobile:{
+    title:"MOBILE SHOP BILL",
+    design:"design-mobile",
+    columns:[
+        ["sr","Sr. No."],
+        ["item","Mobile / Product Name"],
+        ["brand","Brand"],
+        ["model","Model"],
+        ["imei","IMEI No."],
+        ["qty","Qty"],
+        ["rate","Rate"],
+        ["amount","Amount"]
+    ]
+},
+
+general:{
+    title:"GENERAL SHOP BILL",
+    design:"design-general",
+    columns:[
+        ["sr","Sr. No."],
+        ["item","सामान / Product"],
+        ["details","Description"],
+        ["qty","Qty"],
+        ["unit","Unit"],
+        ["rate","Rate"],
+        ["amount","Amount"]
+    ]
+},
+
+electronics:{
+    title:"ELECTRONICS BILL",
+    design:"design-electronics",
+    columns:[
+        ["sr","Sr. No."],
+        ["item","Product"],
+        ["brand","Brand"],
+        ["model","Model"],
+        ["serial","Serial No."],
+        ["qty","Qty"],
+        ["rate","Rate"],
+        ["amount","Amount"]
+    ]
+},
+
+clothing:{
+    title:"CLOTHING BILL",
+    design:"design-clothing",
+    columns:[
+        ["sr","Sr. No."],
+        ["item","Clothing / कपड़ा"],
+        ["size","Size"],
+        ["colour","Colour"],
+        ["qty","Qty"],
+        ["rate","Rate"],
+        ["discount","Discount"],
+        ["amount","Amount"]
+    ]
+},
+
+repair:{
+    title:"REPAIRING BILL",
+    design:"design-repair",
+    columns:[
+        ["sr","Sr. No."],
+        ["item","Customer Item"],
+        ["details","Problem / Work Details"],
+        ["parts","Parts"],
+        ["labour","Labour"],
+        ["amount","Total"]
+    ]
+},
+
+restaurant:{
+    title:"RESTAURANT BILL",
+    design:"design-restaurant",
+    columns:[
+        ["sr","Sr. No."],
+        ["item","Food / Item"],
+        ["details","Description"],
+        ["qty","Qty"],
+        ["rate","Rate"],
+        ["amount","Amount"]
+    ]
+},
+
+medical:{
+    title:"MEDICAL SHOP BILL",
+    design:"design-medical",
+    columns:[
+        ["sr","Sr. No."],
+        ["item","Medicine Name"],
+        ["details","Batch / Expiry"],
+        ["qty","Qty"],
+        ["rate","Rate"],
+        ["amount","Amount"]
+    ]
+},
+
+furniture:{
+    title:"FURNITURE BILL",
+    design:"design-furniture",
+    columns:[
+        ["sr","Sr. No."],
+        ["item","Furniture"],
+        ["details","Description"],
+        ["qty","Qty"],
+        ["rate","Rate"],
+        ["amount","Amount"]
+    ]
+},
+
+hardware:{
+    title:"HARDWARE BILL",
+    design:"design-hardware",
+    columns:[
+        ["sr","Sr. No."],
+        ["item","Hardware Item"],
+        ["details","Description"],
+        ["qty","Qty"],
+        ["unit","Unit"],
+        ["rate","Rate"],
+        ["amount","Amount"]
+    ]
+},
+
+purchase:{
+    title:"PURCHASE BILL",
+    design:"design-purchase",
+    columns:[
+        ["sr","Sr. No."],
+        ["item","Purchased Item"],
+        ["details","Description"],
+        ["qty","Qty"],
+        ["rate","Rate"],
+        ["amount","Amount"]
+    ]
+},
+
+service:{
+    title:"SERVICE BILL",
+    design:"design-service",
+    columns:[
+        ["sr","Sr. No."],
+        ["item","Service"],
+        ["details","Service Details"],
+        ["qty","Qty"],
+        ["rate","Rate"],
+        ["amount","Amount"]
+    ]
+},
+
+invoice:{
+    title:"INVOICE / BILL",
+    design:"design-service",
+    columns:[
+        ["sr","Sr. No."],
+        ["item","Item / Description"],
+        ["details","Details"],
+        ["qty","Qty"],
+        ["unit","Unit"],
+        ["rate","Rate"],
+        ["amount","Amount"]
+    ]
+}
+
+};
+
+
+/* ===================================
+   ITEMS
+=================================== */
+
+let items=[];
+
+
+/* ===================================
+   DEFAULT ITEM
+=================================== */
+
+function newItem(){
+
+return {
+    item:"",
+    details:"",
+    brand:"",
+    model:"",
+    imei:"",
+    serial:"",
+    size:"",
+    colour:"",
+    unit:"",
+    parts:"",
+    labour:"",
+    qty:1,
+    rate:0,
+    discount:0
+};
+
+}
+
+
+/* ===================================
+   ADD ITEM
+=================================== */
+
+function addItem(){
+
+items.push(newItem());
+
+renderControls();
+renderBill();
+
+}
+
+
+/* ===================================
+   REMOVE ITEM
+=================================== */
+
+function removeItem(index){
+
+items.splice(index,1);
+
+if(items.length===0){
+    items.push(newItem());
+}
+
+renderControls();
+renderBill();
+
+}
+
+
+/* ===================================
+   UPDATE ITEM
+=================================== */
+
+function updateItem(index,key,value){
+
+items[index][key]=value;
+
+renderBill();
+
+}
+
+
+/* ===================================
+   CONTROL INPUTS
+=================================== */
+
+function renderControls(){
+
+const type=document.getElementById("billType").value;
+
+const config=configs[type];
+
+const box=document.getElementById("itemControls");
+
+box.innerHTML="";
+
+
+items.forEach((item,index)=>{
+
+const card=document.createElement("div");
+
+card.style.cssText=
+"border:1px solid #dbe2ea;padding:10px;border-radius:10px;margin-bottom:10px;background:#f8fafc";
+
+
+let html=`
+
+<div style="
+display:flex;
+justify-content:space-between;
+align-items:center;
+margin-bottom:8px">
+
+<strong>सामान ${index+1}</strong>
+
+<button
+onclick="removeItem(${index})"
+style="
+border:0;
+background:#fee2e2;
+color:#dc2626;
+padding:5px 9px;
+border-radius:7px;
+font-weight:bold">
+🗑️
+</button>
+
+</div>
+`;
+
+
+/* COMMON */
+
+html+=field(
+index,
+"item",
+"सामान / Product का पूरा नाम",
+item.item,
+"जैसे Samsung Galaxy A55 5G"
+);
+
+if(config.columns.some(c=>c[0]==="details")){
+
+html+=field(
+index,
+"details",
+"पूरा विवरण",
+item.details,
+"सामान का पूरा विवरण लिखें"
+);
+
+}
+
+if(config.columns.some(c=>c[0]==="brand")){
+
+html+=field(
+index,
+"brand",
+"Brand",
+item.brand,
+"Samsung / Apple..."
+);
+
+}
+
+if(config.columns.some(c=>c[0]==="model")){
+
+html+=field(
+index,
+"model",
+"Model",
+item.model,
+"Model Number"
+);
+
+}
+
+if(config.columns.some(c=>c[0]==="imei")){
+
+html+=field(
+index,
+"imei",
+"IMEI Number",
+item.imei,
+"IMEI No."
+);
+
+}
+
+if(config.columns.some(c=>c[0]==="serial")){
+
+html+=field(
+index,
+"serial",
+"Serial Number",
+item.serial,
+"Serial No."
+);
+
+}
+
+if(config.columns.some(c=>c[0]==="size")){
+
+html+=field(
+index,
+"size",
+"Size",
+item.size,
+"M / L / XL"
+);
+
+}
+
+if(config.columns.some(c=>c[0]==="colour")){
+
+html+=field(
+index,
+"colour",
+"Colour",
+item.colour,
+"Colour"
+);
+
+}
+
+if(config.columns.some(c=>c[0]==="parts")){
+
+html+=field(
+index,
+"parts",
+"Parts / Material",
+item.parts,
+"Used Parts"
+);
+
+}
+
+if(config.columns.some(c=>c[0]==="labour")){
+
+html+=field(
+index,
+"labour",
+"Labour Charge",
+item.labour,
+"0"
+);
+
+}
+
+
+/* QUANTITY + RATE */
+
+html+=`
+
+<div class="two">
+
+<div class="field">
+
+<label>Quantity</label>
+
+<input
+type="number"
+min="0"
+value="${item.qty}"
+oninput="updateItem(${index},'qty',this.value)"
+>
+
+</div>
+
+<div class="field">
+
+<label>Rate ₹</label>
+
+<input
+type="number"
+min="0"
+value="${item.rate}"
+oninput="updateItem(${index},'rate',this.value)"
+>
+
+</div>
+
+</div>
+
+`;
+
+
+card.innerHTML=html;
+
+box.appendChild(card);
+
+});
+
+}
+
+
+/* ===================================
+   FIELD HELPER
+=================================== */
+
+function field(index,key,label,value,placeholder){
+
+return `
+
+<div class="field">
+
+<label>${label}</label>
+
+<textarea
+placeholder="${placeholder}"
+oninput="updateItem(${index},'${key}',this.value)"
+>${escapeHTML(value)}</textarea>
+
+</div>
+
+`;
+
+}
+
+
+/* ===================================
+   RENDER BILL
+=================================== */
+
+function renderBill(){
+
+const type=document.getElementById("billType").value;
+
+const config=configs[type];
+
+const bill=document.getElementById("bill");
+
+bill.className=
+"bill "+config.design;
+
+
+/* TITLE */
+
+document.getElementById("pBillTitle")
+.innerText=config.title;
+
+
+/* TABLE HEAD */
+
+const head=document.getElementById("tableHead");
+
+head.innerHTML="";
+
+const tr=document.createElement("tr");
+
+config.columns.forEach(col=>{
+
+const th=document.createElement("th");
+
+th.innerText=col[1];
+
+tr.appendChild(th);
+
+});
+
+head.appendChild(tr);
+
+
+/* TABLE BODY */
+
+const body=document.getElementById("billItems");
+
+body.innerHTML="";
+
+
+items.forEach((item,index)=>{
+
+const tr=document.createElement("tr");
+
+config.columns.forEach(col=>{
+
+const td=document.createElement("td");
+
+const key=col[0];
+
+if(key==="sr"){
+
+td.innerText=index+1;
+
+td.className="center";
+
+}
+
+else if(key==="item"){
+
+td.innerText=item.item || "";
+
+td.className="description";
+
+}
+
+else if(key==="details"){
+
+td.innerText=item.details || "";
+
+td.className="description";
+
+}
+
+else if(key==="brand"){
+
+td.innerText=item.brand || "";
+
+}
+
+else if(key==="model"){
+
+td.innerText=item.model || "";
+
+}
+
+else if(key==="imei"){
+
+td.innerText=item.imei || "";
+
+}
+
+else if(key==="serial"){
+
+td.innerText=item.serial || "";
+
+}
+
+else if(key==="size"){
+
+td.innerText=item.size || "";
+
+}
+
+else if(key==="colour"){
+
+td.innerText=item.colour || "";
+
+}
+
+else if(key==="unit"){
+
+td.innerText=item.unit || "";
+
+}
+
+else if(key==="parts"){
+
+td.innerText=item.parts || "";
+
+}
+
+else if(key==="labour"){
+
+td.innerText=
+money(item.labour);
+
+}
+
+else if(key==="qty"){
+
+td.innerText=item.qty || 0;
+
+td.className="center";
+
+}
+
+else if(key==="rate"){
+
+td.innerText=
+money(item.rate);
+
+td.className="center";
+
+}
+
+else if(key==="discount"){
+
+td.innerText=
+money(item.discount);
+
+}
+
+else if(key==="amount"){
+
+let amount=
+Number(item.qty||0) *
+Number(item.rate||0);
+
+if(type==="repair"){
+
+amount=
+Number(item.parts||0)+
+Number(item.labour||0);
+
+}
+
+td.innerText=
+money(amount);
+
+td.className="center";
+
+}
+
+tr.appendChild(td);
+
+});
+
+body.appendChild(tr);
+
+});
+
+
+calculate();
+
+}
+
+
+/* ===================================
+   CALCULATE
+=================================== */
+
+function calculate(){
+
+let subtotal=0;
+
+const type=
+document.getElementById("billType").value;
+
+
+items.forEach(item=>{
+
+let amount=
+Number(item.qty||0) *
+Number(item.rate||0);
+
+if(type==="repair"){
+
+amount=
+Number(item.parts||0)+
+Number(item.labour||0);
+
+}
+
+subtotal+=amount;
+
+});
+
+
+const discount=
+Number(document.getElementById("discount").value)||0;
+
+const taxable=
+Math.max(0,subtotal-discount);
+
+const gstPercent=
+Number(document.getElementById("gst").value)||0;
+
+const gst=
+taxable*gstPercent/100;
+
+const total=
+taxable+gst;
+
+const advance=
+Number(document.getElementById("advance").value)||0;
+
+const due=
+Math.max(0,total-advance);
+
+
+document.getElementById("pSubtotal")
+.innerText=money(subtotal);
+
+document.getElementById("pDiscount")
+.innerText=money(discount);
+
+document.getElementById("pGSTAmount")
+.innerText=money(gst);
+
+document.getElementById("pTotal")
+.innerText=money(total);
+
+document.getElementById("pAdvance")
+.innerText=money(advance);
+
+document.getElementById("pDue")
+.innerText=money(due);
+
+document.getElementById("pWords")
+.innerText=
+numberToWords(Math.round(total))+
+" Rupees Only";
+
+}
+
+
+/* ===================================
+   UPDATE BUSINESS
+=================================== */
+
+function updateBusiness(){
+
+document.getElementById("pShopName")
+.innerText=
+document.getElementById("shopName").value ||
+"YOUR SHOP NAME";
+
+
+document.getElementById("pAddress")
+.innerText=
+document.getElementById("shopAddress").value;
+
+
+let contact=[];
+
+const mobile=
+document.getElementById("shopMobile").value;
+
+const email=
+document.getElementById("shopEmail").value;
+
+if(mobile) contact.push("Mob: "+mobile);
+
+if(email) contact.push(email);
+
+document.getElementById("pContact")
+.innerText=contact.join(" | ");
+
+
+const gstin=
+document.getElementById("gstin").value;
+
+document.getElementById("pGST")
+.innerText=
+gstin ? "GSTIN: "+gstin : "";
+
+
+document.getElementById("pCustomer")
+.innerText=
+document.getElementById("customerName").value;
+
+
+document.getElementById("pCustomerMobile")
+.innerText=
+document.getElementById("customerMobile").value;
+
+
+document.getElementById("pCustomerAddress")
+.innerText=
+document.getElementById("customerAddress").value;
+
+
+document.getElementById("pCustomerEmail")
+.innerText=
+document.getElementById("customerEmail").value;
+
+
+document.getElementById("pBillNo")
+.innerText=
+document.getElementById("billNo").value;
+
+
+const date=
+document.getElementById("billDate").value;
+
+if(date){
+
+document.getElementById("pDate")
+.innerText=
+new Date(date+"T00:00:00")
+.toLocaleDateString("en-IN");
+
+}
+
+}
+
+
+/* ===================================
+   BILL TYPE
+=================================== */
+
+document.getElementById("billType")
+.addEventListener("change",function(){
+
+renderControls();
+renderBill();
+
+});
+
+
+/* ===================================
+   INPUT LISTENERS
+=================================== */
+
+document.querySelectorAll(
+"#shopName,#shopAddress,#shopMobile,#shopEmail,#gstin,#customerName,#customerAddress,#customerMobile,#customerEmail,#billNo,#billDate,#discount,#gst,#advance"
+)
+.forEach(input=>{
+
+input.addEventListener(
+"input",
+function(){
+
+updateBusiness();
+calculate();
+
+});
+
+input.addEventListener(
+"change",
+function(){
+
+updateBusiness();
+calculate();
+
+});
+
+});
+
+
+/* ===================================
+   LOGO
+=================================== */
+
+document.getElementById("logoInput")
+.addEventListener("change",function(e){
+
+const file=e.target.files[0];
+
+if(!file)return;
+
+const reader=new FileReader();
+
+reader.onload=function(event){
+
+const img=
+document.getElementById("billLogo");
+
+img.src=event.target.result;
+
+img.style.display="block";
+
+};
+
+reader.readAsDataURL(file);
+
+});
+
+
+/* ===================================
+   MONEY
+=================================== */
+
+function money(value){
+
+return "₹"+
+Number(value||0)
+.toLocaleString("en-IN",{
+minimumFractionDigits:2,
+maximumFractionDigits:2
+});
+
+}
+
+
+/* ===================================
+   ESCAPE
+=================================== */
+
+function escapeHTML(text){
+
+return String(text||"")
+.replace(/&/g,"&amp;")
+.replace(/</g,"&lt;")
+.replace(/>/g,"&gt;")
+.replace(/"/g,"&quot;")
+.replace(/'/g,"&#039;");
+
+}
+
+
+/* ===================================
+   NUMBER TO WORDS
+=================================== */
+
+function numberToWords(num){
+
+num=Math.floor(num);
+
+if(num===0) return "Zero";
+
+
+const ones=[
+"",
+"One","Two","Three","Four","Five",
+"Six","Seven","Eight","Nine","Ten",
+"Eleven","Twelve","Thirteen","Fourteen",
+"Fifteen","Sixteen","Seventeen",
+"Eighteen","Nineteen"
+];
+
+const tens=[
+"","","Twenty","Thirty","Forty",
+"Fifty","Sixty","Seventy","Eighty","Ninety"
+];
+
+
+function convert(n){
+
+if(n<20) return ones[n];
+
+if(n<100){
+
+return tens[Math.floor(n/10)] +
+(n%10 ? " "+ones[n%10] : "");
+
+}
+
+if(n<1000){
+
+return ones[Math.floor(n/100)]+" Hundred"+
+(n%100 ? " "+convert(n%100) : "");
+
+}
+
+if(n<100000){
+
+return convert(Math.floor(n/1000))+
+" Thousand"+
+(n%1000 ? " "+convert(n%1000) : "");
+
+}
+
+if(n<10000000){
+
+return convert(Math.floor(n/100000))+
+" Lakh"+
+(n%100000 ? " "+convert(n%100000) : "");
+
+}
+
+return convert(Math.floor(n/10000000))+
+" Crore"+
+(n%10000000 ? " "+convert(n%10000000) : "");
+
+}
+
+return convert(num);
+
+}
+
+
+/* ===================================
+   RESET
+=================================== */
+
+function resetAll(){
+
+items=[newItem()];
+
+document.getElementById("shopName").value=
+"YOUR SHOP NAME";
+
+document.getElementById("shopAddress").value="";
+document.getElementById("shopMobile").value="";
+document.getElementById("shopEmail").value="";
+document.getElementById("gstin").value="";
+
+document.getElementById("customerName").value="";
+document.getElementById("customerAddress").value="";
+document.getElementById("customerMobile").value="";
+document.getElementById("customerEmail").value="";
+
+document.getElementById("billNo").value="INV-001";
+
+document.getElementById("billDate").valueAsDate=
+new Date();
+
+document.getElementById("discount").value=0;
+document.getElementById("gst").value=0;
+document.getElementById("advance").value=0;
+
+document.getElementById("logoInput").value="";
+
+document.getElementById("billLogo").style.display="none";
+
+renderControls();
+updateBusiness();
+renderBill();
+
+}
+
+
+/* ===================================
+   START
+=================================== */
+
+document.getElementById("billDate")
+.valueAsDate=new Date();
+
+items.push(newItem());
+
+renderControls();
+
+updateBusiness();
+
+renderBill();
+
+</script>
+
+</body>
+</html>
