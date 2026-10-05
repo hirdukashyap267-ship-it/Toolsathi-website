@@ -1,0 +1,1350 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Payment & Ledger | Tool Sathi</title>
+
+<style>
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+}
+
+body{
+    font-family:Arial,"Noto Sans Devanagari",sans-serif;
+    background:linear-gradient(135deg,#eef4ff,#fdf4ff);
+    color:#172033;
+    min-height:100vh;
+}
+
+header{
+    background:#fff;
+    padding:15px 20px;
+    box-shadow:0 5px 20px rgba(0,0,0,.08);
+    position:sticky;
+    top:0;
+    z-index:20;
+}
+
+.nav{
+    max-width:1100px;
+    margin:auto;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+}
+
+.logo{
+    font-size:24px;
+    font-weight:bold;
+    background:linear-gradient(135deg,#2878f0,#7138e8);
+    -webkit-background-clip:text;
+    color:transparent;
+}
+
+.home-btn{
+    text-decoration:none;
+    background:#eef3ff;
+    color:#2868df;
+    padding:9px 15px;
+    border-radius:12px;
+    font-weight:bold;
+}
+
+.hero{
+    max-width:1100px;
+    margin:25px auto 10px;
+    padding:0 15px;
+}
+
+.hero h1{
+    font-size:30px;
+    margin-bottom:7px;
+}
+
+.hero p{
+    color:#64748b;
+}
+
+/* TABS */
+
+.tabs{
+    max-width:1100px;
+    margin:20px auto;
+    padding:0 15px;
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:12px;
+}
+
+.tab{
+    border:0;
+    padding:16px 10px;
+    border-radius:17px;
+    background:#fff;
+    box-shadow:0 5px 18px rgba(0,0,0,.07);
+    cursor:pointer;
+    font-size:16px;
+    font-weight:bold;
+    transition:.2s;
+}
+
+.tab:hover{
+    transform:translateY(-2px);
+}
+
+.tab.active{
+    background:linear-gradient(135deg,#2878f0,#7138e8);
+    color:#fff;
+}
+
+/* MAIN */
+
+.container{
+    max-width:1100px;
+    margin:auto;
+    padding:0 15px 40px;
+}
+
+.tool{
+    display:none;
+    background:#fff;
+    padding:20px;
+    border-radius:22px;
+    box-shadow:0 10px 30px rgba(30,50,100,.09);
+}
+
+.tool.active{
+    display:block;
+}
+
+.tool-title{
+    margin-bottom:18px;
+    font-size:23px;
+}
+
+/* FORM */
+
+.grid{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:15px;
+}
+
+.field{
+    margin-bottom:12px;
+}
+
+.field.full{
+    grid-column:1/-1;
+}
+
+label{
+    display:block;
+    font-weight:bold;
+    margin-bottom:7px;
+    font-size:14px;
+}
+
+input,textarea,select{
+    width:100%;
+    padding:12px;
+    border:1px solid #dbe3f0;
+    border-radius:11px;
+    outline:none;
+    font-size:15px;
+    background:#fafcff;
+}
+
+input:focus,
+textarea:focus,
+select:focus{
+    border-color:#397af0;
+    box-shadow:0 0 0 3px rgba(57,122,240,.1);
+}
+
+textarea{
+    resize:vertical;
+    min-height:75px;
+}
+
+/* ITEMS */
+
+.items-head{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    margin:18px 0 10px;
+}
+
+.items-head h3{
+    font-size:18px;
+}
+
+.add-btn{
+    border:0;
+    background:#e8fff2;
+    color:#08783b;
+    padding:10px 14px;
+    border-radius:10px;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+.item-row{
+    display:grid;
+    grid-template-columns:55px 1fr 120px 120px 45px;
+    gap:8px;
+    margin-bottom:9px;
+    align-items:center;
+}
+
+.item-row input{
+    min-width:0;
+}
+
+.sr{
+    background:#f1f5ff;
+    border-radius:10px;
+    padding:12px;
+    text-align:center;
+    font-weight:bold;
+}
+
+.delete{
+    border:0;
+    background:#ffe9e9;
+    color:#d71920;
+    height:43px;
+    border-radius:10px;
+    cursor:pointer;
+    font-size:17px;
+}
+
+/* TOTAL */
+
+.total-box{
+    margin-top:20px;
+    background:linear-gradient(135deg,#f5f8ff,#faf5ff);
+    border-radius:17px;
+    padding:17px;
+}
+
+.total-line{
+    display:flex;
+    justify-content:space-between;
+    padding:7px 0;
+}
+
+.grand{
+    border-top:1px dashed #ccd5e5;
+    margin-top:8px;
+    padding-top:12px;
+    font-size:20px;
+    font-weight:bold;
+}
+
+/* BUTTONS */
+
+.actions{
+    display:flex;
+    flex-wrap:wrap;
+    gap:10px;
+    margin-top:20px;
+}
+
+.btn{
+    border:0;
+    padding:12px 18px;
+    border-radius:12px;
+    cursor:pointer;
+    font-weight:bold;
+    font-size:15px;
+}
+
+.primary{
+    background:linear-gradient(135deg,#2878f0,#7138e8);
+    color:white;
+}
+
+.green{
+    background:#e7fff0;
+    color:#08783b;
+}
+
+.gray{
+    background:#eef2f7;
+    color:#334155;
+}
+
+.red{
+    background:#ffecec;
+    color:#c62828;
+}
+
+/* PREVIEW */
+
+.preview{
+    margin-top:25px;
+    border:1px solid #e2e8f0;
+    border-radius:18px;
+    padding:20px;
+    background:#fff;
+}
+
+.receipt-paper{
+    max-width:800px;
+    margin:auto;
+}
+
+.paper-head{
+    text-align:center;
+    border-bottom:2px solid #222;
+    padding-bottom:15px;
+    margin-bottom:15px;
+}
+
+.paper-head h2{
+    font-size:26px;
+}
+
+.paper-info{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:15px;
+    margin-bottom:18px;
+}
+
+.paper-table{
+    width:100%;
+    border-collapse:collapse;
+    margin-top:10px;
+}
+
+.paper-table th,
+.paper-table td{
+    border:1px solid #333;
+    padding:8px;
+    text-align:left;
+}
+
+.paper-table th{
+    background:#f0f3f8;
+}
+
+.paper-total{
+    margin-left:auto;
+    width:300px;
+    margin-top:15px;
+}
+
+.paper-total div{
+    display:flex;
+    justify-content:space-between;
+    padding:5px;
+}
+
+.paper-grand{
+    border-top:2px solid #222;
+    font-size:18px;
+    font-weight:bold;
+}
+
+/* LEDGER */
+
+.balance-card{
+    margin:15px 0;
+    padding:18px;
+    border-radius:17px;
+    background:linear-gradient(135deg,#eef5ff,#f8efff);
+}
+
+.balance-grid{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:12px;
+}
+
+.balance-item{
+    background:#fff;
+    border-radius:13px;
+    padding:15px;
+    text-align:center;
+}
+
+.balance-item span{
+    display:block;
+    color:#64748b;
+    font-size:13px;
+    margin-bottom:5px;
+}
+
+.balance-item strong{
+    font-size:20px;
+}
+
+.ledger-table{
+    width:100%;
+    border-collapse:collapse;
+    margin-top:18px;
+    min-width:650px;
+}
+
+.ledger-table th,
+.ledger-table td{
+    border:1px solid #dce3ed;
+    padding:10px;
+    text-align:center;
+}
+
+.ledger-table th{
+    background:#edf3ff;
+}
+
+.table-wrap{
+    overflow-x:auto;
+}
+
+.empty{
+    text-align:center;
+    padding:30px;
+    color:#64748b;
+}
+
+/* PRINT */
+
+@media print{
+    body{
+        background:#fff;
+    }
+
+    header,
+    .hero,
+    .tabs,
+    .tool > *:not(.preview){
+        display:none !important;
+    }
+
+    .tool{
+        display:block !important;
+        box-shadow:none;
+        padding:0;
+    }
+
+    .preview{
+        border:0;
+        padding:0;
+    }
+}
+
+/* MOBILE */
+
+@media(max-width:700px){
+
+    .hero h1{
+        font-size:25px;
+    }
+
+    .tabs{
+        grid-template-columns:1fr;
+    }
+
+    .grid{
+        grid-template-columns:1fr;
+    }
+
+    .item-row{
+        grid-template-columns:40px 1fr 80px 80px 40px;
+    }
+
+    .item-row input{
+        padding:9px 6px;
+        font-size:13px;
+    }
+
+    .balance-grid{
+        grid-template-columns:1fr;
+    }
+
+    .paper-info{
+        grid-template-columns:1fr;
+    }
+
+    .paper-total{
+        width:100%;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <div class="nav">
+        <div class="logo">🛠️ Tool Sathi</div>
+        <a href="index.html" class="home-btn">🏠 Home</a>
+    </div>
+</header>
+
+<section class="hero">
+    <h1>💼 Payment & Ledger</h1>
+    <p>Payment Receipt, Delivery Challan और Customer Ledger एक ही जगह बनाएं।</p>
+</section>
+
+<!-- TABS -->
+
+<div class="tabs">
+
+    <button class="tab active" onclick="showTool('receipt',this)">
+        💰 Payment Receipt
+    </button>
+
+    <button class="tab" onclick="showTool('challan',this)">
+        🚚 Delivery Challan
+    </button>
+
+    <button class="tab" onclick="showTool('ledger',this)">
+        📒 Customer Ledger
+    </button>
+
+</div>
+
+<div class="container">
+
+<!-- ================= PAYMENT RECEIPT ================= -->
+
+<section id="receipt" class="tool active">
+
+<h2 class="tool-title">💰 Payment Receipt Maker</h2>
+
+<div class="grid">
+
+<div class="field">
+<label>Shop / Company Name</label>
+<input id="rShop" placeholder="आपकी दुकान / कंपनी का नाम">
+</div>
+
+<div class="field">
+<label>Receipt Number</label>
+<input id="rNo" placeholder="REC-001">
+</div>
+
+<div class="field">
+<label>Shop Address</label>
+<input id="rAddress" placeholder="दुकान का पता">
+</div>
+
+<div class="field">
+<label>Date</label>
+<input id="rDate" type="date">
+</div>
+
+<div class="field">
+<label>Customer Name</label>
+<input id="rCustomer" placeholder="ग्राहक का नाम">
+</div>
+
+<div class="field">
+<label>Mobile Number</label>
+<input id="rMobile" placeholder="मोबाइल नंबर">
+</div>
+
+<div class="field">
+<label>Amount ₹</label>
+<input id="rAmount" type="number" placeholder="0">
+</div>
+
+<div class="field">
+<label>Payment Mode</label>
+<select id="rMode">
+<option>Cash</option>
+<option>UPI</option>
+<option>Bank Transfer</option>
+<option>Cheque</option>
+<option>Other</option>
+</select>
+</div>
+
+<div class="field full">
+<label>Payment For / Description</label>
+<textarea id="rDescription" placeholder="किस चीज के लिए भुगतान प्राप्त हुआ..."></textarea>
+</div>
+
+</div>
+
+<div class="actions">
+<button class="btn primary" onclick="previewReceipt()">👁️ Preview Receipt</button>
+<button class="btn green" onclick="printCurrent()">🖨️ Print / PDF</button>
+<button class="btn gray" onclick="resetReceipt()">🔄 Reset</button>
+</div>
+
+<div class="preview" id="receiptPreview">
+
+<div class="receipt-paper">
+
+<div class="paper-head">
+<h2>PAYMENT RECEIPT</h2>
+<p id="pShop">Shop / Company Name</p>
+<p id="pAddress">Address</p>
+</div>
+
+<div class="paper-info">
+
+<div>
+<strong>Received From:</strong><br>
+<span id="pCustomer">Customer Name</span><br>
+<span id="pMobile">Mobile</span>
+</div>
+
+<div>
+<strong>Receipt No:</strong> <span id="pNo">REC-001</span><br>
+<strong>Date:</strong> <span id="pDate">-</span><br>
+<strong>Payment Mode:</strong> <span id="pMode">Cash</span>
+</div>
+
+</div>
+
+<table class="paper-table">
+
+<tr>
+<th>Description</th>
+<th>Amount</th>
+</tr>
+
+<tr>
+<td id="pDescription">Payment Description</td>
+<td>₹ <span id="pAmount">0</span></td>
+</tr>
+
+</table>
+
+<div class="paper-total">
+
+<div class="paper-grand">
+<span>Total Received</span>
+<span>₹ <span id="pTotal">0</span></span>
+</div>
+
+</div>
+
+<br><br>
+
+<p>Receiver Signature: ____________________</p>
+
+</div>
+
+</div>
+
+</section>
+
+
+<!-- ================= DELIVERY CHALLAN ================= -->
+
+<section id="challan" class="tool">
+
+<h2 class="tool-title">🚚 Delivery Challan Maker</h2>
+
+<div class="grid">
+
+<div class="field">
+<label>Shop / Company Name</label>
+<input id="cShop" placeholder="आपकी दुकान / कंपनी का नाम">
+</div>
+
+<div class="field">
+<label>Challan Number</label>
+<input id="cNo" placeholder="DC-001">
+</div>
+
+<div class="field">
+<label>Address</label>
+<input id="cAddress" placeholder="दुकान का पता">
+</div>
+
+<div class="field">
+<label>Date</label>
+<input id="cDate" type="date">
+</div>
+
+<div class="field">
+<label>Customer Name</label>
+<input id="cCustomer" placeholder="ग्राहक का नाम">
+</div>
+
+<div class="field">
+<label>Customer Mobile</label>
+<input id="cMobile" placeholder="मोबाइल नंबर">
+</div>
+
+<div class="field full">
+<label>Delivery Address</label>
+<textarea id="cDelivery" placeholder="सामान कहाँ deliver करना है?"></textarea>
+</div>
+
+</div>
+
+<div class="items-head">
+<h3>📦 सामान की सूची</h3>
+
+<button class="add-btn" onclick="addChallanItem()">
+➕ Item जोड़ें
+</button>
+</div>
+
+<div id="challanItems">
+
+</div>
+
+<div class="actions">
+
+<button class="btn primary" onclick="previewChallan()">
+👁️ Preview Challan
+</button>
+
+<button class="btn green" onclick="printCurrent()">
+🖨️ Print / PDF
+</button>
+
+<button class="btn gray" onclick="resetChallan()">
+🔄 Reset
+</button>
+
+</div>
+
+<div class="preview" id="challanPreview">
+
+<div class="receipt-paper">
+
+<div class="paper-head">
+
+<h2>DELIVERY CHALLAN</h2>
+
+<p id="cpShop">Shop / Company Name</p>
+
+<p id="cpAddress">Address</p>
+
+</div>
+
+<div class="paper-info">
+
+<div>
+<strong>Customer:</strong><br>
+<span id="cpCustomer">Customer Name</span><br>
+<span id="cpMobile">Mobile</span>
+</div>
+
+<div>
+<strong>Challan No:</strong> <span id="cpNo">DC-001</span><br>
+<strong>Date:</strong> <span id="cpDate">-</span>
+</div>
+
+</div>
+
+<p>
+<strong>Delivery Address:</strong>
+<span id="cpDelivery">-</span>
+</p>
+
+<table class="paper-table">
+
+<thead>
+<tr>
+<th>Sr.</th>
+<th>Item / Description</th>
+<th>Qty</th>
+</tr>
+</thead>
+
+<tbody id="challanPreviewItems">
+</tbody>
+
+</table>
+
+<br>
+
+<p>Receiver Signature: ____________________</p>
+
+</div>
+
+</div>
+
+</section>
+
+
+<!-- ================= CUSTOMER LEDGER ================= -->
+
+<section id="ledger" class="tool">
+
+<h2 class="tool-title">📒 Customer Ledger</h2>
+
+<div class="grid">
+
+<div class="field">
+<label>Customer Name</label>
+<input id="lCustomer" placeholder="ग्राहक का नाम">
+</div>
+
+<div class="field">
+<label>Mobile Number</label>
+<input id="lMobile" placeholder="मोबाइल नंबर">
+</div>
+
+<div class="field">
+<label>Opening Balance ₹</label>
+<input id="lOpening" type="number" value="0">
+</div>
+
+<div class="field">
+<label>Ledger Date</label>
+<input id="lDate" type="date">
+</div>
+
+<div class="field">
+<label>Description</label>
+<input id="lDescription" placeholder="उदाहरण: सामान बिक्री">
+</div>
+
+<div class="field">
+<label>Entry Type</label>
+<select id="lType">
+<option value="credit">Credit</option>
+<option value="debit">Debit</option>
+</select>
+</div>
+
+<div class="field">
+<label>Amount ₹</label>
+<input id="lAmount" type="number" placeholder="0">
+</div>
+
+</div>
+
+<div class="actions">
+
+<button class="btn primary" onclick="addLedgerEntry()">
+➕ Entry जोड़ें
+</button>
+
+<button class="btn green" onclick="printCurrent()">
+🖨️ Print / PDF
+</button>
+
+<button class="btn gray" onclick="clearLedger()">
+🔄 Clear
+</button>
+
+</div>
+
+<div class="balance-card">
+
+<div class="balance-grid">
+
+<div class="balance-item">
+<span>Total Credit</span>
+<strong id="totalCredit">₹ 0</strong>
+</div>
+
+<div class="balance-item">
+<span>Total Debit</span>
+<strong id="totalDebit">₹ 0</strong>
+</div>
+
+<div class="balance-item">
+<span>Balance</span>
+<strong id="ledgerBalance">₹ 0</strong>
+</div>
+
+</div>
+
+</div>
+
+<div class="preview">
+
+<div class="receipt-paper">
+
+<div class="paper-head">
+
+<h2>CUSTOMER LEDGER</h2>
+
+<p>
+<strong id="lpCustomer">Customer Name</strong>
+</p>
+
+<p id="lpMobile">Mobile</p>
+
+</div>
+
+<div class="table-wrap">
+
+<table class="ledger-table">
+
+<thead>
+
+<tr>
+<th>Date</th>
+<th>Description</th>
+<th>Credit</th>
+<th>Debit</th>
+<th>Balance</th>
+<th>Action</th>
+</tr>
+
+</thead>
+
+<tbody id="ledgerBody">
+
+<tr>
+<td colspan="6" class="empty">
+अभी कोई entry नहीं है।
+</td>
+</tr>
+
+</tbody>
+
+</table>
+
+</div>
+
+</div>
+
+</div>
+
+</section>
+
+</div>
+
+
+<script>
+
+/* ================= TAB SYSTEM ================= */
+
+function showTool(id,btn){
+
+    document.querySelectorAll(".tool")
+    .forEach(x=>x.classList.remove("active"));
+
+    document.querySelectorAll(".tab")
+    .forEach(x=>x.classList.remove("active"));
+
+    document.getElementById(id).classList.add("active");
+
+    btn.classList.add("active");
+}
+
+
+/* ================= DATE ================= */
+
+const today = new Date().toISOString().split("T")[0];
+
+document.getElementById("rDate").value = today;
+document.getElementById("cDate").value = today;
+document.getElementById("lDate").value = today;
+
+
+/* ================= PAYMENT RECEIPT ================= */
+
+function previewReceipt(){
+
+    document.getElementById("pShop").textContent =
+        document.getElementById("rShop").value || "Shop / Company Name";
+
+    document.getElementById("pAddress").textContent =
+        document.getElementById("rAddress").value || "Address";
+
+    document.getElementById("pNo").textContent =
+        document.getElementById("rNo").value || "REC-001";
+
+    document.getElementById("pDate").textContent =
+        document.getElementById("rDate").value || "-";
+
+    document.getElementById("pCustomer").textContent =
+        document.getElementById("rCustomer").value || "Customer Name";
+
+    document.getElementById("pMobile").textContent =
+        document.getElementById("rMobile").value || "Mobile";
+
+    document.getElementById("pMode").textContent =
+        document.getElementById("rMode").value;
+
+    document.getElementById("pDescription").textContent =
+        document.getElementById("rDescription").value || "Payment";
+
+    let amount =
+        Number(document.getElementById("rAmount").value) || 0;
+
+    document.getElementById("pAmount").textContent =
+        amount.toFixed(2);
+
+    document.getElementById("pTotal").textContent =
+        amount.toFixed(2);
+}
+
+
+function resetReceipt(){
+
+    document.querySelectorAll("#receipt input, #receipt textarea")
+    .forEach(x=>x.value="");
+
+    document.getElementById("rDate").value=today;
+
+    previewReceipt();
+}
+
+
+/* ================= CHALLAN ================= */
+
+let challanItems = [];
+
+function addChallanItem(){
+
+    challanItems.push({
+        name:"",
+        qty:1
+    });
+
+    renderChallanItems();
+}
+
+
+function renderChallanItems(){
+
+    let box = document.getElementById("challanItems");
+
+    box.innerHTML="";
+
+    challanItems.forEach((item,index)=>{
+
+        let row=document.createElement("div");
+
+        row.className="item-row";
+
+        row.innerHTML=`
+
+            <div class="sr">${index+1}</div>
+
+            <input
+                type="text"
+                placeholder="Item / पूरा विवरण"
+                value="${item.name}"
+                oninput="challanItems[${index}].name=this.value"
+            >
+
+            <input
+                type="number"
+                min="1"
+                value="${item.qty}"
+                oninput="challanItems[${index}].qty=this.value"
+            >
+
+            <div></div>
+
+            <button
+                class="delete"
+                onclick="removeChallanItem(${index})">
+                ×
+            </button>
+
+        `;
+
+        box.appendChild(row);
+
+    });
+}
+
+
+function removeChallanItem(index){
+
+    challanItems.splice(index,1);
+
+    renderChallanItems();
+}
+
+
+function previewChallan(){
+
+    document.getElementById("cpShop").textContent =
+        document.getElementById("cShop").value ||
+        "Shop / Company Name";
+
+    document.getElementById("cpAddress").textContent =
+        document.getElementById("cAddress").value ||
+        "Address";
+
+    document.getElementById("cpNo").textContent =
+        document.getElementById("cNo").value ||
+        "DC-001";
+
+    document.getElementById("cpDate").textContent =
+        document.getElementById("cDate").value ||
+        "-";
+
+    document.getElementById("cpCustomer").textContent =
+        document.getElementById("cCustomer").value ||
+        "Customer Name";
+
+    document.getElementById("cpMobile").textContent =
+        document.getElementById("cMobile").value ||
+        "Mobile";
+
+    document.getElementById("cpDelivery").textContent =
+        document.getElementById("cDelivery").value ||
+        "-";
+
+    let body=document.getElementById("challanPreviewItems");
+
+    body.innerHTML="";
+
+    challanItems.forEach((item,index)=>{
+
+        let tr=document.createElement("tr");
+
+        tr.innerHTML=`
+            <td>${index+1}</td>
+            <td>${escapeHTML(item.name || "-")}</td>
+            <td>${item.qty || 0}</td>
+        `;
+
+        body.appendChild(tr);
+
+    });
+
+}
+
+
+function resetChallan(){
+
+    document.querySelectorAll("#challan input, #challan textarea")
+    .forEach(x=>x.value="");
+
+    document.getElementById("cDate").value=today;
+
+    challanItems=[];
+
+    renderChallanItems();
+
+    previewChallan();
+}
+
+
+/* ================= LEDGER ================= */
+
+let ledgerEntries=[];
+
+
+function addLedgerEntry(){
+
+    let customer =
+        document.getElementById("lCustomer").value.trim();
+
+    let mobile =
+        document.getElementById("lMobile").value.trim();
+
+    let date =
+        document.getElementById("lDate").value;
+
+    let description =
+        document.getElementById("lDescription").value.trim();
+
+    let type =
+        document.getElementById("lType").value;
+
+    let amount =
+        Number(document.getElementById("lAmount").value);
+
+    if(!customer){
+
+        alert("कृपया Customer Name डालें।");
+        return;
+    }
+
+    if(!amount || amount<=0){
+
+        alert("कृपया सही Amount डालें।");
+        return;
+    }
+
+    ledgerEntries.push({
+
+        customer,
+        mobile,
+        date,
+        description,
+        type,
+        amount
+
+    });
+
+    document.getElementById("lpCustomer").textContent=customer;
+
+    document.getElementById("lpMobile").textContent=
+        mobile || "Mobile";
+
+    document.getElementById("lDescription").value="";
+    document.getElementById("lAmount").value="";
+
+    renderLedger();
+
+}
+
+
+function renderLedger(){
+
+    let body=document.getElementById("ledgerBody");
+
+    body.innerHTML="";
+
+    let credit=0;
+    let debit=0;
+
+    let opening=
+        Number(document.getElementById("lOpening").value)||0;
+
+    ledgerEntries.forEach((entry,index)=>{
+
+        if(entry.type==="credit"){
+            credit += entry.amount;
+        }else{
+            debit += entry.amount;
+        }
+
+        let balance=opening + debit - credit;
+
+        let tr=document.createElement("tr");
+
+        tr.innerHTML=`
+
+        <td>${entry.date}</td>
+
+        <td>${escapeHTML(entry.description || "-")}</td>
+
+        <td>
+            ${entry.type==="credit"
+                ? "₹ "+entry.amount.toFixed(2)
+                : "-"}
+        </td>
+
+        <td>
+            ${entry.type==="debit"
+                ? "₹ "+entry.amount.toFixed(2)
+                : "-"}
+        </td>
+
+        <td>₹ ${balance.toFixed(2)}</td>
+
+        <td>
+            <button
+                class="delete"
+                onclick="deleteLedger(${index})">
+                ×
+            </button>
+        </td>
+
+        `;
+
+        body.appendChild(tr);
+
+    });
+
+
+    if(ledgerEntries.length===0){
+
+        body.innerHTML=`
+
+        <tr>
+            <td colspan="6" class="empty">
+                अभी कोई entry नहीं है।
+            </td>
+        </tr>
+
+        `;
+
+    }
+
+
+    document.getElementById("totalCredit").textContent=
+        "₹ "+credit.toFixed(2);
+
+    document.getElementById("totalDebit").textContent=
+        "₹ "+debit.toFixed(2);
+
+    document.getElementById("ledgerBalance").textContent=
+        "₹ "+(opening + debit - credit).toFixed(2);
+
+}
+
+
+function deleteLedger(index){
+
+    if(confirm("यह entry हटाएं?")){
+
+        ledgerEntries.splice(index,1);
+
+        renderLedger();
+
+    }
+
+}
+
+
+function clearLedger(){
+
+    if(!confirm("Ledger की सभी entries हटानी हैं?")){
+        return;
+    }
+
+    ledgerEntries=[];
+
+    document.getElementById("lCustomer").value="";
+    document.getElementById("lMobile").value="";
+    document.getElementById("lOpening").value=0;
+    document.getElementById("lDescription").value="";
+    document.getElementById("lAmount").value="";
+
+    renderLedger();
+
+}
+
+
+/* ================= PRINT ================= */
+
+function printCurrent(){
+
+    window.print();
+
+}
+
+
+/* ================= SECURITY ================= */
+
+function escapeHTML(str){
+
+    return String(str)
+
+    .replace(/&/g,"&amp;")
+
+    .replace(/</g,"&lt;")
+
+    .replace(/>/g,"&gt;")
+
+    .replace(/"/g,"&quot;")
+
+    .replace(/'/g,"&#039;");
+
+}
+
+
+/* INITIAL */
+
+addChallanItem();
+
+previewReceipt();
+
+renderLedger();
+
+</script>
+
+</body>
+</html>
