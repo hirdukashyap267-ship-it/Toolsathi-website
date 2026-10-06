@@ -1,0 +1,3188 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Birthday Image Maker | Tool Sathi</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+<link href="https://fonts.googleapis.com/css2?family=Abril+Fatface&family=Caveat:wght@400;600;700&family=Cinzel:wght@500;700;900&family=Dancing+Script:wght@400;600;700&family=Great+Vibes&family=Lobster&family=Montserrat:wght@400;600;700;800;900&family=Oswald:wght@400;600;700&family=Pacifico&family=Poppins:wght@400;600;700;800&family=Satisfy&display=swap" rel="stylesheet">
+
+<style>
+
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+}
+
+body{
+    font-family:Arial,"Noto Sans Devanagari",sans-serif;
+    background:#eef1ff;
+    color:#171a2b;
+}
+
+.header{
+    background:linear-gradient(135deg,#ff167d,#7434e8,#1679f2);
+    color:white;
+    text-align:center;
+    padding:22px 15px;
+    box-shadow:0 8px 25px #0002;
+}
+
+.header h1{
+    font-size:28px;
+    margin-bottom:5px;
+}
+
+.header p{
+    font-size:13px;
+}
+
+.container{
+    width:min(1250px,96%);
+    margin:18px auto;
+    display:grid;
+    grid-template-columns:390px 1fr;
+    gap:18px;
+}
+
+.panel,
+.preview{
+    background:white;
+    border-radius:22px;
+    padding:18px;
+    box-shadow:0 8px 30px #26347d18;
+}
+
+h2{
+    color:#5935dc;
+    margin-bottom:15px;
+}
+
+.section{
+    background:#f7f8ff;
+    border:1px solid #e2e5f3;
+    border-radius:16px;
+    padding:14px;
+    margin-bottom:12px;
+}
+
+.section-title{
+    font-weight:bold;
+    color:#5538d1;
+    margin-bottom:10px;
+}
+
+.field{
+    margin-bottom:11px;
+}
+
+label{
+    display:block;
+    font-size:12px;
+    font-weight:bold;
+    margin-bottom:5px;
+}
+
+input,
+select,
+textarea{
+    width:100%;
+    padding:10px;
+    border:2px solid #e0e3f0;
+    border-radius:10px;
+    background:white;
+    outline:none;
+    font-size:14px;
+}
+
+textarea{
+    min-height:80px;
+    resize:vertical;
+}
+
+input:focus,
+select:focus,
+textarea:focus{
+    border-color:#7043e9;
+}
+
+.row{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:8px;
+}
+
+.check{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    margin:8px 0;
+}
+
+.check input{
+    width:auto;
+}
+
+.check label{
+    margin:0;
+}
+
+input[type="color"]{
+    height:42px;
+    padding:3px;
+}
+
+input[type="range"]{
+    padding:0;
+    accent-color:#693de7;
+}
+
+.buttons{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:8px;
+}
+
+button{
+    border:0;
+    border-radius:12px;
+    padding:12px;
+    font-weight:bold;
+    cursor:pointer;
+    transition:.2s;
+}
+
+button:hover{
+    transform:translateY(-2px);
+}
+
+.full{
+    grid-column:1/-1;
+}
+
+.surprise{
+    background:linear-gradient(135deg,#ff167d,#ff9000,#7138e8);
+    color:white;
+}
+
+.random{
+    background:linear-gradient(135deg,#00b894,#0984e3);
+    color:white;
+}
+
+.download{
+    background:linear-gradient(135deg,#7038eb,#e84393);
+    color:white;
+}
+
+.share{
+    background:#12b95d;
+    color:white;
+}
+
+.reset{
+    background:#e7e9f2;
+}
+
+.preview-area{
+    min-height:450px;
+    max-height:850px;
+    overflow:auto;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    padding:15px;
+
+    background:
+    repeating-conic-gradient(
+        #e9e9e9 0 25%,
+        #fff 0 50%
+    ) 50%/20px 20px;
+
+    border-radius:18px;
+}
+
+canvas{
+    display:block;
+    max-width:100%;
+    height:auto;
+    border-radius:8px;
+    box-shadow:0 12px 35px #0005;
+}
+
+.status{
+    text-align:center;
+    margin-top:10px;
+    color:#686f84;
+    font-size:13px;
+}
+
+.note{
+    color:#777d91;
+    font-size:11px;
+    line-height:1.5;
+}
+
+@media(max-width:850px){
+
+    .container{
+        grid-template-columns:1fr;
+    }
+
+}
+
+@media(max-width:450px){
+
+    .row,
+    .buttons{
+        grid-template-columns:1fr;
+    }
+
+    .full{
+        grid-column:auto;
+    }
+
+    .header h1{
+        font-size:23px;
+    }
+}
+
+</style>
+</head>
+
+<body>
+
+<header class="header">
+
+<h1>🎂 Birthday Image Maker Pro</h1>
+
+<p>
+Tool Sathi • अपना Birthday Poster खुद बनाएं
+</p>
+
+</header>
+
+
+<div class="container">
+
+
+<!-- ================= CONTROL ================= -->
+
+<div class="panel">
+
+<h2>✨ Design Settings</h2>
+
+
+<!-- BIRTHDAY TEXT -->
+
+<div class="section">
+
+<div class="section-title">
+🎂 Birthday Text
+</div>
+
+<div class="field">
+
+<label>मुख्य Birthday Text</label>
+
+<input
+id="birthdayText"
+type="text"
+value="Happy Birthday"
+placeholder="जैसे Happy Birthday"
+>
+
+</div>
+
+<div class="field">
+
+<label>👤 नाम</label>
+
+<input
+id="name"
+type="text"
+value="Rahul"
+placeholder="जैसे Rahul"
+>
+
+</div>
+
+<div class="field">
+
+<label>💬 Birthday Message</label>
+
+<textarea
+id="message"
+placeholder="अपना Birthday Message लिखें..."
+>Wishing you endless happiness, beautiful moments and lots of success!</textarea>
+
+</div>
+
+</div>
+
+
+<!-- DATE -->
+
+<div class="section">
+
+<div class="section-title">
+📅 Birthday Date
+</div>
+
+<div class="row">
+
+<div>
+
+<label>दिन</label>
+
+<select id="day"></select>
+
+</div>
+
+<div>
+
+<label>महीना</label>
+
+<select id="month">
+
+<option>January</option>
+<option>February</option>
+<option>March</option>
+<option>April</option>
+<option>May</option>
+<option>June</option>
+<option>July</option>
+<option selected>August</option>
+<option>September</option>
+<option>October</option>
+<option>November</option>
+<option>December</option>
+
+</select>
+
+</div>
+
+</div>
+
+</div>
+
+
+<!-- PHOTO -->
+
+<div class="section">
+
+<div class="section-title">
+📸 Photo
+</div>
+
+<div class="field">
+
+<label>Photo Upload</label>
+
+<input
+id="photo"
+type="file"
+accept="image/*"
+>
+
+</div>
+
+<div class="field">
+
+<label>Photo Shape</label>
+
+<select id="photoShape">
+
+<option value="circle">⭕ Circle</option>
+<option value="oval">🥚 Oval</option>
+<option value="round">▢ Rounded</option>
+<option value="square">⬜ Square</option>
+
+</select>
+
+</div>
+
+<label>🔍 Photo Zoom</label>
+
+<input
+id="photoZoom"
+type="range"
+min="80"
+max="300"
+value="145"
+>
+
+<label style="margin-top:10px">
+🔄 Photo Rotate
+</label>
+
+<input
+id="photoRotate"
+type="range"
+min="-30"
+max="30"
+value="0"
+>
+
+</div>
+
+
+<!-- RELATION -->
+
+<div class="section">
+
+<div class="section-title">
+💖 Birthday किसके लिए?
+</div>
+
+<select id="relation">
+
+<option value="custom">✍️ Custom</option>
+<option value="sister">💗 Sister</option>
+<option value="brother">💙 Brother</option>
+<option value="friend">😊 Friend</option>
+<option value="bestfriend">🥰 Best Friend</option>
+<option value="wife">💍 Wife</option>
+<option value="husband">💙 Husband</option>
+<option value="gf">❤️ Girlfriend</option>
+<option value="bf">💙 Boyfriend</option>
+<option value="mother">🌷 Mother</option>
+<option value="father">💙 Father</option>
+<option value="daughter">🌸 Daughter</option>
+<option value="son">⭐ Son</option>
+
+</select>
+
+<div class="field" style="margin-top:10px">
+
+<label>Relationship Text</label>
+
+<input
+id="relationText"
+value="SISTER"
+>
+
+</div>
+
+</div>
+
+
+<!-- BACKGROUND -->
+
+<div class="section">
+
+<div class="section-title">
+🎨 Background
+</div>
+
+<select id="design">
+
+<option value="pink">🌸 Pink Floral</option>
+<option value="party">🎈 Party</option>
+<option value="royal">👑 Royal</option>
+<option value="neon">💜 Neon</option>
+<option value="luxury">💎 Luxury</option>
+<option value="sunset">🌅 Sunset</option>
+<option value="cute">🧸 Cute</option>
+<option value="nature">🌿 Nature</option>
+<option value="disco">🪩 Disco</option>
+<option value="fireworks">🎆 Fireworks</option>
+<option value="random">🎲 Random</option>
+
+</select>
+
+<div class="field" style="margin-top:10px">
+
+<label>📐 Image Size</label>
+
+<select id="size">
+
+<option value="square">1080 × 1080</option>
+<option value="story">1080 × 1920 Status</option>
+<option value="facebook">1200 × 628 Facebook</option>
+<option value="youtube">1280 × 720 YouTube</option>
+
+</select>
+
+</div>
+
+</div>
+
+
+<!-- COLOR -->
+
+<div class="section">
+
+<div class="section-title">
+🌈 Colors
+</div>
+
+<div class="check">
+
+<input
+id="customColors"
+type="checkbox"
+>
+
+<label>
+अपने Colors इस्तेमाल करें
+</label>
+
+</div>
+
+<div class="row">
+
+<div>
+
+<label>Color 1</label>
+
+<input
+id="color1"
+type="color"
+value="#ff3d81"
+>
+
+</div>
+
+<div>
+
+<label>Color 2</label>
+
+<input
+id="color2"
+type="color"
+value="#7138e8"
+>
+
+</div>
+
+</div>
+
+</div>
+
+
+<!-- FONT -->
+
+<div class="section">
+
+<div class="section-title">
+🔤 Font Style
+</div>
+
+<select id="font">
+
+<optgroup label="✍️ Script">
+
+<option value="Great Vibes">Great Vibes</option>
+<option value="Dancing Script">Dancing Script</option>
+<option value="Pacifico">Pacifico</option>
+<option value="Satisfy">Satisfy</option>
+<option value="Caveat">Caveat</option>
+
+</optgroup>
+
+<optgroup label="✨ Fancy">
+
+<option value="Lobster">Lobster</option>
+<option value="Abril Fatface">Abril Fatface</option>
+<option value="Cinzel">Cinzel</option>
+
+</optgroup>
+
+<optgroup label="🔤 Modern">
+
+<option value="Montserrat">Montserrat</option>
+<option value="Poppins">Poppins</option>
+<option value="Oswald">Oswald</option>
+<option value="Arial">Arial</option>
+
+</optgroup>
+
+</select>
+
+
+<div class="field" style="margin-top:10px">
+
+<label>
+📏 Text Size
+<span id="sizeValue">105px</span>
+</label>
+
+<input
+id="textSize"
+type="range"
+min="45"
+max="180"
+value="105"
+>
+
+</div>
+
+
+<label>
+↗️ Text Rotate
+<span id="rotateValue">0°</span>
+</label>
+
+<input
+id="textRotate"
+type="range"
+min="-25"
+max="25"
+value="0"
+>
+
+
+<div class="check">
+
+<input
+id="arcText"
+type="checkbox"
+>
+
+<label>
+🌊 Curved / Arc Text
+</label>
+
+</div>
+
+
+<div class="check">
+
+<input
+id="threeD"
+type="checkbox"
+checked
+>
+
+<label>
+💎 3D Text
+</label>
+
+</div>
+
+
+<div class="row">
+
+<div>
+
+<label>Text Color</label>
+
+<input
+id="textColor"
+type="color"
+value="#ffffff"
+>
+
+</div>
+
+<div>
+
+<label>3D Color</label>
+
+<input
+id="threeDColor"
+type="color"
+value="#a31360"
+>
+
+</div>
+
+</div>
+
+
+<div class="check">
+
+<input
+id="shadow"
+type="checkbox"
+checked
+>
+
+<label>
+🌑 Text Shadow
+</label>
+
+</div>
+
+<label>
+Shadow Strength
+</label>
+
+<input
+id="shadowStrength"
+type="range"
+min="0"
+max="50"
+value="20"
+>
+
+
+<div class="check">
+
+<input
+id="glow"
+type="checkbox"
+checked
+>
+
+<label>
+✨ Text Glow
+</label>
+
+</div>
+
+
+<div class="check">
+
+<input
+id="outline"
+type="checkbox"
+checked
+>
+
+<label>
+🔲 Text Outline
+</label>
+
+</div>
+
+</div>
+
+
+<!-- DATE DESIGN -->
+
+<div class="section">
+
+<div class="section-title">
+📅 Date Design
+</div>
+
+<div class="check">
+
+<input
+id="bigDate"
+type="checkbox"
+checked
+>
+
+<label>
+बड़ा और साफ Birthday Date
+</label>
+
+</div>
+
+<label>
+Date Size
+</label>
+
+<input
+id="dateSize"
+type="range"
+min="100"
+max="330"
+value="230"
+>
+
+<p class="note">
+Example: 6 AUGUST — Date poster में clearly दिखाई जाएगी।
+</p>
+
+</div>
+
+
+<!-- DECORATIONS -->
+
+<div class="section">
+
+<div class="section-title">
+🎉 Decorations
+</div>
+
+<div class="check">
+<input id="balloons" type="checkbox" checked>
+<label>🎈 बड़े Colorful Balloons</label>
+</div>
+
+<div class="check">
+<input id="flowers" type="checkbox" checked>
+<label>🌹 Flowers</label>
+</div>
+
+<div class="check">
+<input id="hearts" type="checkbox" checked>
+<label>❤️ Hearts</label>
+</div>
+
+<div class="check">
+<input id="stars" type="checkbox" checked>
+<label>⭐ Stars</label>
+</div>
+
+<div class="check">
+<input id="sparkles" type="checkbox" checked>
+<label>✨ Sparkles</label>
+</div>
+
+<div class="check">
+<input id="confetti" type="checkbox" checked>
+<label>🎊 Confetti</label>
+</div>
+
+<div class="check">
+<input id="fireworks" type="checkbox">
+<label>🎆 Fireworks</label>
+</div>
+
+<div class="check">
+<input id="gifts" type="checkbox">
+<label>🎁 Gifts</label>
+</div>
+
+<div class="check">
+<input id="cake" type="checkbox" checked>
+<label>🎂 Cake</label>
+</div>
+
+<div class="check">
+<input id="crown" type="checkbox">
+<label>👑 Crown</label>
+</div>
+
+</div>
+
+
+<!-- BUTTONS -->
+
+<div class="buttons">
+
+<button
+class="surprise full"
+id="surpriseBtn"
+>
+🎲✨ SURPRISE ME
+</button>
+
+<button
+class="random"
+id="randomColorBtn"
+>
+🌈 New Colors
+</button>
+
+<button
+class="random"
+id="randomDesignBtn"
+>
+🎨 New Design
+</button>
+
+<button
+class="download"
+id="downloadBtn"
+>
+📥 Download PNG
+</button>
+
+<button
+class="share"
+id="shareBtn"
+>
+📤 Share
+</button>
+
+<button
+class="reset full"
+id="resetBtn"
+>
+🔄 Reset
+</button>
+
+</div>
+
+</div>
+
+
+<!-- ================= PREVIEW ================= -->
+
+<div class="preview">
+
+<h2>🖼️ Live Preview</h2>
+
+<div class="preview-area">
+
+<canvas id="canvas"></canvas>
+
+</div>
+
+<div
+class="status"
+id="status"
+>
+✨ आपका Birthday Poster तैयार है
+</div>
+
+</div>
+
+</div>
+
+
+<script>
+
+/* =================================================
+   BASIC
+================================================= */
+
+const canvas =
+document.getElementById("canvas");
+
+const ctx =
+canvas.getContext("2d");
+
+let uploadedPhoto = null;
+
+let palette = [
+    "#ff3d81",
+    "#7138e8",
+    "#ffd166"
+];
+
+let currentDesign = "pink";
+
+
+const $ = id =>
+document.getElementById(id);
+
+
+/* =================================================
+   DAYS
+================================================= */
+
+for(let i=1;i<=31;i++){
+
+    const option =
+    document.createElement("option");
+
+    option.value = i;
+    option.textContent = i;
+
+    if(i === 6){
+        option.selected = true;
+    }
+
+    $("day").appendChild(option);
+}
+
+
+/* =================================================
+   STATUS
+================================================= */
+
+function status(text){
+
+    $("status").textContent = text;
+
+}
+
+
+/* =================================================
+   RANDOM COLOR
+================================================= */
+
+function randomHex(){
+
+    return "#" +
+    Math.floor(
+        Math.random()*16777215
+    )
+    .toString(16)
+    .padStart(6,"0");
+
+}
+
+
+function randomColors(){
+
+    palette = [
+        randomHex(),
+        randomHex(),
+        randomHex()
+    ];
+
+    draw();
+
+    status("🌈 नया Color Combination तैयार!");
+
+}
+
+
+/* =================================================
+   RANDOM DESIGN
+================================================= */
+
+const designs = [
+    "pink",
+    "party",
+    "royal",
+    "neon",
+    "luxury",
+    "sunset",
+    "cute",
+    "nature",
+    "disco",
+    "fireworks"
+];
+
+
+function randomDesign(){
+
+    currentDesign =
+    designs[
+        Math.floor(
+            Math.random()*designs.length
+        )
+    ];
+
+    $("design").value =
+    currentDesign;
+
+    randomColors();
+
+    draw();
+
+    status("🎨 नया Birthday Design तैयार!");
+
+}
+
+
+/* =================================================
+   SURPRISE
+================================================= */
+
+function surpriseMe(){
+
+    currentDesign =
+    designs[
+        Math.floor(
+            Math.random()*designs.length
+        )
+    ];
+
+    $("design").value =
+    currentDesign;
+
+
+    randomColors();
+
+
+    const fonts = [
+        "Great Vibes",
+        "Dancing Script",
+        "Pacifico",
+        "Satisfy",
+        "Caveat",
+        "Lobster",
+        "Abril Fatface",
+        "Cinzel",
+        "Montserrat",
+        "Poppins",
+        "Oswald"
+    ];
+
+
+    $("font").value =
+    fonts[
+        Math.floor(
+            Math.random()*fonts.length
+        )
+    ];
+
+
+    $("textSize").value =
+    65 +
+    Math.floor(
+        Math.random()*90
+    );
+
+
+    $("textRotate").value =
+    Math.floor(
+        Math.random()*31
+    ) - 15;
+
+
+    $("arcText").checked =
+    Math.random() > .6;
+
+
+    $("threeD").checked = true;
+    $("shadow").checked = true;
+    $("glow").checked = true;
+    $("outline").checked = true;
+
+
+    draw();
+
+    status("🎲✨ नया Surprise Birthday Poster!");
+
+}
+
+
+/* =================================================
+   CANVAS SIZE
+================================================= */
+
+function setSize(){
+
+    switch($("size").value){
+
+        case "story":
+
+            canvas.width = 1080;
+            canvas.height = 1920;
+
+            break;
+
+
+        case "facebook":
+
+            canvas.width = 1200;
+            canvas.height = 628;
+
+            break;
+
+
+        case "youtube":
+
+            canvas.width = 1280;
+            canvas.height = 720;
+
+            break;
+
+
+        default:
+
+            canvas.width = 1080;
+            canvas.height = 1080;
+
+    }
+
+}
+
+
+/* =================================================
+   COLORS
+================================================= */
+
+function colors(){
+
+    if($("customColors").checked){
+
+        return [
+            $("color1").value,
+            $("color2").value
+        ];
+
+    }
+
+    return palette;
+
+}
+
+
+/* =================================================
+   BACKGROUND
+================================================= */
+
+function background(){
+
+    const w = canvas.width;
+    const h = canvas.height;
+
+    const c = colors();
+
+
+    const gradient =
+    ctx.createLinearGradient(
+        0,
+        0,
+        w,
+        h
+    );
+
+
+    if(currentDesign === "luxury"){
+
+        gradient.addColorStop(
+            0,
+            "#12000b"
+        );
+
+        gradient.addColorStop(
+            .5,
+            c[0]
+        );
+
+        gradient.addColorStop(
+            1,
+            "#050505"
+        );
+
+    }
+
+    else if(currentDesign === "neon"){
+
+        gradient.addColorStop(
+            0,
+            "#10002f"
+        );
+
+        gradient.addColorStop(
+            .5,
+            c[1]
+        );
+
+        gradient.addColorStop(
+            1,
+            "#001c3d"
+        );
+
+    }
+
+    else if(currentDesign === "nature"){
+
+        gradient.addColorStop(
+            0,
+            "#064e3b"
+        );
+
+        gradient.addColorStop(
+            .5,
+            "#16a34a"
+        );
+
+        gradient.addColorStop(
+            1,
+            "#bef264"
+        );
+
+    }
+
+    else if(currentDesign === "sunset"){
+
+        gradient.addColorStop(
+            0,
+            "#ff512f"
+        );
+
+        gradient.addColorStop(
+            .5,
+            "#f09819"
+        );
+
+        gradient.addColorStop(
+            1,
+            "#7b2ff7"
+        );
+
+    }
+
+    else{
+
+        gradient.addColorStop(
+            0,
+            c[0]
+        );
+
+        gradient.addColorStop(
+            .5,
+            c[1]
+        );
+
+        gradient.addColorStop(
+            1,
+            "#ffb3d1"
+        );
+
+    }
+
+
+    ctx.fillStyle =
+    gradient;
+
+    ctx.fillRect(
+        0,
+        0,
+        w,
+        h
+    );
+
+
+    /* background glow */
+
+    for(let i=0;i<12;i++){
+
+        ctx.fillStyle =
+        c[i%2] + "22";
+
+        ctx.beginPath();
+
+        ctx.arc(
+            Math.random()*w,
+            Math.random()*h,
+            50 +
+            Math.random()*180,
+            0,
+            Math.PI*2
+        );
+
+        ctx.fill();
+
+    }
+
+}
+
+
+/* =================================================
+   BALLOONS
+================================================= */
+
+function balloons(){
+
+    const c = colors();
+
+    const w = canvas.width;
+    const h = canvas.height;
+
+
+    for(let i=0;i<18;i++){
+
+        const left =
+        i % 2 === 0;
+
+
+        const x =
+        left
+        ?
+        40 + Math.random()*300
+        :
+        w - 40 - Math.random()*300;
+
+
+        const y =
+        40 +
+        Math.random() *
+        Math.min(700,h*.55);
+
+
+        const r =
+        42 +
+        Math.random()*45;
+
+
+        const color =
+        c[i%c.length];
+
+
+        /* string */
+
+        ctx.strokeStyle =
+        "#ffffffaa";
+
+        ctx.lineWidth = 2;
+
+        ctx.beginPath();
+
+        ctx.moveTo(
+            x,
+            y+r
+        );
+
+        ctx.lineTo(
+            x +
+            Math.random()*50-25,
+            y+r+130
+        );
+
+        ctx.stroke();
+
+
+        /* balloon */
+
+        const gradient =
+        ctx.createRadialGradient(
+            x-r*.3,
+            y-r*.4,
+            5,
+            x,
+            y,
+            r
+        );
+
+        gradient.addColorStop(
+            0,
+            "#ffffffbb"
+        );
+
+        gradient.addColorStop(
+            .2,
+            color
+        );
+
+        gradient.addColorStop(
+            1,
+            color
+        );
+
+
+        ctx.fillStyle =
+        gradient;
+
+
+        ctx.beginPath();
+
+        ctx.ellipse(
+            x,
+            y,
+            r*.78,
+            r,
+            0,
+            0,
+            Math.PI*2
+        );
+
+        ctx.fill();
+
+    }
+
+}
+
+
+/* =================================================
+   CONFETTI
+================================================= */
+
+function confetti(){
+
+    const c = colors();
+
+    for(let i=0;i<120;i++){
+
+        ctx.fillStyle =
+        c[i%c.length];
+
+        ctx.save();
+
+        ctx.translate(
+            Math.random()*canvas.width,
+            Math.random()*canvas.height
+        );
+
+        ctx.rotate(
+            Math.random()*Math.PI
+        );
+
+        ctx.fillRect(
+            0,
+            0,
+            7,
+            15
+        );
+
+        ctx.restore();
+
+    }
+
+}
+
+
+/* =================================================
+   STARS
+================================================= */
+
+function stars(){
+
+    const c = colors();
+
+    for(let i=0;i<35;i++){
+
+        const x =
+        Math.random()*canvas.width;
+
+        const y =
+        Math.random()*canvas.height;
+
+        const s =
+        7+Math.random()*15;
+
+
+        ctx.fillStyle =
+        c[i%c.length];
+
+
+        ctx.beginPath();
+
+        for(let j=0;j<10;j++){
+
+            const angle =
+            -Math.PI/2 +
+            j*Math.PI/5;
+
+            const r =
+            j%2===0
+            ? s
+            : s*.4;
+
+
+            const px =
+            x + Math.cos(angle)*r;
+
+            const py =
+            y + Math.sin(angle)*r;
+
+
+            if(j===0)
+                ctx.moveTo(px,py);
+            else
+                ctx.lineTo(px,py);
+
+        }
+
+        ctx.closePath();
+
+        ctx.fill();
+
+    }
+
+}
+
+
+/* =================================================
+   HEARTS
+================================================= */
+
+function hearts(){
+
+    ctx.font =
+    "55px Arial";
+
+    ctx.fillStyle =
+    "#ff477e";
+
+    for(let i=0;i<18;i++){
+
+        ctx.fillText(
+            "♥",
+            Math.random()*canvas.width,
+            Math.random()*canvas.height
+        );
+
+    }
+
+}
+
+
+/* =================================================
+   SPARKLES
+================================================= */
+
+function sparkles(){
+
+    ctx.fillStyle =
+    "#ffffff";
+
+    for(let i=0;i<45;i++){
+
+        const x =
+        Math.random()*canvas.width;
+
+        const y =
+        Math.random()*canvas.height;
+
+        const s =
+        6+Math.random()*15;
+
+
+        ctx.beginPath();
+
+        ctx.moveTo(x,y-s);
+        ctx.lineTo(x+s*.25,y-s*.25);
+        ctx.lineTo(x+s,y);
+        ctx.lineTo(x+s*.25,y+s*.25);
+        ctx.lineTo(x,y+s);
+        ctx.lineTo(x-s*.25,y+s*.25);
+        ctx.lineTo(x-s,y);
+        ctx.lineTo(x-s*.25,y-s*.25);
+
+        ctx.closePath();
+
+        ctx.fill();
+
+    }
+
+}
+
+
+/* =================================================
+   FLOWERS
+================================================= */
+
+function flowers(){
+
+    const c = colors();
+
+    const positions = [
+
+        [70,canvas.height-100],
+
+        [canvas.width-70,
+         canvas.height-150],
+
+        [canvas.width-70,180],
+
+        [70,220]
+
+    ];
+
+
+    positions.forEach(pos=>{
+
+        for(let j=0;j<4;j++){
+
+            const x =
+            pos[0] +
+            Math.random()*90-45;
+
+            const y =
+            pos[1] +
+            Math.random()*90-45;
+
+            const r =
+            20 +
+            Math.random()*18;
+
+
+            ctx.fillStyle =
+            c[j%c.length];
+
+
+            for(let k=0;k<6;k++){
+
+                const a =
+                k*Math.PI/3;
+
+                ctx.beginPath();
+
+                ctx.ellipse(
+                    x+Math.cos(a)*r*.6,
+                    y+Math.sin(a)*r*.6,
+                    r*.4,
+                    r*.7,
+                    a,
+                    0,
+                    Math.PI*2
+                );
+
+                ctx.fill();
+
+            }
+
+
+            ctx.fillStyle =
+            "#ffd166";
+
+            ctx.beginPath();
+
+            ctx.arc(
+                x,
+                y,
+                r*.25,
+                0,
+                Math.PI*2
+            );
+
+            ctx.fill();
+
+        }
+
+    });
+
+}
+
+
+/* =================================================
+   FIREWORKS
+================================================= */
+
+function fireworks(){
+
+    const c = colors();
+
+
+    for(let n=0;n<7;n++){
+
+        const x =
+        80 +
+        Math.random() *
+        (canvas.width-160);
+
+        const y =
+        80 +
+        Math.random() *
+        canvas.height*.45;
+
+
+        ctx.strokeStyle =
+        c[n%c.length];
+
+        ctx.lineWidth = 3;
+
+
+        for(let i=0;i<18;i++){
+
+            const a =
+            i*Math.PI*2/18;
+
+
+            ctx.beginPath();
+
+            ctx.moveTo(
+                x+Math.cos(a)*10,
+                y+Math.sin(a)*10
+            );
+
+            ctx.lineTo(
+                x+Math.cos(a)*90,
+                y+Math.sin(a)*90
+            );
+
+            ctx.stroke();
+
+        }
+
+    }
+
+}
+
+
+/* =================================================
+   PHOTO
+================================================= */
+
+function drawPhoto(){
+
+    if(!uploadedPhoto)
+        return;
+
+
+    const w = canvas.width;
+    const h = canvas.height;
+
+
+    const zoom =
+    Number($("photoZoom").value)/100;
+
+
+    const x =
+    w*.39;
+
+    const y =
+    h*.62;
+
+
+    const r =
+    Math.min(w,h)*.21;
+
+
+    ctx.save();
+
+
+    ctx.translate(
+        x,
+        y
+    );
+
+
+    ctx.rotate(
+        Number($("photoRotate").value)
+        * Math.PI/180
+    );
+
+
+    /* white border */
+
+    ctx.fillStyle =
+    "#ffffff";
+
+
+    ctx.beginPath();
+
+    ctx.arc(
+        0,
+        0,
+        r*1.08,
+        0,
+        Math.PI*2
+    );
+
+    ctx.fill();
+
+
+    ctx.save();
+
+
+    const shape =
+    $("photoShape").value;
+
+
+    if(shape === "oval"){
+
+        ctx.beginPath();
+
+        ctx.ellipse(
+            0,
+            0,
+            r,
+            r*1.25,
+            0,
+            0,
+            Math.PI*2
+        );
+
+        ctx.clip();
+
+    }
+
+    else{
+
+        ctx.beginPath();
+
+        ctx.roundRect(
+            -r,
+            -r,
+            r*2,
+            r*2,
+            shape === "circle"
+            ? r
+            : 35
+        );
+
+        ctx.clip();
+
+    }
+
+
+    const scale =
+    Math.max(
+        r*2/uploadedPhoto.width,
+        r*2/uploadedPhoto.height
+    ) * zoom;
+
+
+    const iw =
+    uploadedPhoto.width*scale;
+
+    const ih =
+    uploadedPhoto.height*scale;
+
+
+    ctx.drawImage(
+        uploadedPhoto,
+        -iw/2,
+        -ih/2,
+        iw,
+        ih
+    );
+
+
+    ctx.restore();
+
+
+    ctx.strokeStyle =
+    "#ffffff";
+
+    ctx.lineWidth = 10;
+
+
+    ctx.beginPath();
+
+    if(shape === "oval"){
+
+        ctx.ellipse(
+            0,
+            0,
+            r,
+            r*1.25,
+            0,
+            0,
+            Math.PI*2
+        );
+
+    }
+    else{
+
+        ctx.arc(
+            0,
+            0,
+            r,
+            0,
+            Math.PI*2
+        );
+
+    }
+
+    ctx.stroke();
+
+
+    ctx.restore();
+
+}
+
+
+/* =================================================
+   DATE
+================================================= */
+
+function drawDate(){
+
+    if(!$("bigDate").checked)
+        return;
+
+
+    const w = canvas.width;
+    const h = canvas.height;
+
+
+    const day =
+    $("day").value;
+
+    const month =
+    $("month").value;
+
+
+    const size =
+    Number($("dateSize").value);
+
+
+    /*
+      Date position
+    */
+
+    const x =
+    w*.78;
+
+    const y =
+    h*.25;
+
+
+    ctx.save();
+
+
+    /*
+      BIG DATE CARD
+    */
+
+    ctx.fillStyle =
+    "rgba(255,255,255,.96)";
+
+
+    ctx.shadowColor =
+    "rgba(0,0,0,.30)";
+
+    ctx.shadowBlur = 25;
+
+
+    ctx.beginPath();
+
+    ctx.roundRect(
+        x-w*.145,
+        y-size*.50,
+        w*.29,
+        size*1.30,
+        30
+    );
+
+    ctx.fill();
+
+
+    ctx.shadowBlur = 0;
+
+
+    /*
+      BIRTHDAY
+    */
+
+    ctx.textAlign =
+    "center";
+
+    ctx.textBaseline =
+    "middle";
+
+
+    ctx.font =
+    `800 ${Math.max(24,size*.13)}px Montserrat`;
+
+    ctx.fillStyle =
+    colors()[1];
+
+
+    ctx.fillText(
+        "BIRTHDAY",
+        x,
+        y-size*.38
+    );
+
+
+    /*
+      DAY
+    */
+
+    ctx.font =
+    `900 ${size}px Montserrat`;
+
+    ctx.fillStyle =
+    colors()[0];
+
+
+    ctx.fillText(
+        day,
+        x,
+        y
+    );
+
+
+    /*
+      MONTH
+    */
+
+    ctx.font =
+    `900 ${Math.max(30,size*.23)}px Montserrat`;
+
+    ctx.fillStyle =
+    "#202020";
+
+
+    ctx.fillText(
+        month.toUpperCase(),
+        x,
+        y+size*.58
+    );
+
+
+    ctx.restore();
+
+}
+
+
+/* =================================================
+   TEXT EFFECT
+================================================= */
+
+function textEffect(
+    text,
+    x,
+    y,
+    size
+){
+
+    if(!text)
+        return;
+
+
+    ctx.save();
+
+
+    const font =
+    $("font").value;
+
+
+    ctx.font =
+    `700 ${size}px "${font}"`;
+
+
+    ctx.textAlign =
+    "center";
+
+    ctx.textBaseline =
+    "middle";
+
+
+    ctx.translate(
+        x,
+        y
+    );
+
+
+    ctx.rotate(
+        Number($("textRotate").value)
+        * Math.PI/180
+    );
+
+
+    /*
+      SHADOW
+    */
+
+    if($("shadow").checked){
+
+        ctx.shadowColor =
+        "rgba(0,0,0,.65)";
+
+        ctx.shadowBlur =
+        Number($("shadowStrength").value);
+
+        ctx.shadowOffsetX = 7;
+        ctx.shadowOffsetY = 9;
+
+    }
+
+
+    /*
+      3D
+    */
+
+    if($("threeD").checked){
+
+        for(
+            let d=16;
+            d>=1;
+            d--
+        ){
+
+            ctx.fillStyle =
+            $("threeDColor").value;
+
+            ctx.fillText(
+                text,
+                d,
+                d
+            );
+
+        }
+
+    }
+
+
+    /*
+      OUTLINE
+    */
+
+    if($("outline").checked){
+
+        ctx.lineWidth = 8;
+
+        ctx.strokeStyle =
+        $("threeDColor").value;
+
+        ctx.strokeText(
+            text,
+            0,
+            0
+        );
+
+    }
+
+
+    /*
+      GLOW
+    */
+
+    if($("glow").checked){
+
+        ctx.shadowColor =
+        $("textColor").value;
+
+        ctx.shadowBlur = 25;
+
+    }
+
+
+    /*
+      MAIN GRADIENT
+    */
+
+    const gradient =
+    ctx.createLinearGradient(
+        -size,
+        -size,
+        size,
+        size
+    );
+
+
+    gradient.addColorStop(
+        0,
+        $("textColor").value
+    );
+
+    gradient.addColorStop(
+        .45,
+        "#ffffff"
+    );
+
+    gradient.addColorStop(
+        1,
+        $("textColor").value
+    );
+
+
+    ctx.fillStyle =
+    gradient;
+
+
+    ctx.fillText(
+        text,
+        0,
+        0
+    );
+
+
+    ctx.restore();
+
+}
+
+
+/* =================================================
+   WRAPPED MESSAGE
+================================================= */
+
+function drawWrappedMessage(
+    text,
+    x,
+    y,
+    maxWidth
+){
+
+    if(!text)
+        return;
+
+
+    ctx.save();
+
+
+    const fontSize =
+    Math.min(
+        canvas.width*.024,
+        30
+    );
+
+
+    ctx.font =
+    `600 ${fontSize}px Poppins`;
+
+
+    ctx.textAlign =
+    "center";
+
+    ctx.textBaseline =
+    "top";
+
+
+    ctx.fillStyle =
+    $("textColor").value;
+
+
+    if($("shadow").checked){
+
+        ctx.shadowColor =
+        "rgba(0,0,0,.45)";
+
+        ctx.shadowBlur = 8;
+
+        ctx.shadowOffsetX = 2;
+
+        ctx.shadowOffsetY = 3;
+
+    }
+
+
+    const words =
+    text.split(/\s+/);
+
+
+    const lines = [];
+
+    let line = "";
+
+
+    words.forEach(word=>{
+
+        const test =
+        line
+        ? line+" "+word
+        : word;
+
+
+        if(
+            ctx.measureText(test).width >
+            maxWidth
+        ){
+
+            if(line)
+                lines.push(line);
+
+            line = word;
+
+        }
+        else{
+
+            line = test;
+
+        }
+
+    });
+
+
+    if(line)
+        lines.push(line);
+
+
+    /*
+      Maximum 5 lines
+    */
+
+    const visibleLines =
+    lines.slice(0,5);
+
+
+    const lineHeight =
+    fontSize*1.45;
+
+
+    const startY =
+    y -
+    visibleLines.length*
+    lineHeight/2;
+
+
+    visibleLines.forEach(
+        (lineText,index)=>{
+
+            ctx.fillText(
+                lineText,
+                x,
+                startY+
+                index*lineHeight
+            );
+
+        }
+    );
+
+
+    ctx.restore();
+
+}
+
+
+/* =================================================
+   MAIN TEXT
+================================================= */
+
+function drawText(){
+
+    const w =
+    canvas.width;
+
+    const h =
+    canvas.height;
+
+
+    const size =
+    Number($("textSize").value);
+
+
+    const x =
+    w*.39;
+
+
+    /*
+      MAIN BIRTHDAY TEXT
+    */
+
+    const birthdayText =
+    $("birthdayText").value.trim()
+    ||
+    "Happy Birthday";
+
+
+    textEffect(
+        birthdayText,
+        x,
+        h*.13,
+        Math.min(
+            size*.55,
+            w*.065
+        )
+    );
+
+
+    /*
+      NAME
+    */
+
+    const name =
+    $("name").value.trim()
+    ||
+    "Your Name";
+
+
+    textEffect(
+        name,
+        x,
+        h*.22,
+        size
+    );
+
+
+    /*
+      RELATION BADGE
+    */
+
+    const relation =
+    $("relationText").value.trim();
+
+
+    if(relation){
+
+        ctx.save();
+
+
+        const badgeY =
+        h*.30;
+
+
+        ctx.fillStyle =
+        "rgba(255,255,255,.95)";
+
+
+        ctx.shadowColor =
+        "rgba(0,0,0,.20)";
+
+        ctx.shadowBlur = 18;
+
+
+        ctx.beginPath();
+
+        ctx.roundRect(
+            x-w*.18,
+            badgeY-28,
+            w*.36,
+            56,
+            28
+        );
+
+        ctx.fill();
+
+
+        ctx.shadowBlur = 0;
+
+
+        ctx.fillStyle =
+        colors()[1];
+
+
+        ctx.font =
+        `800 ${Math.min(w*.035,38)}px Montserrat`;
+
+
+        ctx.textAlign =
+        "center";
+
+        ctx.textBaseline =
+        "middle";
+
+
+        ctx.fillText(
+            relation.toUpperCase(),
+            x,
+            badgeY
+        );
+
+
+        ctx.restore();
+
+    }
+
+
+    /*
+      MESSAGE
+    */
+
+    const message =
+    $("message").value.trim();
+
+
+    if(message){
+
+        drawWrappedMessage(
+            message,
+            w*.72,
+            h*.60,
+            w*.40
+        );
+
+    }
+
+}
+
+
+/* =================================================
+   CAKE
+================================================= */
+
+function cake(){
+
+    const x =
+    canvas.width*.85;
+
+    const y =
+    canvas.height*.87;
+
+
+    ctx.font =
+    "100px Arial";
+
+
+    ctx.textAlign =
+    "center";
+
+
+    ctx.fillText(
+        "🎂",
+        x,
+        y
+    );
+
+}
+
+
+/* =================================================
+   MAIN DRAW
+================================================= */
+
+function draw(){
+
+    setSize();
+
+    background();
+
+
+    if($("confetti").checked)
+        confetti();
+
+
+    if($("balloons").checked)
+        balloons();
+
+
+    if($("flowers").checked)
+        flowers();
+
+
+    if($("hearts").checked)
+        hearts();
+
+
+    if($("stars").checked)
+        stars();
+
+
+    if($("sparkles").checked)
+        sparkles();
+
+
+    if($("fireworks").checked)
+        fireworks();
+
+
+    /*
+      Date
+    */
+
+    drawDate();
+
+
+    /*
+      Photo
+    */
+
+    drawPhoto();
+
+
+    /*
+      Text
+    */
+
+    drawText();
+
+
+    /*
+      Cake
+    */
+
+    if($("cake").checked)
+        cake();
+
+}
+
+
+/* =================================================
+   PHOTO UPLOAD
+================================================= */
+
+$("photo").addEventListener(
+    "change",
+    function(){
+
+        const file =
+        this.files[0];
+
+        if(!file)
+            return;
+
+
+        const reader =
+        new FileReader();
+
+
+        reader.onload =
+        function(e){
+
+            const img =
+            new Image();
+
+
+            img.onload =
+            function(){
+
+                uploadedPhoto =
+                img;
+
+                draw();
+
+                status(
+                    "📸 Photo successfully add हो गई!"
+                );
+
+            };
+
+
+            img.src =
+            e.target.result;
+
+        };
+
+
+        reader.readAsDataURL(file);
+
+    }
+);
+
+
+/* =================================================
+   RELATION PRESETS
+================================================= */
+
+const preset = {
+
+    sister:[
+        "SISTER",
+        "Wishing you endless happiness, beautiful moments and lots of success!"
+    ],
+
+    brother:[
+        "BROTHER",
+        "Wishing you a wonderful birthday filled with happiness and success!"
+    ],
+
+    friend:[
+        "FRIEND",
+        "Happy Birthday! May your special day be full of beautiful memories!"
+    ],
+
+    bestfriend:[
+        "BEST FRIEND",
+        "Life is more beautiful with a friend like you. Happy Birthday!"
+    ],
+
+    wife:[
+        "MY WIFE",
+        "Wishing you love, happiness and beautiful moments. Happy Birthday!"
+    ],
+
+    husband:[
+        "MY HUSBAND",
+        "Wishing you endless happiness and success. Happy Birthday!"
+    ],
+
+    gf:[
+        "MY LOVE",
+        "Wishing you a beautiful birthday filled with love and happiness!"
+    ],
+
+    bf:[
+        "MY LOVE",
+        "May your birthday be as wonderful and special as you are!"
+    ],
+
+    mother:[
+        "MOTHER",
+        "Wishing you endless happiness, love and beautiful moments!"
+    ],
+
+    father:[
+        "FATHER",
+        "Wishing you happiness, success and countless wonderful moments!"
+    ],
+
+    daughter:[
+        "DAUGHTER",
+        "May your life always be filled with happiness and beautiful dreams!"
+    ],
+
+    son:[
+        "SON",
+        "Wishing you success, happiness and a wonderful birthday!"
+    ]
+
+};
+
+
+$("relation").addEventListener(
+    "change",
+    function(){
+
+        const p =
+        preset[this.value];
+
+
+        if(p){
+
+            $("relationText").value =
+            p[0];
+
+            $("message").value =
+            p[1];
+
+        }
+
+
+        draw();
+
+    }
+);
+
+
+/* =================================================
+   LIVE UPDATE
+================================================= */
+
+document
+.querySelectorAll(
+    "input,select,textarea"
+)
+.forEach(el=>{
+
+    el.addEventListener(
+        "input",
+        function(){
+
+            if(this.id === "textRotate"){
+
+                $("rotateValue")
+                .textContent =
+                this.value+"°";
+
+            }
+
+
+            if(this.id === "textSize"){
+
+                $("sizeValue")
+                .textContent =
+                this.value+"px";
+
+            }
+
+
+            draw();
+
+        }
+    );
+
+
+    el.addEventListener(
+        "change",
+        function(){
+
+            draw();
+
+        }
+    );
+
+});
+
+
+/* =================================================
+   DESIGN CHANGE
+================================================= */
+
+$("design").addEventListener(
+    "change",
+    function(){
+
+        currentDesign =
+        this.value;
+
+
+        if(currentDesign === "random"){
+
+            currentDesign =
+            designs[
+                Math.floor(
+                    Math.random()*
+                    designs.length
+                )
+            ];
+
+        }
+
+
+        draw();
+
+    }
+);
+
+
+/* =================================================
+   DOWNLOAD
+================================================= */
+
+function downloadPNG(){
+
+    /*
+      IMPORTANT:
+      Download से पहले random नहीं होगा.
+      जो Preview में है वही save होगा.
+    */
+
+    draw();
+
+
+    canvas.toBlob(
+        function(blob){
+
+            if(!blob){
+
+                alert(
+                    "Image तैयार नहीं हो पाई।"
+                );
+
+                return;
+
+            }
+
+
+            const url =
+            URL.createObjectURL(blob);
+
+
+            const a =
+            document.createElement("a");
+
+
+            let fileName =
+            $("name").value.trim()
+            ||
+            "birthday";
+
+
+            fileName =
+            fileName.replace(
+                /[^a-zA-Z0-9_-]/g,
+                "_"
+            );
+
+
+            a.href = url;
+
+            a.download =
+            fileName +
+            "-birthday.png";
+
+
+            document.body.appendChild(a);
+
+            a.click();
+
+            a.remove();
+
+
+            setTimeout(
+                function(){
+
+                    URL.revokeObjectURL(url);
+
+                },
+                1000
+            );
+
+
+            status(
+                "📥 Birthday Image Download हो रही है!"
+            );
+
+        },
+        "image/png"
+    );
+
+}
+
+
+/* =================================================
+   SHARE
+================================================= */
+
+async function shareImage(){
+
+    draw();
+
+
+    canvas.toBlob(
+        async function(blob){
+
+            if(!blob)
+                return;
+
+
+            const file =
+            new File(
+                [blob],
+                "birthday.png",
+                {
+                    type:"image/png"
+                }
+            );
+
+
+            if(
+                navigator.share &&
+                navigator.canShare &&
+                navigator.canShare({
+                    files:[file]
+                })
+            ){
+
+                try{
+
+                    await navigator.share({
+
+                        title:
+                        "Birthday Image",
+
+                        text:
+                        "🎂 Birthday Poster",
+
+                        files:[
+                            file
+                        ]
+
+                    });
+
+                }
+                catch(e){}
+
+            }
+
+            else{
+
+                alert(
+                    "इस browser में direct image sharing उपलब्ध नहीं है। पहले Download करके WhatsApp/Instagram पर share करें।"
+                );
+
+            }
+
+        },
+        "image/png"
+    );
+
+}
+
+
+/* =================================================
+   RESET
+================================================= */
+
+function resetAll(){
+
+    $("birthdayText").value =
+    "Happy Birthday";
+
+    $("name").value =
+    "Rahul";
+
+    $("day").value =
+    "6";
+
+    $("month").value =
+    "August";
+
+    $("relation").value =
+    "sister";
+
+    $("relationText").value =
+    "SISTER";
+
+    $("message").value =
+    "Wishing you endless happiness, beautiful moments and lots of success!";
+
+
+    $("design").value =
+    "pink";
+
+    currentDesign =
+    "pink";
+
+
+    $("font").value =
+    "Great Vibes";
+
+
+    $("textSize").value =
+    "105";
+
+
+    $("sizeValue").textContent =
+    "105px";
+
+
+    $("textRotate").value =
+    "0";
+
+
+    $("rotateValue").textContent =
+    "0°";
+
+
+    $("arcText").checked =
+    false;
+
+
+    $("threeD").checked =
+    true;
+
+    $("shadow").checked =
+    true;
+
+    $("glow").checked =
+    true;
+
+    $("outline").checked =
+    true;
+
+    $("bigDate").checked =
+    true;
+
+
+    $("dateSize").value =
+    "230";
+
+
+    $("photoZoom").value =
+    "145";
+
+
+    $("photoRotate").value =
+    "0";
+
+
+    $("photoShape").value =
+    "circle";
+
+
+    uploadedPhoto =
+    null;
+
+
+    $("photo").value =
+    "";
+
+
+    palette = [
+        "#ff3d81",
+        "#7138e8",
+        "#ffd166"
+    ];
+
+
+    draw();
+
+
+    status(
+        "🔄 Design Reset हो गया!"
+    );
+
+}
+
+
+/* =================================================
+   BUTTON EVENTS
+================================================= */
+
+$("surpriseBtn")
+.addEventListener(
+    "click",
+    surpriseMe
+);
+
+
+$("randomColorBtn")
+.addEventListener(
+    "click",
+    randomColors
+);
+
+
+$("randomDesignBtn")
+.addEventListener(
+    "click",
+    randomDesign
+);
+
+
+$("downloadBtn")
+.addEventListener(
+    "click",
+    downloadPNG
+);
+
+
+$("shareBtn")
+.addEventListener(
+    "click",
+    shareImage
+);
+
+
+$("resetBtn")
+.addEventListener(
+    "click",
+    resetAll
+);
+
+
+/* =================================================
+   FIRST LOAD
+================================================= */
+
+draw();
+
+</script>
+
+</body>
+</html>
