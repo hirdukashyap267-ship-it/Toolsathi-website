@@ -1,0 +1,1586 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Worker Attendance | Tool Sathi</title>
+
+<style>
+*{
+    box-sizing:border-box;
+}
+
+html{
+    scroll-behavior:auto !important;
+}
+
+body{
+    margin:0;
+    font-family:Arial,"Noto Sans Devanagari",sans-serif;
+    background:linear-gradient(135deg,#eef4ff,#fff0f8);
+    color:#172033;
+}
+
+/* HEADER */
+header{
+    background:linear-gradient(135deg,#2878f0,#7138e8);
+    color:white;
+    padding:24px 15px;
+    text-align:center;
+    box-shadow:0 5px 20px rgba(0,0,0,.15);
+}
+
+header h1{
+    margin:0;
+    font-size:30px;
+}
+
+header p{
+    margin:7px 0 0;
+    font-size:15px;
+}
+
+/* CONTAINER */
+.container{
+    width:96%;
+    max-width:1550px;
+    margin:20px auto 50px;
+}
+
+/* TOP CARD */
+.top-card{
+    background:white;
+    padding:18px;
+    border-radius:18px;
+    box-shadow:0 8px 25px rgba(0,0,0,.08);
+    margin-bottom:20px;
+}
+
+.top-card h2{
+    margin-top:0;
+    color:#2878f0;
+}
+
+.add-box{
+    display:flex;
+    gap:10px;
+    flex-wrap:wrap;
+}
+
+.add-box input{
+    flex:1;
+    min-width:180px;
+    padding:13px;
+    border:2px solid #dce4f5;
+    border-radius:10px;
+    font-size:16px;
+    outline:none;
+}
+
+.add-box input:focus{
+    border-color:#2878f0;
+}
+
+.add-btn{
+    border:0;
+    background:linear-gradient(135deg,#2878f0,#7138e8);
+    color:white;
+    padding:13px 22px;
+    border-radius:10px;
+    font-size:16px;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+.add-btn:active{
+    transform:scale(.97);
+}
+
+.save-status{
+    margin-top:12px;
+    padding:9px 12px;
+    background:#eafff3;
+    color:#138a4d;
+    border-radius:9px;
+    font-size:14px;
+    font-weight:bold;
+}
+
+/* LEGEND */
+.legend{
+    margin-top:15px;
+    display:flex;
+    gap:15px;
+    flex-wrap:wrap;
+    font-size:14px;
+}
+
+.legend span{
+    display:flex;
+    align-items:center;
+    gap:5px;
+}
+
+.dot{
+    width:15px;
+    height:15px;
+    border-radius:50%;
+    display:inline-block;
+}
+
+.green{
+    background:#20b26b;
+}
+
+.red{
+    background:#e53935;
+}
+
+/* MONTH CARD */
+.month-card{
+    background:white;
+    border-radius:18px;
+    margin-bottom:25px;
+    box-shadow:0 8px 25px rgba(0,0,0,.08);
+    overflow:hidden;
+}
+
+.month-title{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:12px;
+    flex-wrap:wrap;
+    padding:15px;
+    background:linear-gradient(135deg,#2878f0,#7138e8);
+    color:white;
+}
+
+.month-title h2{
+    margin:0;
+    font-size:22px;
+}
+
+/* TABLE */
+.table-box{
+    width:100%;
+    overflow-x:auto;
+    overflow-y:hidden;
+    -webkit-overflow-scrolling:touch;
+}
+
+.worker-table{
+    border-collapse:collapse;
+    width:max-content;
+    min-width:100%;
+}
+
+.worker-table th,
+.worker-table td{
+    border:1px solid #dce3f0;
+    padding:6px;
+    text-align:center;
+    white-space:nowrap;
+}
+
+.worker-table th{
+    background:#f0f4ff;
+    color:#253b70;
+    position:sticky;
+    top:0;
+    z-index:2;
+}
+
+/* STICKY NAME */
+.name-head,
+.name-cell{
+    position:sticky;
+    left:0;
+    z-index:3;
+    background:white;
+    min-width:170px;
+}
+
+.name-head{
+    background:#eaf0ff !important;
+}
+
+/* WAGE */
+.wage-head,
+.wage-cell{
+    min-width:120px;
+}
+
+.name-input,
+.wage-input{
+    width:150px;
+    border:1px solid #ccd6ea;
+    border-radius:7px;
+    padding:8px;
+    font-size:14px;
+}
+
+.wage-input{
+    width:105px;
+}
+
+/* P A BUTTONS */
+.att-btn{
+    width:34px;
+    height:32px;
+    border:1px solid #ccd6ea;
+    border-radius:7px;
+    background:#f8faff;
+    cursor:pointer;
+    font-weight:bold;
+    margin:2px;
+}
+
+.att-btn.present{
+    background:#20b26b;
+    color:white;
+    border-color:#20b26b;
+}
+
+.att-btn.absent{
+    background:#e53935;
+    color:white;
+    border-color:#e53935;
+}
+
+/* SUMMARY */
+.days-count{
+    color:#087f4d;
+    font-weight:bold;
+    min-width:100px;
+}
+
+.payment{
+    color:#2878f0;
+    font-weight:bold;
+    min-width:120px;
+}
+
+.delete-btn{
+    border:0;
+    background:#ff4d5e;
+    color:white;
+    padding:8px 10px;
+    border-radius:7px;
+    cursor:pointer;
+}
+
+.empty{
+    padding:30px;
+    text-align:center;
+    color:#777;
+    font-weight:bold;
+}
+
+/* MONTH TOTAL */
+.month-total{
+    padding:15px;
+    background:#f7f9ff;
+    border-top:1px solid #e0e6f2;
+    display:flex;
+    gap:15px;
+    flex-wrap:wrap;
+}
+
+.total-box{
+    background:white;
+    padding:10px 15px;
+    border-radius:10px;
+    box-shadow:0 3px 10px rgba(0,0,0,.06);
+    font-weight:bold;
+}
+
+.total-money{
+    color:#2878f0;
+}
+
+@media(max-width:600px){
+
+    header h1{
+        font-size:24px;
+    }
+
+    .container{
+        width:97%;
+    }
+
+    .month-title h2{
+        font-size:19px;
+    }
+
+    .name-head,
+    .name-cell{
+        min-width:145px;
+    }
+
+    .name-input{
+        width:125px;
+    }
+
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <h1>🛠️ Tool Sathi</h1>
+    <p>👷 Worker Attendance & Payment</p>
+</header>
+
+<div class="container">
+
+    <div class="top-card">
+
+        <h2>👷 Worker जोड़ें</h2>
+
+        <div class="add-box">
+
+            <input
+                type="text"
+                id="workerName"
+                placeholder="Worker का नाम लिखें"
+                autocomplete="off"
+            >
+
+            <input
+                type="number"
+                id="dailyWage"
+                placeholder="Daily Wage ₹"
+                min="0"
+                step="1"
+            >
+
+            <button
+                class="add-btn"
+                onclick="addWorker()"
+            >
+                ➕ Worker Add
+            </button>
+
+        </div>
+
+        <div class="save-status" id="saveStatus">
+            💾 Data Auto Save है
+        </div>
+
+        <div class="legend">
+
+            <span>
+                <span class="dot green"></span>
+                P = काम किया
+            </span>
+
+            <span>
+                <span class="dot red"></span>
+                A = काम नहीं किया
+            </span>
+
+        </div>
+
+    </div>
+
+    <div id="months"></div>
+
+</div>
+
+
+<script>
+
+/* ==========================================
+   AUTO SAVE
+========================================== */
+
+const STORAGE_KEY =
+    "toolSathiWorkerAttendance";
+
+
+let workers = [];
+
+let attendance = {};
+
+
+/* ==========================================
+   MONTHS
+========================================== */
+
+const monthNames = [
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December"
+];
+
+
+/* ==========================================
+   LOAD DATA
+========================================== */
+
+function loadData(){
+
+    try{
+
+        const saved =
+            localStorage.getItem(STORAGE_KEY);
+
+        if(saved){
+
+            const data =
+                JSON.parse(saved);
+
+            if(Array.isArray(data.workers)){
+
+                workers =
+                    data.workers;
+
+            }
+
+            if(
+                data.attendance &&
+                typeof data.attendance === "object"
+            ){
+
+                attendance =
+                    data.attendance;
+
+            }
+
+        }
+
+    }catch(error){
+
+        console.log("Load error:",error);
+
+        workers = [];
+
+        attendance = {};
+
+    }
+
+}
+
+
+/* ==========================================
+   SAVE DATA
+========================================== */
+
+function saveData(){
+
+    try{
+
+        localStorage.setItem(
+
+            STORAGE_KEY,
+
+            JSON.stringify({
+
+                workers:workers,
+
+                attendance:attendance
+
+            })
+
+        );
+
+        showSaveStatus();
+
+    }catch(error){
+
+        console.log("Save error:",error);
+
+    }
+
+}
+
+
+/* ==========================================
+   SAVE MESSAGE
+========================================== */
+
+let saveTimer;
+
+function showSaveStatus(){
+
+    const box =
+        document.getElementById("saveStatus");
+
+    if(!box) return;
+
+    box.textContent =
+        "✅ Data Save हो गया";
+
+    clearTimeout(saveTimer);
+
+    saveTimer =
+        setTimeout(function(){
+
+            box.textContent =
+                "💾 Data Auto Save है";
+
+        },1500);
+
+}
+
+
+/* ==========================================
+   DAYS
+========================================== */
+
+function getDays(month){
+
+    const year =
+        new Date().getFullYear();
+
+    return new Date(
+        year,
+        month + 1,
+        0
+    ).getDate();
+
+}
+
+
+/* ==========================================
+   ADD WORKER
+========================================== */
+
+function addWorker(){
+
+    const nameInput =
+        document.getElementById("workerName");
+
+    const wageInput =
+        document.getElementById("dailyWage");
+
+    const name =
+        nameInput.value.trim();
+
+    const wage =
+        Number(wageInput.value);
+
+
+    if(!name){
+
+        alert(
+            "पहले Worker का नाम लिखें।"
+        );
+
+        nameInput.focus();
+
+        return;
+
+    }
+
+
+    if(
+        wageInput.value === "" ||
+        wage < 0
+    ){
+
+        alert(
+            "Daily Wage सही डालें।"
+        );
+
+        wageInput.focus();
+
+        return;
+
+    }
+
+
+    const id =
+        Date.now().toString() +
+        Math.random()
+            .toString(36)
+            .substring(2,8);
+
+
+    workers.push({
+
+        id:id,
+
+        name:name,
+
+        wage:wage
+
+    });
+
+
+    attendance[id] = {};
+
+
+    saveData();
+
+
+    nameInput.value = "";
+
+    wageInput.value = "";
+
+
+    renderMonths();
+
+
+    nameInput.focus();
+
+}
+
+
+/* ==========================================
+   CHANGE NAME
+========================================== */
+
+function changeName(id,value){
+
+    const worker =
+        workers.find(
+            w => w.id === id
+        );
+
+    if(worker){
+
+        worker.name =
+            value.trim();
+
+        saveData();
+
+    }
+
+}
+
+
+/* ==========================================
+   CHANGE WAGE
+========================================== */
+
+function changeWage(id,value){
+
+    const worker =
+        workers.find(
+            w => w.id === id
+        );
+
+    if(!worker) return;
+
+
+    let wage =
+        Number(value);
+
+
+    if(
+        isNaN(wage) ||
+        wage < 0
+    ){
+
+        wage = 0;
+
+    }
+
+
+    worker.wage =
+        wage;
+
+
+    saveData();
+
+
+    /*
+       सिर्फ उसी worker की rows
+       update होंगी।
+    */
+
+    for(
+        let month = 0;
+        month < 12;
+        month++
+    ){
+
+        updateWorkerRow(
+            id,
+            month
+        );
+
+    }
+
+}
+
+
+/* ==========================================
+   DELETE WORKER
+========================================== */
+
+function deleteWorker(id){
+
+    const worker =
+        workers.find(
+            w => w.id === id
+        );
+
+
+    if(!worker) return;
+
+
+    const ok =
+        confirm(
+            "क्या आप " +
+            worker.name +
+            " को हटाना चाहते हैं?"
+        );
+
+
+    if(!ok) return;
+
+
+    workers =
+        workers.filter(
+            w => w.id !== id
+        );
+
+
+    delete attendance[id];
+
+
+    saveData();
+
+
+    renderMonths();
+
+}
+
+
+/* ==========================================
+   SET P / A
+========================================== */
+
+function setAttendance(
+
+    workerId,
+    month,
+    day,
+    status
+
+){
+
+    if(!attendance[workerId]){
+
+        attendance[workerId] = {};
+
+    }
+
+
+    if(
+        !attendance[workerId][month]
+    ){
+
+        attendance[workerId][month] = {};
+
+    }
+
+
+    const current =
+        attendance[workerId]
+        [month]
+        [day];
+
+
+    /*
+       Same button दोबारा दबाने पर
+       attendance हट जाएगी।
+    */
+
+    if(current === status){
+
+        delete attendance[workerId]
+            [month]
+            [day];
+
+    }else{
+
+        attendance[workerId]
+            [month]
+            [day] =
+            status;
+
+    }
+
+
+    /*
+       Data तुरंत save
+    */
+
+    saveData();
+
+
+    /*
+       सिर्फ clicked worker की row update।
+       पूरा page render नहीं होगा।
+       इसलिए scroll नहीं बदलेगा।
+    */
+
+    updateWorkerRow(
+        workerId,
+        month
+    );
+
+}
+
+
+/* ==========================================
+   UPDATE WORKER ROW
+========================================== */
+
+function updateWorkerRow(
+
+    workerId,
+    month
+
+){
+
+    const row =
+        document.getElementById(
+
+            "row-" +
+            month +
+            "-" +
+            workerId
+
+        );
+
+
+    if(!row) return;
+
+
+    const worker =
+        workers.find(
+            w => w.id === workerId
+        );
+
+
+    if(!worker) return;
+
+
+    const data =
+
+        attendance[workerId] &&
+
+        attendance[workerId][month]
+
+        ?
+
+        attendance[workerId][month]
+
+        :
+
+        {};
+
+
+    let present = 0;
+
+
+    Object.values(data)
+        .forEach(function(status){
+
+            if(status === "P"){
+
+                present++;
+
+            }
+
+        });
+
+
+    const totalPayment =
+        present *
+        Number(worker.wage || 0);
+
+
+    const daysCell =
+        document.getElementById(
+
+            "days-" +
+            month +
+            "-" +
+            workerId
+
+        );
+
+
+    const paymentCell =
+        document.getElementById(
+
+            "payment-" +
+            month +
+            "-" +
+            workerId
+
+        );
+
+
+    if(daysCell){
+
+        daysCell.textContent =
+            present;
+
+    }
+
+
+    if(paymentCell){
+
+        paymentCell.textContent =
+            "₹" +
+            totalPayment.toLocaleString("en-IN");
+
+    }
+
+
+    /*
+       P/A button color update
+    */
+
+    for(
+
+        let day = 1;
+
+        day <= getDays(month);
+
+        day++
+
+    ){
+
+        const pBtn =
+            document.getElementById(
+
+                "att-" +
+                month +
+                "-" +
+                workerId +
+                "-" +
+                day +
+                "-P"
+
+            );
+
+
+        const aBtn =
+            document.getElementById(
+
+                "att-" +
+                month +
+                "-" +
+                workerId +
+                "-" +
+                day +
+                "-A"
+
+            );
+
+
+        if(pBtn){
+
+            pBtn.classList.remove(
+                "present"
+            );
+
+        }
+
+
+        if(aBtn){
+
+            aBtn.classList.remove(
+                "absent"
+            );
+
+        }
+
+
+        if(data[day] === "P"){
+
+            if(pBtn){
+
+                pBtn.classList.add(
+                    "present"
+                );
+
+            }
+
+        }
+
+
+        if(data[day] === "A"){
+
+            if(aBtn){
+
+                aBtn.classList.add(
+                    "absent"
+                );
+
+            }
+
+        }
+
+    }
+
+
+    updateMonthTotal(month);
+
+}
+
+
+/* ==========================================
+   MONTH TOTAL
+========================================== */
+
+function updateMonthTotal(month){
+
+    const workersCount =
+        workers.length;
+
+
+    let totalDays = 0;
+
+    let totalMoney = 0;
+
+
+    workers.forEach(function(worker){
+
+        const data =
+
+            attendance[worker.id] &&
+
+            attendance[worker.id][month]
+
+            ?
+
+            attendance[worker.id][month]
+
+            :
+
+            {};
+
+
+        let present = 0;
+
+
+        Object.values(data)
+            .forEach(function(status){
+
+                if(status === "P"){
+
+                    present++;
+
+                }
+
+            });
+
+
+        totalDays += present;
+
+
+        totalMoney +=
+            present *
+            Number(worker.wage || 0);
+
+    });
+
+
+    const daysBox =
+        document.getElementById(
+
+            "month-total-days-" +
+            month
+
+        );
+
+
+    const moneyBox =
+        document.getElementById(
+
+            "month-total-money-" +
+            month
+
+        );
+
+
+    if(daysBox){
+
+        daysBox.textContent =
+            totalDays;
+
+    }
+
+
+    if(moneyBox){
+
+        moneyBox.textContent =
+            "₹" +
+            totalMoney.toLocaleString("en-IN");
+
+    }
+
+}
+
+
+/* ==========================================
+   RENDER ALL MONTHS
+========================================== */
+
+function renderMonths(){
+
+    const container =
+        document.getElementById("months");
+
+
+    let html = "";
+
+
+    for(
+
+        let month = 0;
+
+        month < 12;
+
+        month++
+
+    ){
+
+        html +=
+            renderMonth(month);
+
+    }
+
+
+    container.innerHTML =
+        html;
+
+
+    for(
+
+        let month = 0;
+
+        month < 12;
+
+        month++
+
+    ){
+
+        updateMonthTotal(month);
+
+    }
+
+}
+
+
+/* ==========================================
+   RENDER ONE MONTH
+========================================== */
+
+function renderMonth(month){
+
+    const days =
+        getDays(month);
+
+
+    let html = `
+
+        <div class="month-card">
+
+            <div class="month-title">
+
+                <h2>
+                    📅 ${monthNames[month]}
+                </h2>
+
+            </div>
+
+            <div class="table-box">
+
+                <table class="worker-table">
+
+                    <thead>
+
+                        <tr>
+
+                            <th class="name-head">
+                                Worker Name
+                            </th>
+
+                            <th class="wage-head">
+                                Daily Wage
+                            </th>
+
+    `;
+
+
+    for(
+
+        let day = 1;
+
+        day <= days;
+
+        day++
+
+    ){
+
+        html +=
+            `<th>${day}</th>`;
+
+    }
+
+
+    html += `
+
+                            <th>
+                                Total Days
+                            </th>
+
+                            <th>
+                                Total Payment
+                            </th>
+
+                            <th>
+                                Delete
+                            </th>
+
+                        </tr>
+
+                    </thead>
+
+                    <tbody>
+
+    `;
+
+
+    if(workers.length === 0){
+
+        html += `
+
+            <tr>
+
+                <td
+                    colspan="${days + 5}"
+                    class="empty"
+                >
+                    👷 ऊपर Worker Add करें
+                </td>
+
+            </tr>
+
+        `;
+
+    }else{
+
+
+        workers.forEach(function(worker){
+
+            const id =
+                worker.id;
+
+
+            const data =
+
+                attendance[id] &&
+
+                attendance[id][month]
+
+                ?
+
+                attendance[id][month]
+
+                :
+
+                {};
+
+
+            let present = 0;
+
+
+            Object.values(data)
+                .forEach(function(status){
+
+                    if(status === "P"){
+
+                        present++;
+
+                    }
+
+                });
+
+
+            const payment =
+                present *
+                Number(worker.wage || 0);
+
+
+            html += `
+
+                <tr
+                    id="row-${month}-${id}"
+                >
+
+                    <td class="name-cell">
+
+                        <input
+                            class="name-input"
+                            value="${escapeAttribute(worker.name)}"
+                            onchange="changeName('${id}',this.value)"
+                        >
+
+                    </td>
+
+                    <td class="wage-cell">
+
+                        <input
+                            class="wage-input"
+                            type="number"
+                            min="0"
+                            value="${Number(worker.wage || 0)}"
+                            onchange="changeWage('${id}',this.value)"
+                        >
+
+                    </td>
+
+            `;
+
+
+            for(
+
+                let day = 1;
+
+                day <= days;
+
+                day++
+
+            ){
+
+                const current =
+                    data[day];
+
+
+                html += `
+
+                    <td>
+
+                        <button
+                            id="att-${month}-${id}-${day}-P"
+                            class="att-btn ${
+                                current === "P"
+                                ? "present"
+                                : ""
+                            }"
+                            onclick="setAttendance(
+                                '${id}',
+                                ${month},
+                                ${day},
+                                'P'
+                            )"
+                        >
+                            P
+                        </button>
+
+                        <button
+                            id="att-${month}-${id}-${day}-A"
+                            class="att-btn ${
+                                current === "A"
+                                ? "absent"
+                                : ""
+                            }"
+                            onclick="setAttendance(
+                                '${id}',
+                                ${month},
+                                ${day},
+                                'A'
+                            )"
+                        >
+                            A
+                        </button>
+
+                    </td>
+
+                `;
+
+            }
+
+
+            html += `
+
+                    <td
+                        id="days-${month}-${id}"
+                        class="days-count"
+                    >
+                        ${present}
+                    </td>
+
+                    <td
+                        id="payment-${month}-${id}"
+                        class="payment"
+                    >
+                        ₹${payment.toLocaleString("en-IN")}
+                    </td>
+
+                    <td>
+
+                        <button
+                            class="delete-btn"
+                            onclick="deleteWorker('${id}')"
+                        >
+                            🗑️
+                        </button>
+
+                    </td>
+
+                </tr>
+
+            `;
+
+        });
+
+    }
+
+
+    html += `
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+            <div class="month-total">
+
+                <div class="total-box">
+
+                    👷 Workers:
+                    ${workers.length}
+
+                </div>
+
+                <div class="total-box">
+
+                    📅 Total Working Days:
+                    <span
+                        id="month-total-days-${month}"
+                    >
+                        0
+                    </span>
+
+                </div>
+
+                <div class="total-box">
+
+                    💰 Total Payment:
+                    <span
+                        id="month-total-money-${month}"
+                        class="total-money"
+                    >
+                        ₹0
+                    </span>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    `;
+
+
+    return html;
+
+}
+
+
+/* ==========================================
+   SECURITY
+========================================== */
+
+function escapeHTML(text){
+
+    return String(text)
+
+        .replace(/&/g,"&amp;")
+
+        .replace(/</g,"&lt;")
+
+        .replace(/>/g,"&gt;")
+
+        .replace(/"/g,"&quot;")
+
+        .replace(/'/g,"&#039;");
+
+}
+
+
+function escapeAttribute(text){
+
+    return escapeHTML(text);
+
+}
+
+
+/* ==========================================
+   ENTER KEY
+========================================== */
+
+document
+    .getElementById("workerName")
+    .addEventListener(
+
+        "keydown",
+
+        function(event){
+
+            if(event.key === "Enter"){
+
+                addWorker();
+
+            }
+
+        }
+
+    );
+
+
+document
+    .getElementById("dailyWage")
+    .addEventListener(
+
+        "keydown",
+
+        function(event){
+
+            if(event.key === "Enter"){
+
+                addWorker();
+
+            }
+
+        }
+
+    );
+
+
+/* ==========================================
+   START
+========================================== */
+
+loadData();
+
+renderMonths();
+
+</script>
+
+</body>
+</html>
