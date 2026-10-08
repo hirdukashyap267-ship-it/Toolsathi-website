@@ -1,0 +1,1915 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>School Attendance | Tool Sathi</title>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
+
+<style>
+
+*{
+    box-sizing:border-box;
+}
+
+html{
+    scroll-behavior:auto !important;
+}
+
+body{
+    margin:0;
+    font-family:Arial,"Noto Sans Devanagari",sans-serif;
+    background:linear-gradient(135deg,#eef4ff,#fff0f8);
+    color:#172033;
+}
+
+header{
+    background:linear-gradient(135deg,#2878f0,#7138e8);
+    color:white;
+    padding:24px 15px;
+    text-align:center;
+    box-shadow:0 5px 20px rgba(0,0,0,.15);
+}
+
+header h1{
+    margin:0;
+    font-size:30px;
+}
+
+header p{
+    margin:7px 0 0;
+    font-size:15px;
+}
+
+.container{
+    width:96%;
+    max-width:1500px;
+    margin:20px auto 50px;
+}
+
+.top-card{
+    background:white;
+    padding:18px;
+    border-radius:18px;
+    box-shadow:0 8px 25px rgba(0,0,0,.08);
+    margin-bottom:20px;
+}
+
+.top-card h2{
+    margin-top:0;
+    color:#2878f0;
+}
+
+.add-box{
+    display:flex;
+    gap:10px;
+    flex-wrap:wrap;
+}
+
+.add-box input{
+    flex:1;
+    min-width:220px;
+    padding:13px;
+    border:2px solid #dce4f5;
+    border-radius:10px;
+    font-size:16px;
+    outline:none;
+}
+
+.add-box input:focus{
+    border-color:#2878f0;
+}
+
+.add-btn{
+    border:0;
+    background:linear-gradient(135deg,#2878f0,#7138e8);
+    color:white;
+    padding:13px 22px;
+    border-radius:10px;
+    font-size:16px;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+.add-btn:active{
+    transform:scale(.97);
+}
+
+.save-status{
+    margin-top:12px;
+    padding:9px 12px;
+    background:#eafff3;
+    color:#138a4d;
+    border-radius:9px;
+    font-size:14px;
+    font-weight:bold;
+}
+
+.month-card{
+    background:white;
+    border-radius:18px;
+    margin-bottom:25px;
+    box-shadow:0 8px 25px rgba(0,0,0,.08);
+    overflow:hidden;
+}
+
+.month-title{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:12px;
+    flex-wrap:wrap;
+    padding:15px;
+    background:linear-gradient(135deg,#2878f0,#7138e8);
+    color:white;
+}
+
+.month-title h2{
+    margin:0;
+    font-size:22px;
+}
+
+.pdf-btn{
+    border:0;
+    background:white;
+    color:#2878f0;
+    padding:10px 15px;
+    border-radius:9px;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+.pdf-btn:active{
+    transform:scale(.97);
+}
+
+.table-box{
+    width:100%;
+    overflow-x:auto;
+    overflow-y:hidden;
+    -webkit-overflow-scrolling:touch;
+}
+
+.attendance-table{
+    border-collapse:collapse;
+    width:max-content;
+    min-width:100%;
+}
+
+.attendance-table th,
+.attendance-table td{
+    border:1px solid #dce3f0;
+    padding:6px;
+    text-align:center;
+    white-space:nowrap;
+}
+
+.attendance-table th{
+    background:#f0f4ff;
+    color:#253b70;
+    position:sticky;
+    top:0;
+    z-index:2;
+}
+
+.name-head,
+.name-cell{
+    position:sticky;
+    left:0;
+    z-index:3;
+    background:white;
+    min-width:170px;
+    max-width:220px;
+}
+
+.name-head{
+    background:#eaf0ff !important;
+}
+
+.name-input{
+    width:155px;
+    border:1px solid #ccd6ea;
+    border-radius:7px;
+    padding:8px;
+    font-size:14px;
+}
+
+.att-btn{
+    width:34px;
+    height:32px;
+    border:1px solid #ccd6ea;
+    border-radius:7px;
+    background:#f8faff;
+    cursor:pointer;
+    font-weight:bold;
+    margin:2px;
+}
+
+.att-btn.present{
+    background:#20b26b;
+    color:white;
+    border-color:#20b26b;
+}
+
+.att-btn.absent{
+    background:#e53935;
+    color:white;
+    border-color:#e53935;
+}
+
+.summary-head{
+    min-width:85px;
+}
+
+.present-count{
+    color:#0a9b58;
+    font-weight:bold;
+}
+
+.absent-count{
+    color:#d72828;
+    font-weight:bold;
+}
+
+.percent{
+    font-weight:bold;
+}
+
+.percent.full{
+    color:#0a9b58;
+}
+
+.percent.medium{
+    color:#e58a00;
+}
+
+.percent.low{
+    color:#d72828;
+}
+
+.delete-btn{
+    border:0;
+    background:#ff4d5e;
+    color:white;
+    padding:8px 10px;
+    border-radius:7px;
+    cursor:pointer;
+}
+
+.empty{
+    padding:30px;
+    text-align:center;
+    color:#777;
+    font-weight:bold;
+}
+
+.legend{
+    margin-top:15px;
+    display:flex;
+    gap:15px;
+    flex-wrap:wrap;
+    font-size:14px;
+}
+
+.legend span{
+    display:flex;
+    align-items:center;
+    gap:5px;
+}
+
+.dot{
+    width:15px;
+    height:15px;
+    border-radius:50%;
+    display:inline-block;
+}
+
+.green{
+    background:#20b26b;
+}
+
+.red{
+    background:#e53935;
+}
+
+.orange{
+    background:#f0a000;
+}
+
+.low-list{
+    margin-top:20px;
+    background:#fff7e6;
+    border:1px solid #ffd98a;
+    border-radius:14px;
+    padding:15px;
+}
+
+.low-list h3{
+    margin-top:0;
+    color:#d17b00;
+}
+
+.low-list p{
+    margin:7px 0;
+}
+
+@media(max-width:600px){
+
+    header h1{
+        font-size:24px;
+    }
+
+    .container{
+        width:97%;
+    }
+
+    .month-title h2{
+        font-size:19px;
+    }
+
+    .pdf-btn{
+        width:100%;
+    }
+
+    .name-head,
+    .name-cell{
+        min-width:145px;
+    }
+
+    .name-input{
+        width:130px;
+    }
+
+}
+
+</style>
+</head>
+
+<body>
+
+<header>
+
+    <h1>🛠️ Tool Sathi</h1>
+
+    <p>📚 School Attendance Sheet</p>
+
+</header>
+
+
+<div class="container">
+
+    <div class="top-card">
+
+        <h2>👨‍🎓 Student जोड़ें</h2>
+
+        <div class="add-box">
+
+            <input
+                type="text"
+                id="studentName"
+                placeholder="Student का नाम लिखें"
+                autocomplete="off"
+            >
+
+            <button
+                class="add-btn"
+                onclick="addStudent()"
+            >
+                ➕ Student Add
+            </button>
+
+        </div>
+
+
+        <div class="save-status" id="saveStatus">
+            💾 Data Auto Save है
+        </div>
+
+
+        <div class="legend">
+
+            <span>
+                <span class="dot green"></span>
+                P = उपस्थित
+            </span>
+
+            <span>
+                <span class="dot red"></span>
+                A = अनुपस्थित
+            </span>
+
+            <span>
+                <span class="dot orange"></span>
+                50% से कम
+            </span>
+
+        </div>
+
+    </div>
+
+
+    <div id="months"></div>
+
+</div>
+
+
+<script>
+
+/* =================================================
+   AUTO SAVE STORAGE
+================================================= */
+
+const STORAGE_KEY =
+    "toolSathiSchoolAttendance";
+
+
+/* =================================================
+   MONTHS
+================================================= */
+
+const monthNames = [
+
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December"
+
+];
+
+
+/* =================================================
+   DATA
+================================================= */
+
+let students = [];
+
+let attendance = {};
+
+
+/* =================================================
+   LOAD SAVED DATA
+================================================= */
+
+function loadData(){
+
+    try{
+
+        const saved =
+            localStorage.getItem(
+                STORAGE_KEY
+            );
+
+
+        if(saved){
+
+            const data =
+                JSON.parse(saved);
+
+
+            if(
+                Array.isArray(data.students)
+            ){
+
+                students =
+                    data.students;
+
+            }
+
+
+            if(
+                data.attendance &&
+                typeof data.attendance === "object"
+            ){
+
+                attendance =
+                    data.attendance;
+
+            }
+
+        }
+
+    }catch(error){
+
+        console.log(
+            "Saved data load error:",
+            error
+        );
+
+        students = [];
+
+        attendance = {};
+
+    }
+
+}
+
+
+/* =================================================
+   SAVE DATA
+================================================= */
+
+function saveData(){
+
+    try{
+
+        const data = {
+
+            students: students,
+
+            attendance: attendance
+
+        };
+
+
+        localStorage.setItem(
+
+            STORAGE_KEY,
+
+            JSON.stringify(data)
+
+        );
+
+
+        showSaveStatus();
+
+    }catch(error){
+
+        console.log(
+            "Save error:",
+            error
+        );
+
+    }
+
+}
+
+
+/* =================================================
+   SAVE STATUS
+================================================= */
+
+let saveTimer;
+
+
+function showSaveStatus(){
+
+    const box =
+        document.getElementById(
+            "saveStatus"
+        );
+
+
+    if(!box) return;
+
+
+    box.textContent =
+        "✅ Data Save हो गया";
+
+
+    clearTimeout(saveTimer);
+
+
+    saveTimer =
+        setTimeout(function(){
+
+            box.textContent =
+                "💾 Data Auto Save है";
+
+        },1500);
+
+}
+
+
+/* =================================================
+   DAYS IN MONTH
+================================================= */
+
+function getDays(month){
+
+    const year =
+        new Date().getFullYear();
+
+
+    return new Date(
+        year,
+        month + 1,
+        0
+    ).getDate();
+
+}
+
+
+/* =================================================
+   ADD STUDENT
+================================================= */
+
+function addStudent(){
+
+    const input =
+        document.getElementById(
+            "studentName"
+        );
+
+
+    const name =
+        input.value.trim();
+
+
+    if(!name){
+
+        alert(
+            "पहले Student का नाम लिखें।"
+        );
+
+        input.focus();
+
+        return;
+
+    }
+
+
+    const id =
+        Date.now().toString() +
+        Math.random()
+            .toString(36)
+            .substring(2,8);
+
+
+    students.push({
+
+        id:id,
+
+        name:name
+
+    });
+
+
+    attendance[id] = {};
+
+
+    /* सबसे पहले Save */
+
+    saveData();
+
+
+    input.value = "";
+
+
+    renderMonths();
+
+
+    input.focus();
+
+}
+
+
+/* =================================================
+   CHANGE NAME
+================================================= */
+
+function changeName(id,value){
+
+    const student =
+        students.find(
+            s => s.id === id
+        );
+
+
+    if(student){
+
+        student.name =
+            value.trim();
+
+
+        saveData();
+
+    }
+
+}
+
+
+/* =================================================
+   DELETE STUDENT
+================================================= */
+
+function deleteStudent(id){
+
+    const student =
+        students.find(
+            s => s.id === id
+        );
+
+
+    if(!student) return;
+
+
+    const ok =
+        confirm(
+            "क्या आप " +
+            student.name +
+            " को हटाना चाहते हैं?"
+        );
+
+
+    if(!ok) return;
+
+
+    students =
+        students.filter(
+            s => s.id !== id
+        );
+
+
+    delete attendance[id];
+
+
+    saveData();
+
+
+    renderMonths();
+
+}
+
+
+/* =================================================
+   SET ATTENDANCE
+   NO PAGE RE-RENDER
+================================================= */
+
+function setAttendance(
+
+    studentId,
+
+    month,
+
+    day,
+
+    status
+
+){
+
+    if(!attendance[studentId]){
+
+        attendance[studentId] = {};
+
+    }
+
+
+    if(
+        !attendance[studentId][month]
+    ){
+
+        attendance[studentId][month] = {};
+
+    }
+
+
+    const current =
+        attendance[studentId]
+            [month]
+            [day];
+
+
+    /*
+       Same P/A button दोबारा दबाने पर
+       attendance clear होगी।
+    */
+
+    if(current === status){
+
+        delete attendance[studentId]
+            [month]
+            [day];
+
+    }else{
+
+        attendance[studentId]
+            [month]
+            [day] =
+            status;
+
+    }
+
+
+    /*
+       IMPORTANT:
+       यहां renderMonths() नहीं है।
+       इसलिए page scroll/jump नहीं करेगा।
+    */
+
+
+    saveData();
+
+
+    updateStudentRow(
+
+        studentId,
+
+        month
+
+    );
+
+}
+
+
+/* =================================================
+   UPDATE ONLY CLICKED STUDENT ROW
+================================================= */
+
+function updateStudentRow(
+
+    studentId,
+
+    month
+
+){
+
+    const row =
+        document.getElementById(
+
+            "row-" +
+            month +
+            "-" +
+            studentId
+
+        );
+
+
+    if(!row) return;
+
+
+    const data =
+
+        attendance[studentId] &&
+
+        attendance[studentId][month]
+
+        ?
+
+        attendance[studentId][month]
+
+        :
+
+        {};
+
+
+    let present = 0;
+
+    let absent = 0;
+
+
+    Object.values(data)
+        .forEach(function(status){
+
+            if(status === "P"){
+
+                present++;
+
+            }
+
+
+            if(status === "A"){
+
+                absent++;
+
+            }
+
+        });
+
+
+    const total =
+        present + absent;
+
+
+    let percentage = 0;
+
+
+    if(total > 0){
+
+        percentage =
+            (present / total) * 100;
+
+    }
+
+
+    const presentCell =
+        document.getElementById(
+
+            "present-" +
+            month +
+            "-" +
+            studentId
+
+        );
+
+
+    const absentCell =
+        document.getElementById(
+
+            "absent-" +
+            month +
+            "-" +
+            studentId
+
+        );
+
+
+    const percentCell =
+        document.getElementById(
+
+            "percent-" +
+            month +
+            "-" +
+            studentId
+
+        );
+
+
+    if(presentCell){
+
+        presentCell.textContent =
+            present;
+
+    }
+
+
+    if(absentCell){
+
+        absentCell.textContent =
+            absent;
+
+    }
+
+
+    if(percentCell){
+
+        percentCell.textContent =
+
+            percentage.toFixed(1) +
+            "%";
+
+
+        percentCell.classList.remove(
+
+            "full",
+
+            "medium",
+
+            "low"
+
+        );
+
+
+        if(total > 0){
+
+            if(percentage >= 100){
+
+                percentCell.classList.add(
+                    "full"
+                );
+
+            }
+            else if(percentage >= 50){
+
+                percentCell.classList.add(
+                    "medium"
+                );
+
+            }
+            else{
+
+                percentCell.classList.add(
+                    "low"
+                );
+
+            }
+
+        }
+
+    }
+
+
+    /* P/A buttons */
+
+    for(
+
+        let day = 1;
+
+        day <= getDays(month);
+
+        day++
+
+    ){
+
+        const pBtn =
+            document.getElementById(
+
+                "att-" +
+                month +
+                "-" +
+                studentId +
+                "-" +
+                day +
+                "-P"
+
+            );
+
+
+        const aBtn =
+            document.getElementById(
+
+                "att-" +
+                month +
+                "-" +
+                studentId +
+                "-" +
+                day +
+                "-A"
+
+            );
+
+
+        if(pBtn){
+
+            pBtn.classList.remove(
+                "present"
+            );
+
+        }
+
+
+        if(aBtn){
+
+            aBtn.classList.remove(
+                "absent"
+            );
+
+        }
+
+
+        if(data[day] === "P"){
+
+            if(pBtn){
+
+                pBtn.classList.add(
+                    "present"
+                );
+
+            }
+
+        }
+
+
+        if(data[day] === "A"){
+
+            if(aBtn){
+
+                aBtn.classList.add(
+                    "absent"
+                );
+
+            }
+
+        }
+
+    }
+
+
+    updateLowList(month);
+
+}
+
+
+/* =================================================
+   LOW ATTENDANCE
+================================================= */
+
+function updateLowList(month){
+
+    const box =
+        document.getElementById(
+
+            "low-list-" +
+            month
+
+        );
+
+
+    if(!box) return;
+
+
+    let html = "";
+
+
+    students.forEach(function(student){
+
+        const data =
+
+            attendance[student.id] &&
+
+            attendance[student.id][month]
+
+            ?
+
+            attendance[student.id][month]
+
+            :
+
+            {};
+
+
+        let p = 0;
+
+        let a = 0;
+
+
+        Object.values(data)
+            .forEach(function(status){
+
+                if(status === "P"){
+
+                    p++;
+
+                }
+
+
+                if(status === "A"){
+
+                    a++;
+
+                }
+
+            });
+
+
+        const total =
+            p + a;
+
+
+        if(total > 0){
+
+            const percent =
+                (p / total) * 100;
+
+
+            if(percent < 50){
+
+                html +=
+
+                    "<p>🔴 <b>" +
+
+                    escapeHTML(
+                        student.name
+                    ) +
+
+                    "</b> — " +
+
+                    percent.toFixed(1) +
+
+                    "%</p>";
+
+            }
+
+        }
+
+    });
+
+
+    if(html === ""){
+
+        box.innerHTML =
+
+            "<h3>⚠️ कम Attendance वाले Students</h3>" +
+
+            "<p>अभी कोई Student 50% से कम नहीं है।</p>";
+
+    }else{
+
+        box.innerHTML =
+
+            "<h3>⚠️ कम Attendance वाले Students</h3>" +
+
+            html;
+
+    }
+
+}
+
+
+/* =================================================
+   RENDER ALL MONTHS
+================================================= */
+
+function renderMonths(){
+
+    const container =
+        document.getElementById(
+            "months"
+        );
+
+
+    let html = "";
+
+
+    for(
+
+        let month = 0;
+
+        month < 12;
+
+        month++
+
+    ){
+
+        html +=
+            renderMonth(month);
+
+    }
+
+
+    container.innerHTML =
+        html;
+
+
+    for(
+
+        let month = 0;
+
+        month < 12;
+
+        month++
+
+    ){
+
+        updateLowList(month);
+
+    }
+
+}
+
+
+/* =================================================
+   RENDER MONTH
+================================================= */
+
+function renderMonth(month){
+
+    const days =
+        getDays(month);
+
+
+    let html = `
+
+        <div class="month-card">
+
+            <div class="month-title">
+
+                <h2>
+                    📅 ${monthNames[month]}
+                </h2>
+
+                <button
+                    class="pdf-btn"
+                    onclick="downloadPDF(${month})"
+                >
+                    📥 Download PDF
+                </button>
+
+            </div>
+
+            <div class="table-box">
+
+                <table class="attendance-table">
+
+                    <thead>
+
+                        <tr>
+
+                            <th class="name-head">
+                                Student Name
+                            </th>
+
+    `;
+
+
+    for(
+
+        let day = 1;
+
+        day <= days;
+
+        day++
+
+    ){
+
+        html +=
+
+            `<th>${day}</th>`;
+
+    }
+
+
+    html += `
+
+                            <th class="summary-head">
+                                Present
+                            </th>
+
+                            <th class="summary-head">
+                                Absent
+                            </th>
+
+                            <th class="summary-head">
+                                Attendance %
+                            </th>
+
+                            <th class="summary-head">
+                                Delete
+                            </th>
+
+                        </tr>
+
+                    </thead>
+
+                    <tbody>
+
+    `;
+
+
+    if(students.length === 0){
+
+        html += `
+
+            <tr>
+
+                <td
+                    colspan="${days + 5}"
+                    class="empty"
+                >
+                    👨‍🎓 ऊपर Student Add करें
+                </td>
+
+            </tr>
+
+        `;
+
+    }else{
+
+
+        students.forEach(function(student){
+
+            const id =
+                student.id;
+
+
+            const data =
+
+                attendance[id] &&
+
+                attendance[id][month]
+
+                ?
+
+                attendance[id][month]
+
+                :
+
+                {};
+
+
+            let present = 0;
+
+            let absent = 0;
+
+
+            Object.values(data)
+                .forEach(function(status){
+
+                    if(status === "P"){
+
+                        present++;
+
+                    }
+
+
+                    if(status === "A"){
+
+                        absent++;
+
+                    }
+
+                });
+
+
+            const total =
+                present + absent;
+
+
+            const percentage =
+
+                total > 0
+
+                ?
+
+                (present / total) * 100
+
+                :
+
+                0;
+
+
+            let percentClass = "";
+
+
+            if(total > 0){
+
+                if(percentage >= 100){
+
+                    percentClass = "full";
+
+                }
+                else if(percentage >= 50){
+
+                    percentClass = "medium";
+
+                }
+                else{
+
+                    percentClass = "low";
+
+                }
+
+            }
+
+
+            html += `
+
+                <tr
+                    id="row-${month}-${id}"
+                >
+
+                    <td class="name-cell">
+
+                        <input
+                            class="name-input"
+                            value="${escapeAttribute(student.name)}"
+                            onchange="changeName('${id}',this.value)"
+                        >
+
+                    </td>
+
+            `;
+
+
+            for(
+
+                let day = 1;
+
+                day <= days;
+
+                day++
+
+            ){
+
+                const current =
+                    data[day];
+
+
+                html += `
+
+                    <td>
+
+                        <button
+                            id="att-${month}-${id}-${day}-P"
+                            class="att-btn ${
+                                current === "P"
+                                ? "present"
+                                : ""
+                            }"
+                            onclick="setAttendance(
+                                '${id}',
+                                ${month},
+                                ${day},
+                                'P'
+                            )"
+                        >
+                            P
+                        </button>
+
+                        <button
+                            id="att-${month}-${id}-${day}-A"
+                            class="att-btn ${
+                                current === "A"
+                                ? "absent"
+                                : ""
+                            }"
+                            onclick="setAttendance(
+                                '${id}',
+                                ${month},
+                                ${day},
+                                'A'
+                            )"
+                        >
+                            A
+                        </button>
+
+                    </td>
+
+                `;
+
+            }
+
+
+            html += `
+
+                    <td
+                        id="present-${month}-${id}"
+                        class="present-count"
+                    >
+                        ${present}
+                    </td>
+
+                    <td
+                        id="absent-${month}-${id}"
+                        class="absent-count"
+                    >
+                        ${absent}
+                    </td>
+
+                    <td
+                        id="percent-${month}-${id}"
+                        class="percent ${percentClass}"
+                    >
+                        ${percentage.toFixed(1)}%
+                    </td>
+
+                    <td>
+
+                        <button
+                            class="delete-btn"
+                            onclick="deleteStudent('${id}')"
+                        >
+                            🗑️
+                        </button>
+
+                    </td>
+
+                </tr>
+
+            `;
+
+        });
+
+    }
+
+
+    html += `
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+            <div
+                class="low-list"
+                id="low-list-${month}"
+            >
+
+                <h3>
+                    ⚠️ कम Attendance वाले Students
+                </h3>
+
+                <p>
+                    अभी कोई Student 50% से कम नहीं है।
+                </p>
+
+            </div>
+
+        </div>
+
+    `;
+
+
+    return html;
+
+}
+
+
+/* =================================================
+   PDF DOWNLOAD
+================================================= */
+
+function downloadPDF(month){
+
+    if(
+        typeof window.jspdf === "undefined"
+    ){
+
+        alert(
+            "PDF Library load नहीं हुई। Internet ON करके दोबारा कोशिश करें।"
+        );
+
+        return;
+
+    }
+
+
+    const { jsPDF } =
+        window.jspdf;
+
+
+    const doc =
+        new jsPDF({
+
+            orientation:"landscape",
+
+            unit:"mm",
+
+            format:"a4"
+
+        });
+
+
+    doc.setFontSize(18);
+
+
+    doc.text(
+
+        "School Attendance - " +
+        monthNames[month],
+
+        14,
+
+        15
+
+    );
+
+
+    const days =
+        getDays(month);
+
+
+    const head = [
+
+        "Student"
+
+    ];
+
+
+    for(
+
+        let day = 1;
+
+        day <= days;
+
+        day++
+
+    ){
+
+        head.push(
+            String(day)
+        );
+
+    }
+
+
+    head.push(
+
+        "Present",
+
+        "Absent",
+
+        "Attendance %"
+
+    );
+
+
+    const body = [];
+
+
+    students.forEach(function(student){
+
+        const data =
+
+            attendance[student.id] &&
+
+            attendance[student.id][month]
+
+            ?
+
+            attendance[student.id][month]
+
+            :
+
+            {};
+
+
+        let present = 0;
+
+        let absent = 0;
+
+
+        const row = [
+
+            student.name
+
+        ];
+
+
+        for(
+
+            let day = 1;
+
+            day <= days;
+
+            day++
+
+        ){
+
+            const status =
+                data[day] || "";
+
+
+            row.push(status);
+
+
+            if(status === "P"){
+
+                present++;
+
+            }
+
+
+            if(status === "A"){
+
+                absent++;
+
+            }
+
+        }
+
+
+        const total =
+            present + absent;
+
+
+        const percentage =
+
+            total > 0
+
+            ?
+
+            (present / total) * 100
+
+            :
+
+            0;
+
+
+        row.push(
+
+            String(present),
+
+            String(absent),
+
+            percentage.toFixed(1) +
+            "%"
+
+        );
+
+
+        body.push(row);
+
+    });
+
+
+    if(
+        typeof doc.autoTable !== "function"
+    ){
+
+        alert(
+            "PDF Table Library load नहीं हुई। Internet ON करके दोबारा कोशिश करें।"
+        );
+
+        return;
+
+    }
+
+
+    doc.autoTable({
+
+        head:[head],
+
+        body:body,
+
+        startY:22,
+
+        styles:{
+
+            fontSize:6,
+
+            cellPadding:1.5
+
+        },
+
+        headStyles:{
+
+            fontSize:6
+
+        }
+
+    });
+
+
+    doc.save(
+
+        "School-Attendance-" +
+
+        monthNames[month] +
+
+        "-" +
+
+        new Date().getFullYear() +
+
+        ".pdf"
+
+    );
+
+}
+
+
+/* =================================================
+   SECURITY
+================================================= */
+
+function escapeHTML(text){
+
+    return String(text)
+
+        .replace(/&/g,"&amp;")
+
+        .replace(/</g,"&lt;")
+
+        .replace(/>/g,"&gt;")
+
+        .replace(/"/g,"&quot;")
+
+        .replace(/'/g,"&#039;");
+
+}
+
+
+function escapeAttribute(text){
+
+    return escapeHTML(text);
+
+}
+
+
+/* =================================================
+   ENTER KEY
+================================================= */
+
+document
+    .getElementById("studentName")
+    .addEventListener(
+
+        "keydown",
+
+        function(event){
+
+            if(event.key === "Enter"){
+
+                addStudent();
+
+            }
+
+        }
+
+    );
+
+
+/* =================================================
+   START
+================================================= */
+
+loadData();
+
+renderMonths();
+
+</script>
+
+</body>
+</html>
