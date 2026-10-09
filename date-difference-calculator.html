@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Date Difference Calculator |tool sathi</title>
+
+<style>
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+}
+
+body{
+    font-family:Arial,"Noto Sans Devanagari",sans-serif;
+    background:linear-gradient(135deg,#eef4ff,#fff0f8);
+    color:#172033;
+    min-height:100vh;
+}
+
+header{
+    background:linear-gradient(135deg,#2878f0,#7138e8);
+    color:white;
+    text-align:center;
+    padding:26px 15px;
+    box-shadow:0 5px 20px rgba(0,0,0,.15);
+}
+
+header h1{
+    font-size:28px;
+    margin-bottom:7px;
+}
+
+header p{
+    font-size:14px;
+}
+
+.container{
+    max-width:1000px;
+    margin:25px auto;
+    padding:0 15px;
+}
+
+.card{
+    background:white;
+    border-radius:22px;
+    padding:22px;
+    box-shadow:0 8px 25px rgba(40,70,120,.12);
+    border:1px solid #e7ebfa;
+}
+
+.card h2{
+    color:#1768d5;
+    font-size:20px;
+    margin-bottom:20px;
+}
+
+.date-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:18px;
+}
+
+.date-box{
+    background:#f7f9ff;
+    border:1px solid #e3e9ff;
+    padding:18px;
+    border-radius:17px;
+}
+
+.date-box label{
+    display:block;
+    font-weight:bold;
+    font-size:14px;
+    margin-bottom:9px;
+}
+
+.date-box input{
+    width:100%;
+    padding:14px;
+    border:2px solid #dfe6f5;
+    border-radius:12px;
+    background:white;
+    font-size:16px;
+    outline:none;
+}
+
+.date-box input:focus{
+    border-color:#2878f0;
+    box-shadow:0 0 0 3px rgba(40,120,240,.1);
+}
+
+.button-row{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:10px;
+    margin-top:20px;
+}
+
+.calculate{
+    border:none;
+    padding:14px;
+    border-radius:13px;
+    background:linear-gradient(135deg,#2878f0,#7138e8);
+    color:white;
+    font-size:16px;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+.reset{
+    border:none;
+    padding:14px;
+    border-radius:13px;
+    background:#eef1f6;
+    color:#333;
+    font-size:16px;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+.result{
+    display:none;
+    margin-top:22px;
+}
+
+.result-grid{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:12px;
+}
+
+.result-box{
+    text-align:center;
+    background:linear-gradient(135deg,#f5f8ff,#faf5ff);
+    border:1px solid #e3e9ff;
+    border-radius:17px;
+    padding:18px 10px;
+}
+
+.result-box h3{
+    color:#666;
+    font-size:13px;
+    margin-bottom:8px;
+}
+
+.result-box .value{
+    color:#1768d5;
+    font-size:25px;
+    font-weight:bold;
+}
+
+.main-result{
+    grid-column:1 / -1;
+    background:#edfff5;
+    border-color:#bcebd0;
+}
+
+.main-result .value{
+    color:#159447;
+    font-size:32px;
+}
+
+.summary{
+    margin-top:14px;
+    padding:15px;
+    background:#f6f8fc;
+    border-radius:14px;
+    text-align:center;
+    line-height:1.8;
+    font-size:14px;
+}
+
+.info{
+    margin-top:20px;
+    background:white;
+    border-radius:20px;
+    padding:20px;
+    box-shadow:0 6px 20px rgba(40,70,120,.08);
+}
+
+.info h3{
+    color:#1768d5;
+    margin-bottom:10px;
+}
+
+.info p{
+    color:#555;
+    font-size:14px;
+    line-height:1.8;
+}
+
+footer{
+    text-align:center;
+    padding:25px 15px;
+    color:#666;
+    font-size:13px;
+}
+
+@media(max-width:800px){
+
+    .result-grid{
+        grid-template-columns:repeat(2,1fr);
+    }
+}
+
+@media(max-width:600px){
+
+    header h1{
+        font-size:23px;
+    }
+
+    .container{
+        padding:0 10px;
+        margin:18px auto;
+    }
+
+    .card{
+        padding:17px;
+        border-radius:18px;
+    }
+
+    .date-grid{
+        grid-template-columns:1fr;
+    }
+
+    .result-grid{
+        grid-template-columns:1fr 1fr;
+    }
+
+    .button-row{
+        grid-template-columns:1fr;
+    }
+
+    .main-result{
+        grid-column:1 / -1;
+    }
+
+    .main-result .value{
+        font-size:28px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <h1>📅 Date Difference Calculator</h1>
+    <p>दो तारीखों के बीच का अंतर आसानी से निकालें</p>
+</header>
+
+<div class="container">
+
+<div class="card">
+
+<h2>📆 तारीख चुनें</h2>
+
+<div class="date-grid">
+
+<div class="date-box">
+<label>🟢 पहली तारीख</label>
+<input type="date" id="startDate">
+</div>
+
+<div class="date-box">
+<label>🔵 दूसरी तारीख</label>
+<input type="date" id="endDate">
+</div>
+
+</div>
+
+<div class="button-row">
+
+<button class="calculate" onclick="calculateDifference()">
+🧮 Calculate
+</button>
+
+<button class="reset" onclick="resetCalculator()">
+🔄 Reset
+</button>
+
+</div>
+
+
+<div id="result" class="result">
+
+<div class="result-grid">
+
+<div class="result-box main-result">
+<h3>📅 कुल अंतर</h3>
+<div class="value" id="totalDays">0 दिन</div>
+</div>
+
+<div class="result-box">
+<h3>📆 साल</h3>
+<div class="value" id="years">0</div>
+</div>
+
+<div class="result-box">
+<h3>🗓️ महीने</h3>
+<div class="value" id="months">0</div>
+</div>
+
+<div class="result-box">
+<h3>📅 सप्ताह</h3>
+<div class="value" id="weeks">0</div>
+</div>
+
+<div class="result-box">
+<h3>☀️ दिन</h3>
+<div class="value" id="days">0</div>
+</div>
+
+</div>
+
+<div class="summary" id="summary"></div>
+
+</div>
+
+</div>
+
+
+<div class="info">
+
+<h3>📚 Date Difference क्या है?</h3>
+
+<p>
+यह Calculator दो तारीखों के बीच का अंतर निकालता है।
+आपको कुल <b>दिन</b>, <b>सप्ताह</b> और
+Calendar के अनुसार <b>साल + महीने + दिन</b> का अंतर दिखाई देगा।
+</p>
+
+</div>
+
+</div>
+
+<footer>
+© 2026 tool sathi • Date Difference Calculator
+</footer>
+
+
+<script>
+
+/* आज की तारीख */
+
+function getToday(){
+
+    const today = new Date();
+
+    const year = today.getFullYear();
+
+    const month = String(today.getMonth()+1).padStart(2,"0");
+
+    const day = String(today.getDate()).padStart(2,"0");
+
+    return `${year}-${month}-${day}`;
+}
+
+
+/* Difference Calculate */
+
+function calculateDifference(){
+
+    const startValue =
+        document.getElementById("startDate").value;
+
+    const endValue =
+        document.getElementById("endDate").value;
+
+    if(!startValue || !endValue){
+
+        alert("कृपया दोनों तारीखें चुनें।");
+
+        return;
+    }
+
+
+    const start = new Date(startValue + "T00:00:00");
+
+    const end = new Date(endValue + "T00:00:00");
+
+
+    if(start > end){
+
+        alert("पहली तारीख दूसरी तारीख से पहले होनी चाहिए।");
+
+        return;
+    }
+
+
+    /* Total Days */
+
+    const difference =
+        end.getTime() - start.getTime();
+
+    const totalDays =
+        Math.round(difference / (1000*60*60*24));
+
+
+    /* Weeks */
+
+    const weeks =
+        Math.floor(totalDays / 7);
+
+    const remainingDays =
+        totalDays % 7;
+
+
+    /* Calendar Difference */
+
+    let y =
+        end.getFullYear() - start.getFullYear();
+
+    let m =
+        end.getMonth() - start.getMonth();
+
+    let d =
+        end.getDate() - start.getDate();
+
+
+    if(d < 0){
+
+        m--;
+
+        const previousMonth =
+            new Date(
+                end.getFullYear(),
+                end.getMonth(),
+                0
+            );
+
+        d += previousMonth.getDate();
+    }
+
+
+    if(m < 0){
+
+        y--;
+
+        m += 12;
+    }
+
+
+    document.getElementById("totalDays").textContent =
+        totalDays + " दिन";
+
+    document.getElementById("years").textContent =
+        y + " साल";
+
+    document.getElementById("months").textContent =
+        m + " महीने";
+
+    document.getElementById("weeks").textContent =
+        weeks + " सप्ताह";
+
+    document.getElementById("days").textContent =
+        remainingDays + " दिन";
+
+
+    document.getElementById("summary").innerHTML =
+        "📌 दोनों तारीखों के बीच <b>" +
+        y + " साल, " +
+        m + " महीने और " +
+        d + " दिन</b> का Calendar अंतर है।" +
+        "<br>" +
+        "कुल अंतर: <b>" +
+        totalDays +
+        " दिन</b> (" +
+        weeks +
+        " सप्ताह और " +
+        remainingDays +
+        " दिन)";
+
+
+    document.getElementById("result").style.display =
+        "block";
+}
+
+
+/* Reset */
+
+function resetCalculator(){
+
+    document.getElementById("startDate").value = "";
+
+    document.getElementById("endDate").value = "";
+
+    document.getElementById("result").style.display =
+        "none";
+}
+
+
+/* Enter today's date by default */
+
+document.getElementById("endDate").value = getToday();
+
+</script>
+
+</body>
+</html>
