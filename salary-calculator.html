@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Salary Calculator | Tool Sathi</title>
+
+<style>
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+}
+
+body{
+    font-family:Arial,"Noto Sans Devanagari",sans-serif;
+    background:linear-gradient(135deg,#eef4ff,#fff1f8);
+    color:#172033;
+    min-height:100vh;
+}
+
+header{
+    background:linear-gradient(135deg,#2878f0,#7138e8);
+    color:white;
+    text-align:center;
+    padding:25px 15px;
+    box-shadow:0 5px 20px rgba(0,0,0,.15);
+}
+
+header h1{
+    font-size:28px;
+    margin-bottom:7px;
+}
+
+header p{
+    font-size:14px;
+}
+
+.container{
+    max-width:1100px;
+    margin:25px auto;
+    padding:0 15px;
+}
+
+.main-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:20px;
+}
+
+.card{
+    background:white;
+    border-radius:22px;
+    padding:22px;
+    box-shadow:0 8px 25px rgba(40,70,120,.12);
+    border:1px solid #e7ebfa;
+}
+
+.card h2{
+    color:#1768d5;
+    font-size:20px;
+    margin-bottom:20px;
+}
+
+.input-group{
+    margin-bottom:15px;
+}
+
+.input-group label{
+    display:block;
+    font-size:14px;
+    font-weight:bold;
+    margin-bottom:7px;
+}
+
+.input-group input{
+    width:100%;
+    padding:13px;
+    border:2px solid #e1e7f5;
+    border-radius:13px;
+    font-size:16px;
+    outline:none;
+}
+
+.input-group input:focus{
+    border-color:#2878f0;
+    box-shadow:0 0 0 3px rgba(40,120,240,.1);
+}
+
+.quick-title{
+    font-size:13px;
+    color:#666;
+    font-weight:bold;
+    margin:12px 0 8px;
+}
+
+.quick-buttons{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:8px;
+}
+
+.quick-buttons button{
+    border:none;
+    padding:9px 5px;
+    border-radius:10px;
+    background:#edf4ff;
+    color:#1768d5;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+.quick-buttons button:hover{
+    background:#2878f0;
+    color:white;
+}
+
+.button-row{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:10px;
+    margin-top:20px;
+}
+
+.calculate{
+    border:none;
+    padding:14px;
+    border-radius:13px;
+    background:linear-gradient(135deg,#2878f0,#7138e8);
+    color:white;
+    font-size:16px;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+.reset{
+    border:none;
+    padding:14px;
+    border-radius:13px;
+    background:#eef1f6;
+    color:#333;
+    font-size:16px;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+.result{
+    display:none;
+}
+
+.result-box{
+    background:linear-gradient(135deg,#f5f8ff,#faf5ff);
+    border:1px solid #e3e9ff;
+    border-radius:16px;
+    padding:15px;
+    margin-bottom:10px;
+}
+
+.result-box h3{
+    color:#666;
+    font-size:13px;
+    margin-bottom:5px;
+}
+
+.result-box .value{
+    font-size:22px;
+    font-weight:bold;
+    color:#1768d5;
+}
+
+.gross{
+    background:#edfff5;
+    border-color:#bcebd0;
+}
+
+.gross .value{
+    color:#159447;
+}
+
+.deduction{
+    background:#fff1f1;
+    border-color:#ffcaca;
+}
+
+.deduction .value{
+    color:#d93636;
+}
+
+.net{
+    background:linear-gradient(135deg,#fff7df,#fff0c7);
+    border-color:#f1d88a;
+}
+
+.net .value{
+    color:#a66b00;
+    font-size:27px;
+}
+
+.summary{
+    background:#f6f8fc;
+    border-radius:14px;
+    padding:15px;
+    line-height:1.8;
+    font-size:14px;
+    margin-top:12px;
+}
+
+.info{
+    background:white;
+    margin-top:20px;
+    padding:20px;
+    border-radius:20px;
+    box-shadow:0 6px 20px rgba(40,70,120,.08);
+}
+
+.info h3{
+    color:#1768d5;
+    margin-bottom:10px;
+}
+
+.info p{
+    color:#555;
+    font-size:14px;
+    line-height:1.8;
+}
+
+footer{
+    text-align:center;
+    padding:25px 15px;
+    color:#666;
+    font-size:13px;
+}
+
+@media(max-width:800px){
+    .main-grid{
+        grid-template-columns:1fr;
+    }
+}
+
+@media(max-width:500px){
+
+    header h1{
+        font-size:23px;
+    }
+
+    .container{
+        padding:0 10px;
+        margin:18px auto;
+    }
+
+    .card{
+        padding:17px;
+        border-radius:18px;
+    }
+
+    .quick-buttons{
+        grid-template-columns:repeat(2,1fr);
+    }
+
+    .button-row{
+        grid-template-columns:1fr;
+    }
+
+    .net .value{
+        font-size:24px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <h1>💼 Salary Calculator</h1>
+    <p>अपनी Gross और अनुमानित In-Hand Salary निकालें</p>
+</header>
+
+<div class="container">
+
+<div class="main-grid">
+
+<!-- INPUT -->
+<div class="card">
+
+<h2>💰 Salary Details</h2>
+
+<div class="input-group">
+<label>Basic Salary</label>
+<input type="number" id="basic" placeholder="जैसे 25000" min="0">
+</div>
+
+<div class="quick-title">Quick Basic Salary</div>
+
+<div class="quick-buttons">
+<button onclick="setValue('basic',15000)">₹15K</button>
+<button onclick="setValue('basic',25000)">₹25K</button>
+<button onclick="setValue('basic',50000)">₹50K</button>
+<button onclick="setValue('basic',75000)">₹75K</button>
+</div>
+
+
+<div class="input-group" style="margin-top:18px;">
+<label>HRA (%)</label>
+<input type="number" id="hra" value="20" min="0">
+</div>
+
+<div class="input-group">
+<label>DA (%)</label>
+<input type="number" id="da" value="10" min="0">
+</div>
+
+<div class="input-group">
+<label>Other Allowance (%)</label>
+<input type="number" id="other" value="5" min="0">
+</div>
+
+<div class="input-group">
+<label>PF (%)</label>
+<input type="number" id="pf" value="12" min="0">
+</div>
+
+<div class="input-group">
+<label>Other Deduction (%)</label>
+<input type="number" id="deduction" value="0" min="0">
+</div>
+
+<div class="button-row">
+
+<button class="calculate" onclick="calculateSalary()">
+🧮 Calculate
+</button>
+
+<button class="reset" onclick="resetSalary()">
+🔄 Reset
+</button>
+
+</div>
+
+</div>
+
+
+<!-- RESULT -->
+<div class="card">
+
+<h2>📊 Salary Result</h2>
+
+<div id="empty">
+
+<div class="result-box">
+<h3>📌 परिणाम</h3>
+<p style="color:#666;line-height:1.7;">
+Salary details भरकर <b>Calculate</b> बटन दबाएँ।
+</p>
+</div>
+
+</div>
+
+
+<div id="result" class="result">
+
+<div class="result-box">
+<h3>Basic Salary</h3>
+<div class="value" id="showBasic">₹0</div>
+</div>
+
+<div class="result-box">
+<h3>HRA</h3>
+<div class="value" id="showHra">₹0</div>
+</div>
+
+<div class="result-box">
+<h3>DA</h3>
+<div class="value" id="showDa">₹0</div>
+</div>
+
+<div class="result-box">
+<h3>Other Allowance</h3>
+<div class="value" id="showOther">₹0</div>
+</div>
+
+<div class="result-box gross">
+<h3>Gross Salary</h3>
+<div class="value" id="showGross">₹0</div>
+</div>
+
+<div class="result-box deduction">
+<h3>Total Deduction</h3>
+<div class="value" id="showDeduction">₹0</div>
+</div>
+
+<div class="result-box net">
+<h3>Estimated In-Hand Salary</h3>
+<div class="value" id="showNet">₹0</div>
+</div>
+
+<div class="summary" id="summary"></div>
+
+</div>
+
+</div>
+
+</div>
+
+
+<div class="info">
+
+<h3>📚 Salary Calculation</h3>
+
+<p>
+<b>HRA</b> = Basic Salary × HRA% ÷ 100
+<br>
+<b>DA</b> = Basic Salary × DA% ÷ 100
+<br>
+<b>Other Allowance</b> = Basic Salary × Other Allowance% ÷ 100
+<br>
+<b>Gross Salary</b> = Basic + HRA + DA + Other Allowance
+<br>
+<b>PF</b> = Basic Salary × PF% ÷ 100
+<br>
+<b>In-Hand Salary</b> = Gross Salary − Total Deduction
+</p>
+
+</div>
+
+</div>
+
+<footer>
+© 2026 Tool Sathi • Salary Calculator
+</footer>
+
+
+<script>
+
+function setValue(id,value){
+    document.getElementById(id).value=value;
+}
+
+function money(value){
+    return "₹" + value.toLocaleString("en-IN",{
+        minimumFractionDigits:2,
+        maximumFractionDigits:2
+    });
+}
+
+function calculateSalary(){
+
+    const basic=parseFloat(document.getElementById("basic").value);
+
+    const hraPercent=parseFloat(document.getElementById("hra").value) || 0;
+    const daPercent=parseFloat(document.getElementById("da").value) || 0;
+    const otherPercent=parseFloat(document.getElementById("other").value) || 0;
+    const pfPercent=parseFloat(document.getElementById("pf").value) || 0;
+    const deductionPercent=parseFloat(document.getElementById("deduction").value) || 0;
+
+    if(isNaN(basic) || basic<=0){
+        alert("कृपया Basic Salary दर्ज करें।");
+        return;
+    }
+
+    if(
+        hraPercent<0 ||
+        daPercent<0 ||
+        otherPercent<0 ||
+        pfPercent<0 ||
+        deductionPercent<0
+    ){
+        alert("कृपया सही प्रतिशत दर्ज करें।");
+        return;
+    }
+
+    const hra=basic*hraPercent/100;
+    const da=basic*daPercent/100;
+    const other=basic*otherPercent/100;
+
+    const gross=basic+hra+da+other;
+
+    const pf=basic*pfPercent/100;
+    const otherDeduction=basic*deductionPercent/100;
+
+    const totalDeduction=pf+otherDeduction;
+
+    const net=gross-totalDeduction;
+
+
+    document.getElementById("showBasic").textContent=money(basic);
+    document.getElementById("showHra").textContent=money(hra);
+    document.getElementById("showDa").textContent=money(da);
+    document.getElementById("showOther").textContent=money(other);
+
+    document.getElementById("showGross").textContent=money(gross);
+
+    document.getElementById("showDeduction").textContent=
+        money(totalDeduction);
+
+    document.getElementById("showNet").textContent=
+        money(net);
+
+
+    document.getElementById("summary").innerHTML=
+
+        "💰 <b>Salary Summary</b><br><br>" +
+
+        "Basic Salary: " + money(basic) + "<br>" +
+
+        "Total Allowances: " +
+        money(hra+da+other) + "<br>" +
+
+        "Gross Salary: " +
+        "<b>" + money(gross) + "</b><br>" +
+
+        "PF Deduction: " +
+        money(pf) + "<br>" +
+
+        "Other Deduction: " +
+        money(otherDeduction) + "<br>" +
+
+        "Total Deduction: " +
+        "<b>" + money(totalDeduction) + "</b><br><br>" +
+
+        "🏠 Estimated In-Hand Salary: " +
+        "<b>" + money(net) + "</b>";
+
+
+    document.getElementById("empty").style.display="none";
+    document.getElementById("result").style.display="block";
+}
+
+
+function resetSalary(){
+
+    document.getElementById("basic").value="";
+
+    document.getElementById("hra").value="20";
+    document.getElementById("da").value="10";
+    document.getElementById("other").value="5";
+    document.getElementById("pf").value="12";
+    document.getElementById("deduction").value="0";
+
+    document.getElementById("result").style.display="none";
+    document.getElementById("empty").style.display="block";
+}
+
+</script>
+
+</body>
+</html>
