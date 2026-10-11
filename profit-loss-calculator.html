@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Profit & Loss Calculator | Tool Sathi</title>
+
+<style>
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+}
+
+body{
+    font-family:Arial,"Noto Sans Devanagari",sans-serif;
+    background:linear-gradient(135deg,#eef4ff,#fff0f8);
+    color:#172033;
+    min-height:100vh;
+}
+
+header{
+    background:linear-gradient(135deg,#2878f0,#7138e8);
+    color:white;
+    padding:25px 15px;
+    text-align:center;
+    box-shadow:0 5px 20px rgba(0,0,0,.15);
+}
+
+header h1{
+    font-size:28px;
+    margin-bottom:7px;
+}
+
+header p{
+    font-size:14px;
+    opacity:.95;
+}
+
+.container{
+    max-width:1050px;
+    margin:25px auto;
+    padding:0 15px;
+}
+
+.main-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:20px;
+}
+
+.card{
+    background:white;
+    border-radius:22px;
+    padding:22px;
+    box-shadow:0 8px 25px rgba(40,70,120,.12);
+    border:1px solid #e8edff;
+}
+
+.card h2{
+    font-size:20px;
+    color:#1768d5;
+    margin-bottom:18px;
+}
+
+.input-group{
+    margin-bottom:16px;
+}
+
+.input-group label{
+    display:block;
+    font-weight:bold;
+    font-size:14px;
+    margin-bottom:7px;
+}
+
+.input-group input{
+    width:100%;
+    padding:14px;
+    border:2px solid #e1e7f5;
+    border-radius:13px;
+    font-size:16px;
+    outline:none;
+    transition:.2s;
+}
+
+.input-group input:focus{
+    border-color:#2878f0;
+    box-shadow:0 0 0 3px rgba(40,120,240,.1);
+}
+
+.quick-title{
+    font-size:13px;
+    font-weight:bold;
+    margin:14px 0 8px;
+    color:#555;
+}
+
+.quick-buttons{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:8px;
+}
+
+.quick-buttons button{
+    border:none;
+    padding:10px 5px;
+    border-radius:10px;
+    background:#edf4ff;
+    color:#1768d5;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+.quick-buttons button:hover{
+    background:#2878f0;
+    color:white;
+}
+
+.button-row{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:10px;
+    margin-top:20px;
+}
+
+.calculate{
+    border:none;
+    padding:14px;
+    border-radius:13px;
+    background:linear-gradient(135deg,#2878f0,#7138e8);
+    color:white;
+    font-size:16px;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+.reset{
+    border:none;
+    padding:14px;
+    border-radius:13px;
+    background:#eef1f6;
+    color:#333;
+    font-size:16px;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+.result{
+    display:none;
+}
+
+.result-box{
+    border-radius:18px;
+    padding:18px;
+    margin-bottom:12px;
+    background:linear-gradient(135deg,#f5f8ff,#faf5ff);
+    border:1px solid #e4eaff;
+}
+
+.result-box h3{
+    font-size:14px;
+    color:#666;
+    margin-bottom:5px;
+}
+
+.result-box .value{
+    font-size:25px;
+    font-weight:bold;
+    color:#1768d5;
+}
+
+.profit{
+    background:#edfff5;
+    border-color:#bcebd0;
+}
+
+.profit .value{
+    color:#159447;
+}
+
+.loss{
+    background:#fff1f1;
+    border-color:#ffcaca;
+}
+
+.loss .value{
+    color:#d93636;
+}
+
+.equal{
+    background:#fff9e8;
+    border-color:#f4df9b;
+}
+
+.equal .value{
+    color:#b47a00;
+}
+
+.summary{
+    margin-top:15px;
+    padding:15px;
+    border-radius:14px;
+    background:#f6f8fc;
+    line-height:1.8;
+    font-size:14px;
+}
+
+.info{
+    margin-top:20px;
+    background:white;
+    border-radius:18px;
+    padding:18px;
+    box-shadow:0 5px 18px rgba(40,70,120,.08);
+}
+
+.info h3{
+    color:#1768d5;
+    margin-bottom:10px;
+}
+
+.info p{
+    font-size:14px;
+    line-height:1.8;
+    color:#555;
+}
+
+footer{
+    text-align:center;
+    padding:25px 15px;
+    color:#666;
+    font-size:13px;
+}
+
+/* Tablet */
+@media(max-width:800px){
+    .main-grid{
+        grid-template-columns:1fr;
+    }
+}
+
+/* Mobile */
+@media(max-width:500px){
+    header h1{
+        font-size:23px;
+    }
+
+    .container{
+        margin:18px auto;
+        padding:0 10px;
+    }
+
+    .card{
+        padding:17px;
+        border-radius:18px;
+    }
+
+    .quick-buttons{
+        grid-template-columns:repeat(2,1fr);
+    }
+
+    .button-row{
+        grid-template-columns:1fr;
+    }
+
+    .result-box .value{
+        font-size:22px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <h1>📊 Profit & Loss Calculator</h1>
+    <p>लाभ और हानि की गणना आसानी से करें</p>
+</header>
+
+<div class="container">
+
+    <div class="main-grid">
+
+        <!-- INPUT CARD -->
+        <div class="card">
+
+            <h2>💰 जानकारी भरें</h2>
+
+            <div class="input-group">
+                <label>क्रय मूल्य (Cost Price)</label>
+                <input
+                    type="number"
+                    id="costPrice"
+                    placeholder="जैसे 1000"
+                    min="0"
+                    step="0.01"
+                >
+            </div>
+
+            <div class="quick-title">क्रय मूल्य चुनें</div>
+
+            <div class="quick-buttons">
+                <button onclick="setCost(500)">₹500</button>
+                <button onclick="setCost(1000)">₹1000</button>
+                <button onclick="setCost(5000)">₹5000</button>
+                <button onclick="setCost(10000)">₹10000</button>
+            </div>
+
+            <div class="input-group" style="margin-top:18px;">
+                <label>विक्रय मूल्य (Selling Price)</label>
+                <input
+                    type="number"
+                    id="sellingPrice"
+                    placeholder="जैसे 1200"
+                    min="0"
+                    step="0.01"
+                >
+            </div>
+
+            <div class="quick-title">विक्रय मूल्य चुनें</div>
+
+            <div class="quick-buttons">
+                <button onclick="setSelling(600)">₹600</button>
+                <button onclick="setSelling(1200)">₹1200</button>
+                <button onclick="setSelling(6000)">₹6000</button>
+                <button onclick="setSelling(12000)">₹12000</button>
+            </div>
+
+            <div class="button-row">
+                <button class="calculate" onclick="calculateProfitLoss()">
+                    🧮 Calculate
+                </button>
+
+                <button class="reset" onclick="resetCalculator()">
+                    🔄 Reset
+                </button>
+            </div>
+
+        </div>
+
+
+        <!-- RESULT CARD -->
+        <div class="card">
+
+            <h2>📈 Result</h2>
+
+            <div id="emptyMessage">
+                <div class="result-box">
+                    <h3>📌 परिणाम</h3>
+                    <p style="color:#666;line-height:1.7;">
+                        क्रय मूल्य और विक्रय मूल्य भरकर
+                        <b>Calculate</b> बटन दबाएँ।
+                    </p>
+                </div>
+            </div>
+
+            <div id="result" class="result">
+
+                <div id="statusBox" class="result-box">
+                    <h3 id="statusTitle">स्थिति</h3>
+                    <div class="value" id="statusValue">₹0</div>
+                </div>
+
+                <div class="result-box">
+                    <h3>क्रय मूल्य</h3>
+                    <div class="value" id="showCP">₹0</div>
+                </div>
+
+                <div class="result-box">
+                    <h3>विक्रय मूल्य</h3>
+                    <div class="value" id="showSP">₹0</div>
+                </div>
+
+                <div class="result-box">
+                    <h3 id="percentTitle">लाभ / हानि प्रतिशत</h3>
+                    <div class="value" id="percentValue">0%</div>
+                </div>
+
+                <div class="summary" id="summary"></div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- INFO -->
+    <div class="info">
+
+        <h3>📚 Profit & Loss Formula</h3>
+
+        <p>
+            <b>लाभ (Profit)</b> = विक्रय मूल्य − क्रय मूल्य
+            <br><br>
+
+            <b>हानि (Loss)</b> = क्रय मूल्य − विक्रय मूल्य
+            <br><br>
+
+            <b>लाभ %</b> = (लाभ ÷ क्रय मूल्य) × 100
+            <br><br>
+
+            <b>हानि %</b> = (हानि ÷ क्रय मूल्य) × 100
+        </p>
+
+    </div>
+
+</div>
+
+<footer>
+    © 2026 Tool Sathi • Profit & Loss Calculator
+</footer>
+
+
+<script>
+
+function setCost(value){
+    document.getElementById("costPrice").value = value;
+}
+
+function setSelling(value){
+    document.getElementById("sellingPrice").value = value;
+}
+
+function formatMoney(value){
+    return "₹" + value.toLocaleString("en-IN", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2
+    });
+}
+
+function calculateProfitLoss(){
+
+    const cp = parseFloat(document.getElementById("costPrice").value);
+    const sp = parseFloat(document.getElementById("sellingPrice").value);
+
+    if(isNaN(cp) || isNaN(sp)){
+        alert("कृपया क्रय मूल्य और विक्रय मूल्य दोनों भरें।");
+        return;
+    }
+
+    if(cp <= 0 || sp < 0){
+        alert("कृपया सही मूल्य दर्ज करें।");
+        return;
+    }
+
+    const difference = sp - cp;
+
+    document.getElementById("showCP").textContent = formatMoney(cp);
+    document.getElementById("showSP").textContent = formatMoney(sp);
+
+    const statusBox = document.getElementById("statusBox");
+    const statusTitle = document.getElementById("statusTitle");
+    const statusValue = document.getElementById("statusValue");
+
+    const percentTitle = document.getElementById("percentTitle");
+    const percentValue = document.getElementById("percentValue");
+
+    statusBox.className = "result-box";
+
+    if(difference > 0){
+
+        const profitPercent = (difference / cp) * 100;
+
+        statusBox.classList.add("profit");
+
+        statusTitle.textContent = "🟢 लाभ";
+        statusValue.textContent = formatMoney(difference);
+
+        percentTitle.textContent = "लाभ प्रतिशत";
+        percentValue.textContent = profitPercent.toFixed(2) + "%";
+
+        document.getElementById("summary").innerHTML =
+            "🎉 <b>लाभ हुआ है।</b><br>" +
+            "क्रय मूल्य: " + formatMoney(cp) + "<br>" +
+            "विक्रय मूल्य: " + formatMoney(sp) + "<br>" +
+            "कुल लाभ: <b>" + formatMoney(difference) + "</b>";
+
+    }else if(difference < 0){
+
+        const loss = Math.abs(difference);
+        const lossPercent = (loss / cp) * 100;
+
+        statusBox.classList.add("loss");
+
+        statusTitle.textContent = "🔴 हानि";
+        statusValue.textContent = formatMoney(loss);
+
+        percentTitle.textContent = "हानि प्रतिशत";
+        percentValue.textContent = lossPercent.toFixed(2) + "%";
+
+        document.getElementById("summary").innerHTML =
+            "⚠️ <b>हानि हुई है।</b><br>" +
+            "क्रय मूल्य: " + formatMoney(cp) + "<br>" +
+            "विक्रय मूल्य: " + formatMoney(sp) + "<br>" +
+            "कुल हानि: <b>" + formatMoney(loss) + "</b>";
+
+    }else{
+
+        statusBox.classList.add("equal");
+
+        statusTitle.textContent = "🟡 न लाभ, न हानि";
+        statusValue.textContent = "₹0";
+
+        percentTitle.textContent = "लाभ / हानि प्रतिशत";
+        percentValue.textContent = "0%";
+
+        document.getElementById("summary").innerHTML =
+            "⚖️ <b>न लाभ हुआ और न ही हानि।</b><br>" +
+            "क्रय मूल्य और विक्रय मूल्य दोनों समान हैं।";
+    }
+
+    document.getElementById("emptyMessage").style.display = "none";
+    document.getElementById("result").style.display = "block";
+}
+
+function resetCalculator(){
+
+    document.getElementById("costPrice").value = "";
+    document.getElementById("sellingPrice").value = "";
+
+    document.getElementById("result").style.display = "none";
+    document.getElementById("emptyMessage").style.display = "block";
+}
+
+</script>
+
+</body>
+</html>
