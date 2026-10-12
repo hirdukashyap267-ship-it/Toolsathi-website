@@ -1,0 +1,794 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>PIN Code Finder | Tool Sathi</title>
+
+<style>
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+}
+
+body{
+    font-family:Arial,"Noto Sans Devanagari",sans-serif;
+    background:linear-gradient(135deg,#eef4ff,#f8efff);
+    color:#172033;
+    min-height:100vh;
+}
+
+/* HEADER */
+.header{
+    background:linear-gradient(135deg,#2878f0,#7138e8);
+    color:white;
+    text-align:center;
+    padding:30px 15px;
+    box-shadow:0 6px 25px rgba(0,0,0,.15);
+}
+
+.header h1{
+    font-size:30px;
+    margin-bottom:8px;
+}
+
+.header p{
+    font-size:15px;
+}
+
+/* CONTAINER */
+.container{
+    width:100%;
+    max-width:1050px;
+    margin:30px auto;
+    padding:0 18px;
+}
+
+.grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:22px;
+}
+
+/* CARD */
+.card{
+    background:white;
+    padding:25px;
+    border-radius:24px;
+    box-shadow:0 10px 35px rgba(40,70,150,.12);
+}
+
+.card h2{
+    color:#1768d5;
+    margin-bottom:20px;
+    font-size:22px;
+}
+
+/* SEARCH TABS */
+.tabs{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:10px;
+    margin-bottom:20px;
+}
+
+.tab{
+    border:2px solid #e0e7f5;
+    background:white;
+    padding:12px;
+    border-radius:12px;
+    font-weight:bold;
+    cursor:pointer;
+    color:#1768d5;
+}
+
+.tab.active{
+    background:linear-gradient(135deg,#2878f0,#7138e8);
+    color:white;
+    border-color:transparent;
+}
+
+/* INPUT */
+label{
+    display:block;
+    font-weight:bold;
+    margin-bottom:8px;
+}
+
+input{
+    width:100%;
+    padding:15px;
+    border:2px solid #e0e7f5;
+    border-radius:13px;
+    outline:none;
+    font-size:17px;
+    background:#fafcff;
+}
+
+input:focus{
+    border-color:#2878f0;
+}
+
+/* BUTTON */
+.search-btn{
+    width:100%;
+    border:0;
+    margin-top:18px;
+    padding:15px;
+    border-radius:14px;
+    background:linear-gradient(135deg,#2878f0,#7138e8);
+    color:white;
+    font-size:17px;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+.reset-btn{
+    width:100%;
+    border:0;
+    margin-top:10px;
+    padding:13px;
+    border-radius:14px;
+    background:#f0f2f7;
+    color:#444;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+/* EXAMPLE */
+.examples{
+    margin-top:18px;
+    padding:15px;
+    background:#f2f7ff;
+    border-radius:14px;
+    font-size:14px;
+    line-height:1.7;
+}
+
+.example-code{
+    display:inline-block;
+    margin-top:8px;
+    padding:7px 10px;
+    background:white;
+    border-radius:8px;
+    color:#1768d5;
+    font-weight:bold;
+}
+
+/* RESULT */
+.result{
+    display:none;
+}
+
+.result-box{
+    background:linear-gradient(135deg,#f0f6ff,#f8f0ff);
+    border-radius:18px;
+    padding:18px;
+}
+
+.result-row{
+    padding:13px 4px;
+    border-bottom:1px dashed #d8deea;
+}
+
+.result-row:last-child{
+    border-bottom:none;
+}
+
+.result-row span{
+    display:block;
+    color:#667085;
+    font-size:13px;
+    margin-bottom:5px;
+}
+
+.result-row strong{
+    color:#1768d5;
+    font-size:16px;
+    word-break:break-word;
+}
+
+/* MULTIPLE RESULT */
+.branch-card{
+    background:white;
+    padding:14px;
+    margin-top:12px;
+    border-radius:14px;
+    border:1px solid #e4e9f3;
+}
+
+.branch-card h3{
+    color:#7138e8;
+    margin-bottom:8px;
+    font-size:17px;
+}
+
+.branch-card p{
+    font-size:14px;
+    line-height:1.6;
+}
+
+/* LOADING */
+.loading{
+    display:none;
+    text-align:center;
+    margin-top:20px;
+    color:#1768d5;
+    font-weight:bold;
+}
+
+/* ERROR */
+.error{
+    display:none;
+    margin-top:18px;
+    padding:14px;
+    border-radius:12px;
+    background:#fff0f0;
+    color:#c62828;
+    font-weight:bold;
+    font-size:14px;
+}
+
+/* INFO */
+.info{
+    margin-top:22px;
+    padding:16px;
+    background:#fff8e7;
+    border-radius:15px;
+    font-size:13px;
+    line-height:1.7;
+}
+
+/* FOOTER */
+.footer{
+    text-align:center;
+    padding:25px 15px;
+    color:#667085;
+    font-size:13px;
+}
+
+/* TABLET */
+@media(max-width:800px){
+
+    .grid{
+        grid-template-columns:1fr;
+    }
+
+    .container{
+        max-width:650px;
+    }
+}
+
+/* MOBILE */
+@media(max-width:500px){
+
+    .header{
+        padding:24px 12px;
+    }
+
+    .header h1{
+        font-size:25px;
+    }
+
+    .header p{
+        font-size:13px;
+    }
+
+    .container{
+        margin:18px auto;
+        padding:0 12px;
+    }
+
+    .card{
+        padding:18px;
+        border-radius:20px;
+    }
+
+    .card h2{
+        font-size:20px;
+    }
+
+    input{
+        font-size:16px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<header class="header">
+    <h1>📍 PIN Code Finder</h1>
+    <p>PIN Code से Post Office और Location की जानकारी खोजें</p>
+</header>
+
+
+<div class="container">
+
+    <div class="grid">
+
+        <!-- SEARCH CARD -->
+        <div class="card">
+
+            <h2>🔎 PIN Search</h2>
+
+            <div class="tabs">
+
+                <button
+                    class="tab active"
+                    id="pinTab"
+                    onclick="setMode('pin')">
+                    🔢 PIN से खोजें
+                </button>
+
+                <button
+                    class="tab"
+                    id="placeTab"
+                    onclick="setMode('place')">
+                    🏠 जगह से खोजें
+                </button>
+
+            </div>
+
+
+            <div id="pinSearch">
+
+                <label for="pin">
+                    PIN Code दर्ज करें
+                </label>
+
+                <input
+                    type="text"
+                    id="pin"
+                    maxlength="6"
+                    inputmode="numeric"
+                    placeholder="जैसे 492001"
+                >
+
+                <button
+                    class="search-btn"
+                    onclick="searchByPIN()">
+                    🔍 Search PIN
+                </button>
+
+            </div>
+
+
+            <div id="placeSearch" style="display:none;">
+
+                <label for="place">
+                    जगह / Post Office का नाम
+                </label>
+
+                <input
+                    type="text"
+                    id="place"
+                    placeholder="जैसे Raipur"
+                >
+
+                <button
+                    class="search-btn"
+                    onclick="searchByPlace()">
+                    🔍 Search Place
+                </button>
+
+            </div>
+
+
+            <button
+                class="reset-btn"
+                onclick="resetSearch()">
+                🔄 Reset
+            </button>
+
+
+            <div class="examples">
+
+                💡 <b>उदाहरण:</b>
+
+                <br>
+
+                PIN Code हमेशा 6 अंकों का होता है।
+
+                <br>
+
+                <span class="example-code">
+                    492001
+                </span>
+
+            </div>
+
+
+            <div class="error" id="error"></div>
+
+
+            <div class="loading" id="loading">
+                🔄 जानकारी खोजी जा रही है...
+            </div>
+
+        </div>
+
+
+        <!-- RESULT CARD -->
+        <div class="card">
+
+            <h2>📋 Post Office Details</h2>
+
+            <div id="result">
+
+                <div class="info">
+                    🔎 PIN Code या जगह का नाम डालकर Search करें।
+                    जानकारी यहां दिखाई जाएगी।
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <div class="card info">
+
+        ⚠️ <b>ध्यान दें:</b>
+        Post Office और PIN Code की जानकारी समय के साथ बदल सकती है।
+        महत्वपूर्ण डाक/सरकारी काम के लिए India Post की official information
+        से details verify करें।
+
+    </div>
+
+</div>
+
+
+<div class="footer">
+    © Tool Sathi • PIN Code Finder
+</div>
+
+
+<script>
+
+let searchMode = "pin";
+
+
+/* MODE */
+
+function setMode(mode){
+
+    searchMode = mode;
+
+    document.getElementById("pinTab")
+        .classList.remove("active");
+
+    document.getElementById("placeTab")
+        .classList.remove("active");
+
+
+    if(mode === "pin"){
+
+        document.getElementById("pinTab")
+            .classList.add("active");
+
+        document.getElementById("pinSearch")
+            .style.display = "block";
+
+        document.getElementById("placeSearch")
+            .style.display = "none";
+
+    }else{
+
+        document.getElementById("placeTab")
+            .classList.add("active");
+
+        document.getElementById("pinSearch")
+            .style.display = "none";
+
+        document.getElementById("placeSearch")
+            .style.display = "block";
+
+    }
+
+}
+
+
+/* COMMON */
+
+function showLoading(show){
+
+    document.getElementById("loading")
+        .style.display = show ? "block" : "none";
+
+}
+
+
+function showError(message){
+
+    const error =
+        document.getElementById("error");
+
+    error.textContent = message;
+
+    error.style.display = "block";
+
+}
+
+
+function clearError(){
+
+    document.getElementById("error")
+        .style.display = "none";
+
+}
+
+
+/* PIN SEARCH */
+
+async function searchByPIN(){
+
+    clearError();
+
+    const pin =
+        document.getElementById("pin")
+        .value.trim();
+
+
+    if(!/^\d{6}$/.test(pin)){
+
+        showError(
+            "❌ कृपया सही 6 अंकों का PIN Code दर्ज करें।"
+        );
+
+        return;
+    }
+
+
+    showLoading(true);
+
+
+    try{
+
+        const response =
+            await fetch(
+                "https://api.postalpincode.in/pincode/" + pin
+            );
+
+
+        const data =
+            await response.json();
+
+
+        showLoading(false);
+
+
+        if(
+            !data ||
+            !data[0] ||
+            data[0].Status !== "Success"
+        ){
+
+            showError(
+                "❌ इस PIN Code की जानकारी नहीं मिली।"
+            );
+
+            return;
+        }
+
+
+        displayResults(data[0].PostOffice);
+
+    }
+    catch(error){
+
+        showLoading(false);
+
+        showError(
+            "❌ Internet connection या server में समस्या है।"
+        );
+
+    }
+
+}
+
+
+/* PLACE SEARCH */
+
+async function searchByPlace(){
+
+    clearError();
+
+    const place =
+        document.getElementById("place")
+        .value.trim();
+
+
+    if(place.length < 2){
+
+        showError(
+            "❌ कृपया सही जगह या Post Office का नाम दर्ज करें।"
+        );
+
+        return;
+    }
+
+
+    showLoading(true);
+
+
+    try{
+
+        const response =
+            await fetch(
+                "https://api.postalpincode.in/postoffice/"
+                + encodeURIComponent(place)
+            );
+
+
+        const data =
+            await response.json();
+
+
+        showLoading(false);
+
+
+        if(
+            !data ||
+            !data[0] ||
+            data[0].Status !== "Success"
+        ){
+
+            showError(
+                "❌ इस जगह की जानकारी नहीं मिली।"
+            );
+
+            return;
+        }
+
+
+        displayResults(data[0].PostOffice);
+
+    }
+    catch(error){
+
+        showLoading(false);
+
+        showError(
+            "❌ Internet connection या server में समस्या है।"
+        );
+
+    }
+
+}
+
+
+/* DISPLAY */
+
+function displayResults(postOffices){
+
+    const result =
+        document.getElementById("result");
+
+
+    if(!postOffices || postOffices.length === 0){
+
+        showError(
+            "❌ कोई Post Office नहीं मिला।"
+        );
+
+        return;
+    }
+
+
+    let html = "";
+
+
+    postOffices.forEach(function(post){
+
+        html += `
+
+            <div class="branch-card">
+
+                <h3>📮 ${escapeHTML(post.Name || "-")}</h3>
+
+                <p>
+                    <b>PIN Code:</b>
+                    ${escapeHTML(post.Pincode || "-")}
+                </p>
+
+                <p>
+                    <b>District:</b>
+                    ${escapeHTML(post.District || "-")}
+                </p>
+
+                <p>
+                    <b>State:</b>
+                    ${escapeHTML(post.State || "-")}
+                </p>
+
+                <p>
+                    <b>Division:</b>
+                    ${escapeHTML(post.Division || "-")}
+                </p>
+
+                <p>
+                    <b>Region:</b>
+                    ${escapeHTML(post.Region || "-")}
+                </p>
+
+                <p>
+                    <b>Branch Type:</b>
+                    ${escapeHTML(post.BranchType || "-")}
+                </p>
+
+            </div>
+
+        `;
+    });
+
+
+    result.innerHTML = html;
+
+}
+
+
+/* BASIC HTML ESCAPE */
+
+function escapeHTML(value){
+
+    return String(value)
+        .replace(/&/g,"&amp;")
+        .replace(/</g,"&lt;")
+        .replace(/>/g,"&gt;")
+        .replace(/"/g,"&quot;")
+        .replace(/'/g,"&#039;");
+
+}
+
+
+/* RESET */
+
+function resetSearch(){
+
+    document.getElementById("pin").value = "";
+
+    document.getElementById("place").value = "";
+
+    clearError();
+
+    showLoading(false);
+
+    document.getElementById("result").innerHTML = `
+        <div class="info">
+            🔎 PIN Code या जगह का नाम डालकर Search करें।
+            जानकारी यहां दिखाई जाएगी।
+        </div>
+    `;
+
+}
+
+
+/* ENTER KEY */
+
+document.getElementById("pin")
+.addEventListener("keydown",function(event){
+
+    if(event.key === "Enter"){
+        searchByPIN();
+    }
+
+});
+
+
+document.getElementById("place")
+.addEventListener("keydown",function(event){
+
+    if(event.key === "Enter"){
+        searchByPlace();
+    }
+
+});
+
+</script>
+
+</body>
+</html>
