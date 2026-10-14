@@ -1,0 +1,568 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>SIP Calculator | Tool Sathi</title>
+
+<style>
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+}
+
+body{
+    font-family:Arial,"Noto Sans Devanagari",sans-serif;
+    background:linear-gradient(135deg,#eef4ff,#f8efff);
+    color:#172033;
+    min-height:100vh;
+}
+
+/* HEADER */
+.header{
+    background:linear-gradient(135deg,#2878f0,#7138e8);
+    color:white;
+    text-align:center;
+    padding:28px 15px;
+    box-shadow:0 6px 25px rgba(0,0,0,.15);
+}
+
+.header h1{
+    font-size:30px;
+    margin-bottom:8px;
+}
+
+.header p{
+    font-size:15px;
+    opacity:.95;
+}
+
+/* CONTAINER */
+.container{
+    width:100%;
+    max-width:1100px;
+    margin:30px auto;
+    padding:0 18px;
+}
+
+.main-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:22px;
+}
+
+/* CARD */
+.card{
+    background:white;
+    border-radius:24px;
+    padding:25px;
+    box-shadow:0 10px 35px rgba(40,70,150,.12);
+}
+
+.card h2{
+    color:#1768d5;
+    margin-bottom:22px;
+    font-size:22px;
+}
+
+/* INPUT */
+label{
+    display:block;
+    font-weight:bold;
+    margin:16px 0 8px;
+}
+
+input{
+    width:100%;
+    padding:14px 15px;
+    border:2px solid #e0e7f5;
+    border-radius:13px;
+    outline:none;
+    font-size:16px;
+    background:#fafcff;
+}
+
+input:focus{
+    border-color:#2878f0;
+}
+
+/* QUICK BUTTONS */
+.quick-buttons{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:8px;
+    margin-top:10px;
+}
+
+.quick-buttons button{
+    border:0;
+    padding:10px 5px;
+    border-radius:10px;
+    background:#eef3ff;
+    color:#1768d5;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+.quick-buttons button:hover{
+    background:#2878f0;
+    color:white;
+}
+
+/* CALCULATE */
+.calculate{
+    width:100%;
+    border:0;
+    margin-top:22px;
+    padding:15px;
+    border-radius:14px;
+    background:linear-gradient(135deg,#2878f0,#7138e8);
+    color:white;
+    font-size:17px;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+.reset{
+    width:100%;
+    border:0;
+    margin-top:10px;
+    padding:13px;
+    border-radius:14px;
+    background:#f0f2f7;
+    color:#444;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+/* RESULT */
+.result-card{
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+}
+
+.big-result{
+    text-align:center;
+    background:linear-gradient(135deg,#f0f6ff,#f8f0ff);
+    padding:25px 15px;
+    border-radius:20px;
+    margin-bottom:18px;
+}
+
+.big-result span{
+    display:block;
+    color:#667085;
+    font-size:14px;
+    margin-bottom:8px;
+}
+
+.big-result strong{
+    display:block;
+    color:#7138e8;
+    font-size:34px;
+}
+
+/* RESULT ROW */
+.result-row{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:10px;
+    padding:14px 5px;
+    border-bottom:1px dashed #d8deea;
+}
+
+.result-row:last-child{
+    border-bottom:none;
+}
+
+.result-row strong{
+    color:#1768d5;
+}
+
+/* INFO */
+.info{
+    margin-top:20px;
+    padding:15px;
+    background:#fff8e7;
+    border-radius:14px;
+    font-size:13px;
+    line-height:1.6;
+}
+
+.formula{
+    margin-top:18px;
+    padding:15px;
+    background:#f2f7ff;
+    border-radius:14px;
+    font-size:14px;
+    line-height:1.7;
+}
+
+/* FOOTER */
+.footer{
+    text-align:center;
+    padding:25px 15px;
+    color:#667085;
+    font-size:13px;
+}
+
+/* TABLET */
+@media(max-width:800px){
+
+    .main-grid{
+        grid-template-columns:1fr;
+    }
+
+    .container{
+        max-width:650px;
+    }
+}
+
+/* MOBILE */
+@media(max-width:500px){
+
+    .header{
+        padding:23px 12px;
+    }
+
+    .header h1{
+        font-size:25px;
+    }
+
+    .header p{
+        font-size:13px;
+    }
+
+    .container{
+        margin:18px auto;
+        padding:0 12px;
+    }
+
+    .card{
+        padding:18px;
+        border-radius:20px;
+    }
+
+    .card h2{
+        font-size:20px;
+    }
+
+    .quick-buttons{
+        grid-template-columns:repeat(2,1fr);
+    }
+
+    input{
+        padding:13px;
+    }
+
+    .big-result strong{
+        font-size:29px;
+    }
+
+    .result-row{
+        font-size:14px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<header class="header">
+    <h1>📈 SIP Calculator</h1>
+    <p>हर महीने निवेश करके अनुमानित भविष्य की राशि जानें</p>
+</header>
+
+
+<div class="container">
+
+    <div class="main-grid">
+
+        <!-- INPUT CARD -->
+        <div class="card">
+
+            <h2>📝 SIP Details</h2>
+
+            <label>💰 हर महीने निवेश (₹)</label>
+
+            <input
+                type="number"
+                id="monthlyInvestment"
+                placeholder="जैसे 5000"
+                min="0"
+            >
+
+            <div class="quick-buttons">
+                <button onclick="setInvestment(1000)">₹1,000</button>
+                <button onclick="setInvestment(5000)">₹5,000</button>
+                <button onclick="setInvestment(10000)">₹10,000</button>
+                <button onclick="setInvestment(20000)">₹20,000</button>
+            </div>
+
+
+            <label>📊 अनुमानित Return (% प्रति वर्ष)</label>
+
+            <input
+                type="number"
+                id="returnRate"
+                placeholder="जैसे 12"
+                step="0.01"
+                min="0"
+            >
+
+            <div class="quick-buttons">
+                <button onclick="setReturn(8)">8%</button>
+                <button onclick="setReturn(10)">10%</button>
+                <button onclick="setReturn(12)">12%</button>
+                <button onclick="setReturn(15)">15%</button>
+            </div>
+
+
+            <label>📅 निवेश अवधि (Years)</label>
+
+            <input
+                type="number"
+                id="years"
+                placeholder="जैसे 10"
+                min="1"
+            >
+
+            <div class="quick-buttons">
+                <button onclick="setYears(5)">5 साल</button>
+                <button onclick="setYears(10)">10 साल</button>
+                <button onclick="setYears(15)">15 साल</button>
+                <button onclick="setYears(20)">20 साल</button>
+            </div>
+
+
+            <button class="calculate" onclick="calculateSIP()">
+                🧮 Calculate SIP
+            </button>
+
+            <button class="reset" onclick="resetCalculator()">
+                🔄 Reset
+            </button>
+
+        </div>
+
+
+        <!-- RESULT CARD -->
+        <div class="card result-card">
+
+            <h2>📊 SIP Result</h2>
+
+            <div class="big-result">
+
+                <span>अनुमानित कुल राशि</span>
+
+                <strong id="futureValue">
+                    ₹0
+                </strong>
+
+            </div>
+
+
+            <div class="result-row">
+                <span>कुल निवेश</span>
+                <strong id="totalInvestment">₹0</strong>
+            </div>
+
+            <div class="result-row">
+                <span>अनुमानित Return</span>
+                <strong id="showReturn">0%</strong>
+            </div>
+
+            <div class="result-row">
+                <span>निवेश अवधि</span>
+                <strong id="showYears">0 साल</strong>
+            </div>
+
+            <div class="result-row">
+                <span>अनुमानित लाभ</span>
+                <strong id="estimatedProfit">₹0</strong>
+            </div>
+
+
+            <div class="formula">
+
+                <b>📌 SIP Calculation:</b><br>
+
+                Monthly Investment ×
+                Investment Period और
+                Expected Return के आधार पर
+                अनुमानित Future Value निकाली जाती है।
+
+                <br><br>
+
+                ⚠️ वास्तविक निवेश Return बाजार की स्थिति
+                और निवेश के प्रकार के अनुसार अलग हो सकता है।
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <div class="card info">
+
+        💡 <b>ध्यान दें:</b>
+        SIP Calculator केवल अनुमान देने के लिए है।
+        इसमें दिखाया गया Return निश्चित या गारंटीकृत नहीं है।
+        वास्तविक निवेश परिणाम अलग हो सकते हैं।
+
+    </div>
+
+</div>
+
+
+<div class="footer">
+    © Tool Sathi • SIP Calculator
+</div>
+
+
+<script>
+
+function setInvestment(value){
+
+    document.getElementById("monthlyInvestment").value = value;
+
+}
+
+function setReturn(value){
+
+    document.getElementById("returnRate").value = value;
+
+}
+
+function setYears(value){
+
+    document.getElementById("years").value = value;
+
+}
+
+
+function formatMoney(value){
+
+    return "₹" + Math.round(value).toLocaleString("en-IN");
+
+}
+
+
+function calculateSIP(){
+
+    let monthly =
+        parseFloat(
+            document.getElementById("monthlyInvestment").value
+        );
+
+    let annualRate =
+        parseFloat(
+            document.getElementById("returnRate").value
+        );
+
+    let years =
+        parseFloat(
+            document.getElementById("years").value
+        );
+
+
+    if(isNaN(monthly) || monthly <= 0){
+
+        alert("कृपया सही Monthly Investment दर्ज करें।");
+        return;
+
+    }
+
+
+    if(isNaN(annualRate) || annualRate < 0){
+
+        alert("कृपया सही Return Rate दर्ज करें।");
+        return;
+
+    }
+
+
+    if(isNaN(years) || years <= 0){
+
+        alert("कृपया सही Investment Period दर्ज करें।");
+        return;
+
+    }
+
+
+    let months = years * 12;
+
+    let monthlyRate = annualRate / 12 / 100;
+
+    let totalInvestment = monthly * months;
+
+    let futureValue;
+
+
+    if(monthlyRate === 0){
+
+        futureValue = totalInvestment;
+
+    }else{
+
+        futureValue =
+            monthly *
+            (
+                (Math.pow(1 + monthlyRate, months) - 1)
+                / monthlyRate
+            ) *
+            (1 + monthlyRate);
+
+    }
+
+
+    let profit = futureValue - totalInvestment;
+
+
+    document.getElementById("futureValue").textContent =
+        formatMoney(futureValue);
+
+    document.getElementById("totalInvestment").textContent =
+        formatMoney(totalInvestment);
+
+    document.getElementById("showReturn").textContent =
+        annualRate + "%";
+
+    document.getElementById("showYears").textContent =
+        years + " साल";
+
+    document.getElementById("estimatedProfit").textContent =
+        formatMoney(profit);
+
+}
+
+
+function resetCalculator(){
+
+    document.getElementById("monthlyInvestment").value = "";
+
+    document.getElementById("returnRate").value = "";
+
+    document.getElementById("years").value = "";
+
+    document.getElementById("futureValue").textContent = "₹0";
+
+    document.getElementById("totalInvestment").textContent = "₹0";
+
+    document.getElementById("showReturn").textContent = "0%";
+
+    document.getElementById("showYears").textContent = "0 साल";
+
+    document.getElementById("estimatedProfit").textContent = "₹0";
+
+}
+
+</script>
+
+</body>
+</html>
