@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>EMI Calculator | Tool Sathi</title>
+
+<style>
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+}
+
+body{
+    font-family:Arial,"Noto Sans Devanagari",sans-serif;
+    background:linear-gradient(135deg,#eef4ff,#f8efff);
+    color:#172033;
+    min-height:100vh;
+}
+
+.header{
+    background:linear-gradient(135deg,#2878f0,#7138e8);
+    color:white;
+    text-align:center;
+    padding:28px 15px;
+    box-shadow:0 6px 25px rgba(0,0,0,.15);
+}
+
+.header h1{
+    font-size:30px;
+    margin-bottom:8px;
+}
+
+.header p{
+    font-size:15px;
+    opacity:.95;
+}
+
+.container{
+    width:100%;
+    max-width:1100px;
+    margin:30px auto;
+    padding:0 18px;
+}
+
+.main-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:22px;
+}
+
+.card{
+    background:white;
+    border-radius:24px;
+    padding:25px;
+    box-shadow:0 10px 35px rgba(40,70,150,.12);
+}
+
+.card h2{
+    color:#1768d5;
+    margin-bottom:22px;
+    font-size:22px;
+}
+
+label{
+    display:block;
+    font-weight:bold;
+    margin:16px 0 8px;
+}
+
+input{
+    width:100%;
+    padding:14px 15px;
+    border:2px solid #e0e7f5;
+    border-radius:13px;
+    outline:none;
+    font-size:16px;
+    background:#fafcff;
+}
+
+input:focus{
+    border-color:#2878f0;
+}
+
+.quick-buttons{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:8px;
+    margin-top:10px;
+}
+
+.quick-buttons button{
+    border:0;
+    padding:10px 5px;
+    border-radius:10px;
+    background:#eef3ff;
+    color:#1768d5;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+.quick-buttons button:hover{
+    background:#2878f0;
+    color:white;
+}
+
+.calculate{
+    width:100%;
+    border:0;
+    margin-top:22px;
+    padding:15px;
+    border-radius:14px;
+    background:linear-gradient(135deg,#2878f0,#7138e8);
+    color:white;
+    font-size:17px;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+.reset{
+    width:100%;
+    border:0;
+    margin-top:10px;
+    padding:13px;
+    border-radius:14px;
+    background:#f0f2f7;
+    color:#444;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+.result-card{
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+}
+
+.big-result{
+    text-align:center;
+    background:linear-gradient(135deg,#f0f6ff,#f8f0ff);
+    padding:25px 15px;
+    border-radius:20px;
+    margin-bottom:18px;
+}
+
+.big-result span{
+    display:block;
+    color:#667085;
+    font-size:14px;
+    margin-bottom:8px;
+}
+
+.big-result strong{
+    display:block;
+    color:#7138e8;
+    font-size:34px;
+}
+
+.result-row{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:14px 5px;
+    border-bottom:1px dashed #d8deea;
+}
+
+.result-row:last-child{
+    border-bottom:none;
+}
+
+.result-row strong{
+    color:#1768d5;
+}
+
+.info{
+    margin-top:20px;
+    padding:15px;
+    background:#fff8e7;
+    border-radius:14px;
+    font-size:13px;
+    line-height:1.6;
+}
+
+.formula{
+    margin-top:18px;
+    padding:15px;
+    background:#f2f7ff;
+    border-radius:14px;
+    font-size:14px;
+    line-height:1.7;
+}
+
+.footer{
+    text-align:center;
+    padding:25px 15px;
+    color:#667085;
+    font-size:13px;
+}
+
+/* Tablet */
+@media(max-width:800px){
+
+    .main-grid{
+        grid-template-columns:1fr;
+    }
+
+    .container{
+        max-width:650px;
+    }
+}
+
+/* Mobile */
+@media(max-width:500px){
+
+    .header{
+        padding:23px 12px;
+    }
+
+    .header h1{
+        font-size:25px;
+    }
+
+    .header p{
+        font-size:13px;
+    }
+
+    .container{
+        margin:18px auto;
+        padding:0 12px;
+    }
+
+    .card{
+        padding:18px;
+        border-radius:20px;
+    }
+
+    .card h2{
+        font-size:20px;
+    }
+
+    .quick-buttons{
+        grid-template-columns:repeat(2,1fr);
+    }
+
+    input{
+        padding:13px;
+    }
+
+    .big-result strong{
+        font-size:29px;
+    }
+
+    .result-row{
+        font-size:14px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<header class="header">
+    <h1>🏦 EMI Calculator</h1>
+    <p>Loan की EMI और कुल ब्याज आसानी से निकालें</p>
+</header>
+
+<div class="container">
+
+    <div class="main-grid">
+
+        <!-- INPUT CARD -->
+        <div class="card">
+
+            <h2>📝 Loan Details</h2>
+
+            <label>💰 Loan Amount (₹)</label>
+
+            <input
+                type="number"
+                id="loanAmount"
+                placeholder="जैसे 500000"
+                min="0"
+            >
+
+            <div class="quick-buttons">
+                <button onclick="setAmount(100000)">₹1 लाख</button>
+                <button onclick="setAmount(200000)">₹2 लाख</button>
+                <button onclick="setAmount(500000)">₹5 लाख</button>
+                <button onclick="setAmount(1000000)">₹10 लाख</button>
+            </div>
+
+
+            <label>📈 Interest Rate (% प्रति वर्ष)</label>
+
+            <input
+                type="number"
+                id="interestRate"
+                placeholder="जैसे 8.5"
+                step="0.01"
+                min="0"
+            >
+
+            <div class="quick-buttons">
+                <button onclick="setInterest(6)">6%</button>
+                <button onclick="setInterest(8)">8%</button>
+                <button onclick="setInterest(10)">10%</button>
+                <button onclick="setInterest(12)">12%</button>
+            </div>
+
+
+            <label>📅 Loan Tenure (Years)</label>
+
+            <input
+                type="number"
+                id="loanYears"
+                placeholder="जैसे 5"
+                min="1"
+            >
+
+            <div class="quick-buttons">
+                <button onclick="setYears(3)">3 साल</button>
+                <button onclick="setYears(5)">5 साल</button>
+                <button onclick="setYears(10)">10 साल</button>
+                <button onclick="setYears(20)">20 साल</button>
+            </div>
+
+
+            <button class="calculate" onclick="calculateEMI()">
+                🧮 Calculate EMI
+            </button>
+
+            <button class="reset" onclick="resetCalculator()">
+                🔄 Reset
+            </button>
+
+        </div>
+
+
+        <!-- RESULT CARD -->
+        <div class="card result-card">
+
+            <h2>📊 EMI Result</h2>
+
+            <div class="big-result">
+
+                <span>आपकी मासिक EMI</span>
+
+                <strong id="monthlyEMI">
+                    ₹0
+                </strong>
+
+            </div>
+
+
+            <div class="result-row">
+                <span>Loan Amount</span>
+                <strong id="showLoan">₹0</strong>
+            </div>
+
+            <div class="result-row">
+                <span>Interest Rate</span>
+                <strong id="showInterest">0%</strong>
+            </div>
+
+            <div class="result-row">
+                <span>Loan Tenure</span>
+                <strong id="showTenure">0 साल</strong>
+            </div>
+
+            <div class="result-row">
+                <span>कुल ब्याज</span>
+                <strong id="totalInterest">₹0</strong>
+            </div>
+
+            <div class="result-row">
+                <span>कुल भुगतान</span>
+                <strong id="totalPayment">₹0</strong>
+            </div>
+
+
+            <div class="formula">
+                <b>📌 EMI Formula:</b><br>
+                EMI = P × R × (1+R)ⁿ ÷ ((1+R)ⁿ−1)
+                <br><br>
+                P = Loan Amount<br>
+                R = Monthly Interest Rate<br>
+                n = Total Number of Months
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <div class="card info">
+        💡 <b>ध्यान दें:</b> यह calculator अनुमानित EMI दिखाता है।
+        बैंक/वित्तीय संस्था के वास्तविक EMI में processing fee,
+        अन्य charges या अलग rounding के कारण थोड़ा अंतर हो सकता है।
+    </div>
+
+</div>
+
+
+<div class="footer">
+    © Tool Sathi • EMI Calculator
+</div>
+
+
+<script>
+
+function setAmount(value){
+    document.getElementById("loanAmount").value = value;
+}
+
+function setInterest(value){
+    document.getElementById("interestRate").value = value;
+}
+
+function setYears(value){
+    document.getElementById("loanYears").value = value;
+}
+
+
+function formatMoney(value){
+
+    return "₹" + Math.round(value).toLocaleString("en-IN");
+
+}
+
+
+function calculateEMI(){
+
+    let P = parseFloat(
+        document.getElementById("loanAmount").value
+    );
+
+    let annualRate = parseFloat(
+        document.getElementById("interestRate").value
+    );
+
+    let years = parseFloat(
+        document.getElementById("loanYears").value
+    );
+
+
+    if(isNaN(P) || P <= 0){
+
+        alert("कृपया सही Loan Amount दर्ज करें।");
+        return;
+
+    }
+
+
+    if(isNaN(annualRate) || annualRate < 0){
+
+        alert("कृपया सही Interest Rate दर्ज करें।");
+        return;
+
+    }
+
+
+    if(isNaN(years) || years <= 0){
+
+        alert("कृपया सही Loan Tenure दर्ज करें।");
+        return;
+
+    }
+
+
+    let R = annualRate / 12 / 100;
+
+    let n = years * 12;
+
+    let EMI;
+
+
+    if(R === 0){
+
+        EMI = P / n;
+
+    }else{
+
+        EMI =
+            P *
+            R *
+            Math.pow(1 + R, n) /
+            (Math.pow(1 + R, n) - 1);
+
+    }
+
+
+    let totalPayment = EMI * n;
+
+    let totalInterest = totalPayment - P;
+
+
+    document.getElementById("monthlyEMI").textContent =
+        formatMoney(EMI);
+
+    document.getElementById("showLoan").textContent =
+        formatMoney(P);
+
+    document.getElementById("showInterest").textContent =
+        annualRate + "%";
+
+    document.getElementById("showTenure").textContent =
+        years + " साल";
+
+    document.getElementById("totalInterest").textContent =
+        formatMoney(totalInterest);
+
+    document.getElementById("totalPayment").textContent =
+        formatMoney(totalPayment);
+
+}
+
+
+function resetCalculator(){
+
+    document.getElementById("loanAmount").value = "";
+
+    document.getElementById("interestRate").value = "";
+
+    document.getElementById("loanYears").value = "";
+
+    document.getElementById("monthlyEMI").textContent = "₹0";
+
+    document.getElementById("showLoan").textContent = "₹0";
+
+    document.getElementById("showInterest").textContent = "0%";
+
+    document.getElementById("showTenure").textContent = "0 साल";
+
+    document.getElementById("totalInterest").textContent = "₹0";
+
+    document.getElementById("totalPayment").textContent = "₹0";
+
+}
+
+</script>
+
+</body>
+</html>
