@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>GST Calculator | Tool Sathi</title>
+
+<style>
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+}
+
+body{
+    font-family:Arial,"Noto Sans Devanagari",sans-serif;
+    background:linear-gradient(135deg,#eef4ff,#f8efff);
+    color:#172033;
+    min-height:100vh;
+}
+
+.header{
+    background:linear-gradient(135deg,#2878f0,#7138e8);
+    color:white;
+    padding:25px 15px;
+    text-align:center;
+    box-shadow:0 5px 20px rgba(0,0,0,.15);
+}
+
+.header h1{
+    font-size:28px;
+    margin-bottom:7px;
+}
+
+.header p{
+    font-size:14px;
+    opacity:.95;
+}
+
+.container{
+    max-width:600px;
+    margin:25px auto;
+    padding:0 15px;
+}
+
+.card{
+    background:white;
+    border-radius:22px;
+    padding:22px;
+    box-shadow:0 8px 30px rgba(40,70,150,.12);
+    margin-bottom:18px;
+}
+
+.card h2{
+    text-align:center;
+    color:#1768d5;
+    margin-bottom:20px;
+}
+
+label{
+    display:block;
+    font-weight:bold;
+    margin:14px 0 7px;
+}
+
+input,select{
+    width:100%;
+    padding:14px;
+    border:2px solid #e0e7f5;
+    border-radius:12px;
+    font-size:16px;
+    outline:none;
+    background:#fafcff;
+}
+
+input:focus,select:focus{
+    border-color:#2878f0;
+}
+
+.rate-buttons{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:8px;
+    margin-top:10px;
+}
+
+.rate-buttons button{
+    border:none;
+    padding:10px 5px;
+    border-radius:10px;
+    background:#eef3ff;
+    color:#1768d5;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+.rate-buttons button:hover{
+    background:#2878f0;
+    color:white;
+}
+
+.main-btn{
+    width:100%;
+    border:none;
+    margin-top:20px;
+    padding:15px;
+    border-radius:14px;
+    background:linear-gradient(135deg,#2878f0,#7138e8);
+    color:white;
+    font-size:17px;
+    font-weight:bold;
+    cursor:pointer;
+    box-shadow:0 6px 15px rgba(40,120,240,.25);
+}
+
+.reset-btn{
+    width:100%;
+    border:none;
+    margin-top:10px;
+    padding:13px;
+    border-radius:14px;
+    background:#f1f3f8;
+    color:#444;
+    font-size:15px;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+.result{
+    display:none;
+    margin-top:20px;
+}
+
+.result-box{
+    background:linear-gradient(135deg,#f1f7ff,#f8f1ff);
+    border-radius:16px;
+    padding:16px;
+}
+
+.row{
+    display:flex;
+    justify-content:space-between;
+    gap:10px;
+    padding:11px 0;
+    border-bottom:1px dashed #d7ddea;
+}
+
+.row:last-child{
+    border-bottom:none;
+}
+
+.row strong{
+    color:#1768d5;
+}
+
+.total{
+    font-size:20px;
+    font-weight:bold;
+    color:#7138e8 !important;
+}
+
+.mode{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:10px;
+    margin-bottom:10px;
+}
+
+.mode button{
+    padding:13px;
+    border:2px solid #e0e7f5;
+    border-radius:12px;
+    background:white;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+.mode button.active{
+    background:linear-gradient(135deg,#2878f0,#7138e8);
+    color:white;
+    border-color:transparent;
+}
+
+.info{
+    margin-top:18px;
+    padding:14px;
+    background:#fff8e8;
+    border-radius:12px;
+    font-size:13px;
+    line-height:1.6;
+}
+
+.footer{
+    text-align:center;
+    padding:20px;
+    font-size:13px;
+    color:#667085;
+}
+
+@media(max-width:450px){
+    .header h1{
+        font-size:24px;
+    }
+
+    .card{
+        padding:18px;
+    }
+
+    .rate-buttons{
+        grid-template-columns:repeat(4,1fr);
+    }
+}
+</style>
+</head>
+
+<body>
+
+<header class="header">
+    <h1>🧾 GST Calculator</h1>
+    <p>GST जोड़ें या GST घटाकर मूल कीमत निकालें</p>
+</header>
+
+<div class="container">
+
+<div class="card">
+
+    <h2>💰 GST Calculator</h2>
+
+    <div class="mode">
+        <button id="addMode" class="active" onclick="setMode('add')">
+            ➕ GST जोड़ें
+        </button>
+
+        <button id="removeMode" onclick="setMode('remove')">
+            ➖ GST घटाएँ
+        </button>
+    </div>
+
+    <label>💵 राशि दर्ज करें</label>
+    <input type="number" id="amount" placeholder="जैसे 1000" min="0">
+
+    <label>📊 GST Rate (%)</label>
+    <input type="number" id="gstRate" placeholder="जैसे 18" min="0">
+
+    <div class="rate-buttons">
+        <button onclick="setRate(5)">5%</button>
+        <button onclick="setRate(12)">12%</button>
+        <button onclick="setRate(18)">18%</button>
+        <button onclick="setRate(28)">28%</button>
+    </div>
+
+    <button class="main-btn" onclick="calculateGST()">
+        🧮 Calculate GST
+    </button>
+
+    <button class="reset-btn" onclick="resetCalculator()">
+        🔄 Reset
+    </button>
+
+    <div class="result" id="result">
+
+        <div class="result-box">
+
+            <div class="row">
+                <span>मूल राशि</span>
+                <strong id="baseAmount">₹0.00</strong>
+            </div>
+
+            <div class="row">
+                <span>GST Rate</span>
+                <strong id="showRate">0%</strong>
+            </div>
+
+            <div class="row">
+                <span>GST Amount</span>
+                <strong id="gstAmount">₹0.00</strong>
+            </div>
+
+            <div class="row">
+                <span>CGST</span>
+                <strong id="cgst">₹0.00</strong>
+            </div>
+
+            <div class="row">
+                <span>SGST</span>
+                <strong id="sgst">₹0.00</strong>
+            </div>
+
+            <div class="row">
+                <span id="totalLabel">GST सहित कुल राशि</span>
+                <strong class="total" id="totalAmount">
+                    ₹0.00
+                </strong>
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="info">
+        💡 <b>ध्यान दें:</b> GST Rate वस्तु या सेवा के अनुसार अलग हो सकती है।
+        सही GST rate के लिए आधिकारिक GST rate information देखें।
+    </div>
+
+</div>
+
+</div>
+
+<div class="footer">
+    © Tool Sathi • GST Calculator
+</div>
+
+<script>
+
+let mode = "add";
+
+function setMode(selectedMode){
+
+    mode = selectedMode;
+
+    document.getElementById("addMode").classList.remove("active");
+    document.getElementById("removeMode").classList.remove("active");
+
+    if(mode === "add"){
+        document.getElementById("addMode").classList.add("active");
+    }else{
+        document.getElementById("removeMode").classList.add("active");
+    }
+
+    document.getElementById("result").style.display = "none";
+}
+
+function setRate(rate){
+    document.getElementById("gstRate").value = rate;
+}
+
+function formatMoney(value){
+    return "₹" + value.toLocaleString("en-IN", {
+        minimumFractionDigits:2,
+        maximumFractionDigits:2
+    });
+}
+
+function calculateGST(){
+
+    let amount = parseFloat(document.getElementById("amount").value);
+    let rate = parseFloat(document.getElementById("gstRate").value);
+
+    if(isNaN(amount) || amount < 0){
+        alert("कृपया सही राशि दर्ज करें।");
+        return;
+    }
+
+    if(isNaN(rate) || rate < 0){
+        alert("कृपया सही GST Rate दर्ज करें।");
+        return;
+    }
+
+    let baseAmount;
+    let gstAmount;
+    let totalAmount;
+
+    if(mode === "add"){
+
+        baseAmount = amount;
+
+        gstAmount = baseAmount * rate / 100;
+
+        totalAmount = baseAmount + gstAmount;
+
+    }else{
+
+        totalAmount = amount;
+
+        baseAmount = totalAmount / (1 + rate / 100);
+
+        gstAmount = totalAmount - baseAmount;
+    }
+
+    let cgst = gstAmount / 2;
+    let sgst = gstAmount / 2;
+
+    document.getElementById("baseAmount").textContent =
+        formatMoney(baseAmount);
+
+    document.getElementById("showRate").textContent =
+        rate + "%";
+
+    document.getElementById("gstAmount").textContent =
+        formatMoney(gstAmount);
+
+    document.getElementById("cgst").textContent =
+        formatMoney(cgst);
+
+    document.getElementById("sgst").textContent =
+        formatMoney(sgst);
+
+    document.getElementById("totalAmount").textContent =
+        formatMoney(totalAmount);
+
+    document.getElementById("totalLabel").textContent =
+        mode === "add"
+        ? "GST सहित कुल राशि"
+        : "GST सहित राशि";
+
+    document.getElementById("result").style.display = "block";
+}
+
+function resetCalculator(){
+
+    document.getElementById("amount").value = "";
+    document.getElementById("gstRate").value = "";
+
+    document.getElementById("result").style.display = "none";
+
+    setMode("add");
+}
+
+</script>
+
+</body>
+</html>
