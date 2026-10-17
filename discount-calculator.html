@@ -1,0 +1,628 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Discount Calculator | Tool Sathi</title>
+
+<style>
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+}
+
+body{
+    font-family:Arial,"Noto Sans Devanagari",sans-serif;
+    min-height:100vh;
+    background:linear-gradient(135deg,#eef5ff,#fff0f7,#effff7);
+    color:#172033;
+}
+
+/* HEADER */
+.header{
+    background:linear-gradient(135deg,#1769e0,#7138e8);
+    color:white;
+    text-align:center;
+    padding:25px 15px;
+    box-shadow:0 6px 22px rgba(0,0,0,.15);
+}
+
+.header .icon{
+    font-size:45px;
+    margin-bottom:5px;
+}
+
+.header h1{
+    font-size:27px;
+    margin-bottom:7px;
+}
+
+.header p{
+    font-size:14px;
+}
+
+/* CONTAINER */
+.container{
+    width:94%;
+    max-width:650px;
+    margin:20px auto;
+}
+
+/* CARD */
+.card{
+    background:white;
+    border-radius:22px;
+    padding:20px;
+    margin-bottom:18px;
+    box-shadow:0 8px 28px rgba(30,50,80,.11);
+}
+
+.card h2{
+    color:#1769e0;
+    font-size:20px;
+    margin-bottom:18px;
+}
+
+/* LABEL */
+label{
+    display:block;
+    font-weight:bold;
+    margin:14px 0 7px;
+}
+
+/* INPUT */
+.input-box{
+    position:relative;
+}
+
+.symbol{
+    position:absolute;
+    left:14px;
+    top:50%;
+    transform:translateY(-50%);
+    font-size:18px;
+    font-weight:bold;
+    color:#667085;
+}
+
+input{
+    width:100%;
+    padding:15px;
+    padding-left:38px;
+    border:2px solid #dbe5f5;
+    border-radius:14px;
+    background:#fafcff;
+    font-size:18px;
+    outline:none;
+}
+
+input:focus{
+    border-color:#1769e0;
+    box-shadow:0 0 0 3px rgba(23,105,224,.10);
+}
+
+/* BUTTON */
+button{
+    width:100%;
+    border:none;
+    padding:15px;
+    margin-top:18px;
+    border-radius:14px;
+    background:linear-gradient(135deg,#1769e0,#7138e8);
+    color:white;
+    font-size:17px;
+    font-weight:bold;
+    cursor:pointer;
+    box-shadow:0 6px 15px rgba(23,105,224,.20);
+}
+
+button:active{
+    transform:scale(.98);
+}
+
+/* RESULT */
+.result{
+    display:none;
+    margin-top:20px;
+}
+
+.result-title{
+    text-align:center;
+    font-size:21px;
+    font-weight:bold;
+    color:#16804b;
+    margin-bottom:14px;
+}
+
+.result-box{
+    background:linear-gradient(135deg,#eff8ff,#f8f1ff);
+    border:2px solid #d7e7ff;
+    border-radius:17px;
+    padding:17px;
+}
+
+.row{
+    display:flex;
+    justify-content:space-between;
+    gap:10px;
+    padding:12px 0;
+    border-bottom:1px solid #dce6f2;
+}
+
+.row:last-child{
+    border-bottom:none;
+}
+
+.label-text{
+    color:#687386;
+}
+
+.value{
+    font-weight:bold;
+    color:#1557a6;
+    text-align:right;
+}
+
+.final-price{
+    margin-top:14px;
+    padding:16px;
+    border-radius:14px;
+    background:#eafaf1;
+    text-align:center;
+    color:#16804b;
+    font-size:22px;
+    font-weight:bold;
+}
+
+/* RESET */
+.reset{
+    background:linear-gradient(135deg,#ff5c5c,#e83b74);
+}
+
+/* QUICK */
+.quick{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:8px;
+    margin-top:12px;
+}
+
+.quick button{
+    margin:0;
+    padding:10px 5px;
+    font-size:14px;
+    background:#eef5ff;
+    color:#1769e0;
+    box-shadow:none;
+}
+
+.note{
+    margin-top:12px;
+    font-size:13px;
+    color:#687386;
+    line-height:1.6;
+}
+
+/* FOOTER */
+.footer{
+    text-align:center;
+    padding:22px;
+    color:#687386;
+    font-size:13px;
+}
+
+/* MOBILE */
+@media(max-width:450px){
+
+    .header h1{
+        font-size:23px;
+    }
+
+    .card{
+        padding:16px;
+    }
+
+    .quick{
+        grid-template-columns:repeat(3,1fr);
+    }
+}
+</style>
+</head>
+
+
+<body>
+
+
+<!-- HEADER -->
+<div class="header">
+
+    <div class="icon">💸</div>
+
+    <h1>Discount Calculator</h1>
+
+    <p>
+        Discount के बाद Final Price आसानी से निकालें
+    </p>
+
+</div>
+
+
+
+<div class="container">
+
+
+<!-- CALCULATOR -->
+<div class="card">
+
+    <h2>🧮 Discount निकालें</h2>
+
+
+    <!-- MRP -->
+    <label>
+        MRP / Original Price
+    </label>
+
+    <div class="input-box">
+
+        <span class="symbol">₹</span>
+
+        <input
+            type="number"
+            id="mrp"
+            placeholder="जैसे 1000"
+            step="any"
+            inputmode="decimal"
+        >
+
+    </div>
+
+
+    <!-- DISCOUNT -->
+    <label>
+        Discount (%)
+    </label>
+
+    <div class="input-box">
+
+        <span class="symbol">%</span>
+
+        <input
+            type="number"
+            id="discount"
+            placeholder="जैसे 20"
+            step="any"
+            inputmode="decimal"
+        >
+
+    </div>
+
+
+    <!-- QUICK DISCOUNT -->
+    <div class="quick">
+
+        <button onclick="setDiscount(10)">
+            10%
+        </button>
+
+        <button onclick="setDiscount(20)">
+            20%
+        </button>
+
+        <button onclick="setDiscount(30)">
+            30%
+        </button>
+
+        <button onclick="setDiscount(40)">
+            40%
+        </button>
+
+        <button onclick="setDiscount(50)">
+            50%
+        </button>
+
+        <button onclick="setDiscount(70)">
+            70%
+        </button>
+
+    </div>
+
+
+    <!-- CALCULATE -->
+    <button onclick="calculateDiscount()">
+        💰 Calculate Discount
+    </button>
+
+
+    <!-- RESULT -->
+    <div
+        class="result"
+        id="result"
+    >
+
+        <div class="result-title">
+            ✅ Calculation Result
+        </div>
+
+        <div class="result-box">
+
+            <div class="row">
+
+                <span class="label-text">
+                    Original Price
+                </span>
+
+                <span
+                    class="value"
+                    id="originalResult">
+                </span>
+
+            </div>
+
+
+            <div class="row">
+
+                <span class="label-text">
+                    Discount
+                </span>
+
+                <span
+                    class="value"
+                    id="percentResult">
+                </span>
+
+            </div>
+
+
+            <div class="row">
+
+                <span class="label-text">
+                    Discount Amount
+                </span>
+
+                <span
+                    class="value"
+                    id="discountResult">
+                </span>
+
+            </div>
+
+
+            <div class="final-price">
+
+                Final Price
+
+                <br>
+
+                <span id="finalResult">
+                </span>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- RESET -->
+    <button
+        class="reset"
+        onclick="resetCalculator()"
+    >
+        🔄 Reset
+    </button>
+
+
+</div>
+
+
+
+<!-- EXAMPLE -->
+<div class="card">
+
+    <h2>📌 उदाहरण</h2>
+
+    <p class="note">
+
+        अगर किसी सामान की कीमत
+        <b>₹1000</b> है और उस पर
+        <b>20% Discount</b> है:
+
+        <br><br>
+
+        Discount Amount = ₹200
+
+        <br>
+
+        Final Price = <b>₹800</b>
+
+    </p>
+
+</div>
+
+
+</div>
+
+
+
+<div class="footer">
+
+    © 2026 Tool Sathi
+
+    <br>
+
+    Discount Calculator
+
+</div>
+
+
+
+<script>
+
+/* DISCOUNT QUICK BUTTON */
+
+function setDiscount(value){
+
+    document.getElementById("discount").value =
+        value;
+
+    calculateDiscount();
+
+}
+
+
+/* CALCULATE */
+
+function calculateDiscount(){
+
+    let mrp =
+        parseFloat(
+            document.getElementById("mrp").value
+        );
+
+    let discount =
+        parseFloat(
+            document.getElementById("discount").value
+        );
+
+
+    let result =
+        document.getElementById("result");
+
+
+    /* VALIDATION */
+
+    if(
+        isNaN(mrp) ||
+        isNaN(discount) ||
+        mrp < 0 ||
+        discount < 0
+    ){
+
+        result.style.display = "block";
+
+        result.innerHTML =
+        `
+        <div class="result-box">
+
+            <div style="
+                text-align:center;
+                color:#c62828;
+                font-weight:bold;
+            ">
+                ⚠️ कृपया सही MRP और Discount डालें
+            </div>
+
+        </div>
+        `;
+
+        return;
+    }
+
+
+    if(discount > 100){
+
+        result.style.display = "block";
+
+        result.innerHTML =
+        `
+        <div class="result-box">
+
+            <div style="
+                text-align:center;
+                color:#c62828;
+                font-weight:bold;
+            ">
+                ⚠️ Discount 100% से ज्यादा नहीं हो सकता
+            </div>
+
+        </div>
+        `;
+
+        return;
+    }
+
+
+    /* CALCULATION */
+
+    let discountAmount =
+        (mrp * discount) / 100;
+
+
+    let finalPrice =
+        mrp - discountAmount;
+
+
+    /* RESULT */
+
+    document.getElementById(
+        "originalResult"
+    ).innerText =
+        formatMoney(mrp);
+
+
+    document.getElementById(
+        "percentResult"
+    ).innerText =
+        discount + "%";
+
+
+    document.getElementById(
+        "discountResult"
+    ).innerText =
+        formatMoney(discountAmount);
+
+
+    document.getElementById(
+        "finalResult"
+    ).innerText =
+        formatMoney(finalPrice);
+
+
+    result.style.display = "block";
+
+}
+
+
+/* MONEY FORMAT */
+
+function formatMoney(number){
+
+    return "₹" +
+        Number(number.toFixed(2))
+        .toLocaleString("en-IN");
+
+}
+
+
+/* RESET */
+
+function resetCalculator(){
+
+    document.getElementById("mrp").value = "";
+
+    document.getElementById("discount").value = "";
+
+    document.getElementById("result").style.display =
+        "none";
+
+}
+
+
+/* ENTER KEY */
+
+document
+.getElementById("discount")
+.addEventListener("keydown",function(event){
+
+    if(event.key === "Enter"){
+        calculateDiscount();
+    }
+
+});
+
+</script>
+
+</body>
+</html>
