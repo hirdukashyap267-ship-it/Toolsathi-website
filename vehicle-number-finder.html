@@ -1,0 +1,925 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Vehicle Number Finder | Tool Sathi</title>
+
+<style>
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+}
+
+body{
+    font-family:Arial,"Noto Sans Devanagari",sans-serif;
+    background:linear-gradient(135deg,#eef5ff,#fff0f8,#edfff5);
+    color:#172033;
+    min-height:100vh;
+}
+
+/* HEADER */
+.header{
+    background:linear-gradient(135deg,#1769e0,#7138e8);
+    color:white;
+    text-align:center;
+    padding:25px 15px;
+    box-shadow:0 6px 22px rgba(0,0,0,.16);
+}
+
+.header .icon{
+    font-size:45px;
+    margin-bottom:5px;
+}
+
+.header h1{
+    font-size:27px;
+    margin-bottom:7px;
+}
+
+.header p{
+    font-size:14px;
+    opacity:.95;
+}
+
+
+/* MAIN */
+.container{
+    width:94%;
+    max-width:750px;
+    margin:20px auto;
+}
+
+
+/* CARD */
+.card{
+    background:white;
+    border-radius:22px;
+    padding:20px;
+    margin-bottom:18px;
+    box-shadow:0 8px 28px rgba(30,50,80,.11);
+}
+
+.card h2{
+    color:#1769e0;
+    font-size:20px;
+    margin-bottom:15px;
+}
+
+
+/* INPUT */
+input{
+    width:100%;
+    padding:15px;
+    border:2px solid #dbe5f5;
+    border-radius:14px;
+    background:#fafcff;
+    font-size:18px;
+    outline:none;
+    text-transform:uppercase;
+}
+
+input:focus{
+    border-color:#1769e0;
+    box-shadow:0 0 0 3px rgba(23,105,224,.10);
+}
+
+
+/* BUTTON */
+button{
+    width:100%;
+    border:0;
+    padding:15px;
+    margin-top:13px;
+    border-radius:14px;
+    background:linear-gradient(135deg,#1769e0,#7138e8);
+    color:white;
+    font-size:17px;
+    font-weight:bold;
+    cursor:pointer;
+    box-shadow:0 6px 15px rgba(23,105,224,.20);
+}
+
+button:active{
+    transform:scale(.98);
+}
+
+
+/* EXAMPLES */
+.examples{
+    display:flex;
+    flex-wrap:wrap;
+    gap:8px;
+    margin-top:13px;
+}
+
+.example{
+    background:#eef5ff;
+    color:#1769e0;
+    border:1px solid #d5e4ff;
+    padding:8px 12px;
+    border-radius:20px;
+    font-size:13px;
+    cursor:pointer;
+}
+
+
+/* RESULT */
+.result{
+    display:none;
+    margin-top:18px;
+    padding:18px;
+    border-radius:17px;
+    background:linear-gradient(135deg,#eff8ff,#f7f1ff);
+    border:2px solid #d7e7ff;
+}
+
+.success{
+    text-align:center;
+    color:#16804b;
+    font-size:20px;
+    font-weight:bold;
+    margin-bottom:12px;
+}
+
+.error{
+    text-align:center;
+    color:#c62828;
+    font-size:17px;
+    font-weight:bold;
+}
+
+.result-row{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:10px;
+    padding:11px 0;
+    border-bottom:1px solid #dce6f2;
+}
+
+.result-row:last-child{
+    border-bottom:none;
+}
+
+.label{
+    color:#687386;
+    font-size:14px;
+}
+
+.value{
+    color:#1557a6;
+    font-weight:bold;
+    text-align:right;
+}
+
+
+/* CG LIST */
+.cg-list{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:9px;
+}
+
+.cg-item{
+    padding:11px;
+    border-radius:12px;
+    background:#f5f8ff;
+    border:1px solid #e1e8f5;
+    font-size:14px;
+}
+
+.cg-code{
+    font-weight:bold;
+    color:#1769e0;
+    display:block;
+    margin-bottom:3px;
+}
+
+.cg-place{
+    color:#4c5870;
+}
+
+
+/* NOTE */
+.note{
+    margin-top:13px;
+    font-size:13px;
+    line-height:1.65;
+    color:#687386;
+}
+
+
+/* FOOTER */
+.footer{
+    text-align:center;
+    padding:22px;
+    color:#687386;
+    font-size:13px;
+}
+
+
+/* MOBILE */
+@media(max-width:500px){
+
+    .header h1{
+        font-size:23px;
+    }
+
+    .header .icon{
+        font-size:38px;
+    }
+
+    .card{
+        padding:16px;
+    }
+
+    .cg-list{
+        grid-template-columns:1fr;
+    }
+
+    .result-row{
+        align-items:flex-start;
+    }
+}
+</style>
+</head>
+
+
+<body>
+
+
+<!-- HEADER -->
+<div class="header">
+
+    <div class="icon">🚗</div>
+
+    <h1>Vehicle Number Finder</h1>
+
+    <p>
+        Vehicle Number से State और RTO की जानकारी देखें
+    </p>
+
+</div>
+
+
+
+<div class="container">
+
+
+<!-- SEARCH CARD -->
+<div class="card">
+
+    <h2>🔎 Vehicle Number डालें</h2>
+
+    <input
+        type="text"
+        id="vehicleNumber"
+        placeholder="जैसे CG17AB1234"
+        maxlength="15"
+        autocomplete="off"
+    >
+
+    <button onclick="findVehicle()">
+        🔍 Search करें
+    </button>
+
+
+    <!-- EXAMPLES -->
+    <div class="examples">
+
+        <div
+            class="example"
+            onclick="setExample('CG17AB1234')">
+            CG17AB1234
+        </div>
+
+        <div
+            class="example"
+            onclick="setExample('CG19AB1234')">
+            CG19AB1234
+        </div>
+
+        <div
+            class="example"
+            onclick="setExample('DL01AB1234')">
+            DL01AB1234
+        </div>
+
+    </div>
+
+
+    <!-- RESULT -->
+    <div
+        class="result"
+        id="result">
+    </div>
+
+
+    <p class="note">
+        ℹ️ यह tool vehicle registration number के
+        State और RTO code को पहचानने के लिए है।
+        यह वाहन मालिक की निजी जानकारी नहीं दिखाता।
+    </p>
+
+</div>
+
+
+
+<!-- HOW IT WORKS -->
+<div class="card">
+
+    <h2>📌 Vehicle Number कैसे समझें?</h2>
+
+    <p class="note">
+
+        उदाहरण:
+
+        <br><br>
+
+        <b>CG17AB1234</b>
+
+        <br><br>
+
+        <b>CG</b> = State Code
+
+        <br>
+
+        <b>17</b> = RTO Code
+
+        <br>
+
+        <b>AB1234</b> = Registration Number
+
+    </p>
+
+</div>
+
+
+
+<!-- CHHATTISGARH LIST -->
+<div class="card">
+
+    <h2>🇮🇳 छत्तीसगढ़ RTO Code List</h2>
+
+    <div class="cg-list" id="cgList"></div>
+
+</div>
+
+
+</div>
+
+
+
+<div class="footer">
+
+    © 2026 Tool Sathi
+
+    <br>
+
+    Vehicle Number Finder
+
+</div>
+
+
+
+<script>
+
+
+/* =====================================================
+   CHHATTISGARH RTO DATA
+   ===================================================== */
+
+const rtoData = {
+
+    "CG01": {
+        state:"छत्तीसगढ़",
+        rto:"छत्तीसगढ़ गवर्नर"
+    },
+
+    "CG02": {
+        state:"छत्तीसगढ़",
+        rto:"छत्तीसगढ़ शासन"
+    },
+
+    "CG03": {
+        state:"छत्तीसगढ़",
+        rto:"छत्तीसगढ़ पुलिस"
+    },
+
+    "CG04": {
+        state:"छत्तीसगढ़",
+        rto:"रायपुर"
+    },
+
+    "CG05": {
+        state:"छत्तीसगढ़",
+        rto:"धमतरी"
+    },
+
+    "CG06": {
+        state:"छत्तीसगढ़",
+        rto:"महासमुंद"
+    },
+
+    "CG07": {
+        state:"छत्तीसगढ़",
+        rto:"दुर्ग"
+    },
+
+    "CG08": {
+        state:"छत्तीसगढ़",
+        rto:"राजनांदगांव"
+    },
+
+    "CG09": {
+        state:"छत्तीसगढ़",
+        rto:"कवर्धा"
+    },
+
+    "CG10": {
+        state:"छत्तीसगढ़",
+        rto:"बिलासपुर"
+    },
+
+    "CG11": {
+        state:"छत्तीसगढ़",
+        rto:"जांजगीर-चांपा"
+    },
+
+    "CG12": {
+        state:"छत्तीसगढ़",
+        rto:"कोरबा"
+    },
+
+    "CG13": {
+        state:"छत्तीसगढ़",
+        rto:"रायगढ़"
+    },
+
+    "CG14": {
+        state:"छत्तीसगढ़",
+        rto:"जशपुर"
+    },
+
+    "CG15": {
+        state:"छत्तीसगढ़",
+        rto:"अंबिकापुर"
+    },
+
+    "CG16": {
+        state:"छत्तीसगढ़",
+        rto:"बैकुण्ठपुर"
+    },
+
+    "CG17": {
+        state:"छत्तीसगढ़",
+        rto:"जगदलपुर"
+    },
+
+    "CG18": {
+        state:"छत्तीसगढ़",
+        rto:"दन्तेवाड़ा"
+    },
+
+    "CG19": {
+        state:"छत्तीसगढ़",
+        rto:"कांकेर"
+    },
+
+    "CG20": {
+        state:"छत्तीसगढ़",
+        rto:"बीजापुर"
+    },
+
+    "CG21": {
+        state:"छत्तीसगढ़",
+        rto:"नारायणपुर"
+    },
+
+    "CG22": {
+        state:"छत्तीसगढ़",
+        rto:"बलौदाबाजार"
+    },
+
+    "CG23": {
+        state:"छत्तीसगढ़",
+        rto:"गरियाबंद"
+    },
+
+    "CG24": {
+        state:"छत्तीसगढ़",
+        rto:"बालोद"
+    },
+
+    "CG25": {
+        state:"छत्तीसगढ़",
+        rto:"बेमेतरा"
+    },
+
+    "CG26": {
+        state:"छत्तीसगढ़",
+        rto:"शुकमा"
+    },
+
+    "CG27": {
+        state:"छत्तीसगढ़",
+        rto:"कोंडागांव"
+    },
+
+    "CG28": {
+        state:"छत्तीसगढ़",
+        rto:"मुंगेली"
+    },
+
+    "CG29": {
+        state:"छत्तीसगढ़",
+        rto:"सूरजपुर"
+    },
+
+    "CG30": {
+        state:"छत्तीसगढ़",
+        rto:"बलरामपुर"
+    }
+
+};
+
+
+
+/* =====================================================
+   INDIA STATE CODES
+   ===================================================== */
+
+const stateCodes = {
+
+    "AN":"अंडमान और निकोबार द्वीप समूह",
+
+    "AP":"आंध्र प्रदेश",
+
+    "AR":"अरुणाचल प्रदेश",
+
+    "AS":"असम",
+
+    "BR":"बिहार",
+
+    "CH":"चंडीगढ़",
+
+    "CG":"छत्तीसगढ़",
+
+    "DD":"दमन और दीव",
+
+    "DL":"दिल्ली",
+
+    "DN":"दादरा और नगर हवेली",
+
+    "GA":"गोवा",
+
+    "GJ":"गुजरात",
+
+    "HR":"हरियाणा",
+
+    "HP":"हिमाचल प्रदेश",
+
+    "JK":"जम्मू और कश्मीर",
+
+    "JH":"झारखंड",
+
+    "KA":"कर्नाटक",
+
+    "KL":"केरल",
+
+    "LA":"लद्दाख",
+
+    "LD":"लक्षद्वीप",
+
+    "MP":"मध्य प्रदेश",
+
+    "MH":"महाराष्ट्र",
+
+    "MN":"मणिपुर",
+
+    "ML":"मेघालय",
+
+    "MZ":"मिजोरम",
+
+    "NL":"नागालैंड",
+
+    "OD":"ओडिशा",
+
+    "OR":"ओडिशा",
+
+    "PB":"पंजाब",
+
+    "PY":"पुडुचेरी",
+
+    "RJ":"राजस्थान",
+
+    "SK":"सिक्किम",
+
+    "TN":"तमिलनाडु",
+
+    "TS":"तेलंगाना",
+
+    "TR":"त्रिपुरा",
+
+    "UK":"उत्तराखंड",
+
+    "UP":"उत्तर प्रदेश",
+
+    "WB":"पश्चिम बंगाल"
+
+};
+
+
+
+/* =====================================================
+   SEARCH VEHICLE
+   ===================================================== */
+
+function findVehicle(){
+
+    let input =
+        document
+        .getElementById("vehicleNumber")
+        .value
+        .toUpperCase()
+        .replace(/[\s-]/g,"");
+
+
+    let result =
+        document.getElementById("result");
+
+
+    result.style.display = "block";
+
+
+    /* Minimum length */
+
+    if(input.length < 4){
+
+        result.innerHTML =
+        `
+        <div class="error">
+            ⚠️ कृपया सही Vehicle Number डालें
+        </div>
+        `;
+
+        return;
+    }
+
+
+    /* First 2 letters */
+
+    let stateCode =
+        input.substring(0,2);
+
+
+    /* First 4 characters */
+
+    let rtoCode =
+        input.substring(0,4);
+
+
+    /* Check state */
+
+    let state =
+        stateCodes[stateCode];
+
+
+    if(!state){
+
+        result.innerHTML =
+        `
+        <div class="error">
+            ❌ State Code नहीं मिला
+        </div>
+        `;
+
+        return;
+    }
+
+
+    /* Check RTO */
+
+    let rto =
+        rtoData[rtoCode];
+
+
+    /* RTO FOUND */
+
+    if(rto){
+
+        result.innerHTML =
+
+        `
+        <div class="success">
+            ✅ जानकारी मिली
+        </div>
+
+        <div class="result-row">
+
+            <span class="label">
+                🚗 Vehicle Number
+            </span>
+
+            <span class="value">
+                ${input}
+            </span>
+
+        </div>
+
+
+        <div class="result-row">
+
+            <span class="label">
+                🇮🇳 State
+            </span>
+
+            <span class="value">
+                ${rto.state}
+            </span>
+
+        </div>
+
+
+        <div class="result-row">
+
+            <span class="label">
+                🔢 RTO Code
+            </span>
+
+            <span class="value">
+                ${stateCode}-${input.substring(2,4)}
+            </span>
+
+        </div>
+
+
+        <div class="result-row">
+
+            <span class="label">
+                📍 RTO / स्थान
+            </span>
+
+            <span class="value">
+                ${rto.rto}
+            </span>
+
+        </div>
+        `;
+
+    }
+
+
+    /* STATE FOUND BUT RTO NOT IN DATABASE */
+
+    else{
+
+        result.innerHTML =
+
+        `
+        <div class="success">
+            ℹ️ State Code मिला
+        </div>
+
+
+        <div class="result-row">
+
+            <span class="label">
+                🚗 Vehicle Number
+            </span>
+
+            <span class="value">
+                ${input}
+            </span>
+
+        </div>
+
+
+        <div class="result-row">
+
+            <span class="label">
+                🇮🇳 State
+            </span>
+
+            <span class="value">
+                ${state}
+            </span>
+
+        </div>
+
+
+        <div class="result-row">
+
+            <span class="label">
+                🔢 RTO Code
+            </span>
+
+            <span class="value">
+                ${stateCode}-${input.substring(2,4)}
+            </span>
+
+        </div>
+
+
+        <p class="note">
+
+            इस RTO code का स्थान अभी database में
+            उपलब्ध नहीं है।
+
+        </p>
+        `;
+    }
+
+}
+
+
+
+/* =====================================================
+   EXAMPLE BUTTON
+   ===================================================== */
+
+function setExample(number){
+
+    document
+    .getElementById("vehicleNumber")
+    .value = number;
+
+    findVehicle();
+
+}
+
+
+
+/* =====================================================
+   ENTER KEY
+   ===================================================== */
+
+document
+.getElementById("vehicleNumber")
+.addEventListener("keydown",function(event){
+
+    if(event.key === "Enter"){
+
+        findVehicle();
+
+    }
+
+});
+
+
+
+/* =====================================================
+   SHOW CG LIST
+   ===================================================== */
+
+function showCGList(){
+
+    let list =
+        document.getElementById("cgList");
+
+
+    Object.keys(rtoData).forEach(function(code){
+
+        let data =
+            rtoData[code];
+
+
+        let item =
+            document.createElement("div");
+
+
+        item.className =
+            "cg-item";
+
+
+        item.innerHTML =
+
+        `
+        <span class="cg-code">
+            ${code.substring(0,2)}-${code.substring(2,4)}
+        </span>
+
+        <span class="cg-place">
+            ${data.rto}
+        </span>
+        `;
+
+
+        list.appendChild(item);
+
+    });
+
+}
+
+
+/* RUN LIST */
+
+showCGList();
+
+</script>
+
+</body>
+</html>
