@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Land Area Converter | Tool Sathi</title>
+
+<style>
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+}
+
+body{
+    font-family:Arial,"Noto Sans Devanagari",sans-serif;
+    background:linear-gradient(135deg,#eef5ff,#fdf2ff,#edfff7);
+    color:#172033;
+    min-height:100vh;
+}
+
+.header{
+    background:linear-gradient(135deg,#1769e0,#7538e8);
+    color:white;
+    padding:22px 15px;
+    text-align:center;
+    box-shadow:0 5px 20px rgba(0,0,0,.15);
+}
+
+.header h1{
+    font-size:26px;
+    margin-bottom:6px;
+}
+
+.header p{
+    font-size:14px;
+    opacity:.95;
+}
+
+.container{
+    width:94%;
+    max-width:700px;
+    margin:20px auto;
+}
+
+.card{
+    background:white;
+    border-radius:20px;
+    padding:20px;
+    margin-bottom:18px;
+    box-shadow:0 8px 25px rgba(31,45,61,.10);
+}
+
+.card h2{
+    font-size:20px;
+    margin-bottom:15px;
+    color:#1769e0;
+}
+
+label{
+    display:block;
+    font-weight:bold;
+    margin:12px 0 7px;
+}
+
+input,select{
+    width:100%;
+    padding:13px;
+    border:2px solid #dce5f5;
+    border-radius:12px;
+    font-size:16px;
+    outline:none;
+    background:#fafcff;
+}
+
+input:focus,select:focus{
+    border-color:#1769e0;
+}
+
+button{
+    width:100%;
+    border:0;
+    padding:14px;
+    margin-top:15px;
+    border-radius:13px;
+    background:linear-gradient(135deg,#1769e0,#7538e8);
+    color:white;
+    font-size:17px;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+button:active{
+    transform:scale(.98);
+}
+
+.result{
+    margin-top:16px;
+    padding:16px;
+    border-radius:14px;
+    background:#eef7ff;
+    border:2px solid #cfe4ff;
+    text-align:center;
+    font-size:18px;
+    font-weight:bold;
+    color:#1557a6;
+    display:none;
+}
+
+.note{
+    font-size:13px;
+    line-height:1.6;
+    color:#596579;
+    margin-top:10px;
+}
+
+.footer{
+    text-align:center;
+    padding:20px;
+    font-size:13px;
+    color:#687386;
+}
+
+/* छोटे स्क्रीन के लिए */
+@media(max-width:450px){
+    .header h1{
+        font-size:23px;
+    }
+
+    .card{
+        padding:16px;
+    }
+
+    .card h2{
+        font-size:18px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="header">
+    <h1>🌾 Land Area Converter</h1>
+    <p>जमीन की माप आसानी से Convert करें</p>
+</div>
+
+<div class="container">
+
+    <!-- AREA CONVERTER -->
+    <div class="card">
+        <h2>🔄 Area Converter</h2>
+
+        <label>कितनी जमीन है?</label>
+        <input type="number" id="amount" placeholder="जैसे 1" step="any">
+
+        <label>From</label>
+        <select id="fromUnit">
+            <option value="dismil">Dismil / डिसमिल</option>
+            <option value="acre">Acre / एकड़</option>
+            <option value="hectare">Hectare / हेक्टेयर</option>
+            <option value="sqft">Square Feet / वर्ग फुट</option>
+            <option value="sqin">Square Inch / वर्ग इंच</option>
+            <option value="sqm">Square Meter / वर्ग मीटर</option>
+        </select>
+
+        <label>To</label>
+        <select id="toUnit">
+            <option value="dismil">Dismil / डिसमिल</option>
+            <option value="acre">Acre / एकड़</option>
+            <option value="hectare">Hectare / हेक्टेयर</option>
+            <option value="sqft">Square Feet / वर्ग फुट</option>
+            <option value="sqin">Square Inch / वर्ग इंच</option>
+            <option value="sqm">Square Meter / वर्ग मीटर</option>
+        </select>
+
+        <button onclick="convertArea()">🔄 Convert करें</button>
+
+        <div class="result" id="areaResult"></div>
+    </div>
+
+
+    <!-- FEET AREA -->
+    <div class="card">
+        <h2>📐 Length × Width से Dismil</h2>
+
+        <label>लंबाई (Feet)</label>
+        <input type="number" id="lengthFt" placeholder="जैसे 50" step="any">
+
+        <label>चौड़ाई (Feet)</label>
+        <input type="number" id="widthFt" placeholder="जैसे 30" step="any">
+
+        <button onclick="feetToDismil()">🌾 Dismil निकालें</button>
+
+        <div class="result" id="feetResult"></div>
+
+        <p class="note">
+            उदाहरण: 50 Feet × 30 Feet = 1500 Square Feet
+            <br>
+            फिर उसे Dismil में बदला जाएगा।
+        </p>
+    </div>
+
+
+    <!-- FEET + INCH -->
+    <div class="card">
+        <h2>📏 Feet + Inch से Area</h2>
+
+        <label>लंबाई - Feet</label>
+        <input type="number" id="lFeet" placeholder="जैसे 50" step="any">
+
+        <label>लंबाई - Inch</label>
+        <input type="number" id="lInch" placeholder="जैसे 6" step="any">
+
+        <label>चौड़ाई - Feet</label>
+        <input type="number" id="wFeet" placeholder="जैसे 30" step="any">
+
+        <label>चौड़ाई - Inch</label>
+        <input type="number" id="wInch" placeholder="जैसे 3" step="any">
+
+        <button onclick="feetInchArea()">📐 Area निकालें</button>
+
+        <div class="result" id="inchResult"></div>
+    </div>
+
+
+    <!-- QUICK INFORMATION -->
+    <div class="card">
+        <h2>📚 Quick Conversion</h2>
+
+        <p class="note">
+            <b>1 Dismil = 435.6 Square Feet</b><br>
+            <b>1 Acre = 100 Dismil</b><br>
+            <b>1 Hectare = 247.105 Dismil</b><br>
+            <b>1 Square Meter ≈ 0.107639 Dismil</b><br>
+            <b>1 Square Foot = 144 Square Inch</b>
+        </p>
+    </div>
+
+</div>
+
+<div class="footer">
+    © 2026 Tool Sathi • Land Area Converter
+</div>
+
+
+<script>
+
+/* 
+   सभी units को Square Feet में रखा गया है।
+   1 Dismil = 435.6 Sq Ft
+*/
+
+const units = {
+    dismil: 435.6,
+    acre: 43560,
+    hectare: 107639.104,
+    sqft: 1,
+    sqin: 1 / 144,
+    sqm: 10.7639104167
+};
+
+
+/* AREA CONVERTER */
+function convertArea(){
+
+    let amount = parseFloat(document.getElementById("amount").value);
+
+    let from = document.getElementById("fromUnit").value;
+    let to = document.getElementById("toUnit").value;
+
+    let resultBox = document.getElementById("areaResult");
+
+    if(isNaN(amount)){
+        resultBox.style.display = "block";
+        resultBox.innerHTML = "⚠️ कृपया संख्या डालें";
+        return;
+    }
+
+    // पहले Square Feet
+    let squareFeet = amount * units[from];
+
+    // फिर target unit
+    let result = squareFeet / units[to];
+
+    resultBox.style.display = "block";
+
+    resultBox.innerHTML =
+        "✅ परिणाम<br><br>" +
+        amount + " " + getName(from) +
+        " = <b>" + formatNumber(result) +
+        " " + getName(to) + "</b>";
+}
+
+
+/* FEET × FEET */
+function feetToDismil(){
+
+    let length = parseFloat(document.getElementById("lengthFt").value);
+    let width = parseFloat(document.getElementById("widthFt").value);
+
+    let resultBox = document.getElementById("feetResult");
+
+    if(isNaN(length) || isNaN(width)){
+        resultBox.style.display = "block";
+        resultBox.innerHTML = "⚠️ लंबाई और चौड़ाई दोनों डालें";
+        return;
+    }
+
+    let sqft = length * width;
+    let dismil = sqft / 435.6;
+
+    resultBox.style.display = "block";
+
+    resultBox.innerHTML =
+        "📐 कुल Area = <b>" +
+        formatNumber(sqft) +
+        " Square Feet</b><br><br>" +
+
+        "🌾 = <b>" +
+        formatNumber(dismil) +
+        " Dismil</b>";
+}
+
+
+/* FEET + INCH */
+function feetInchArea(){
+
+    let lf = parseFloat(document.getElementById("lFeet").value) || 0;
+    let li = parseFloat(document.getElementById("lInch").value) || 0;
+
+    let wf = parseFloat(document.getElementById("wFeet").value) || 0;
+    let wi = parseFloat(document.getElementById("wInch").value) || 0;
+
+    let resultBox = document.getElementById("inchResult");
+
+    if(lf === 0 && li === 0 || wf === 0 && wi === 0){
+        resultBox.style.display = "block";
+        resultBox.innerHTML = "⚠️ लंबाई और चौड़ाई डालें";
+        return;
+    }
+
+    // Inches को Feet में convert
+    let length = lf + (li / 12);
+    let width = wf + (wi / 12);
+
+    let sqft = length * width;
+    let dismil = sqft / 435.6;
+
+    resultBox.style.display = "block";
+
+    resultBox.innerHTML =
+        "📏 लंबाई = <b>" +
+        formatNumber(length) +
+        " Feet</b><br>" +
+
+        "📏 चौड़ाई = <b>" +
+        formatNumber(width) +
+        " Feet</b><br><br>" +
+
+        "📐 Area = <b>" +
+        formatNumber(sqft) +
+        " Square Feet</b><br><br>" +
+
+        "🌾 Area = <b>" +
+        formatNumber(dismil) +
+        " Dismil</b>";
+}
+
+
+/* UNIT NAME */
+function getName(unit){
+
+    const names = {
+        dismil:"Dismil",
+        acre:"Acre",
+        hectare:"Hectare",
+        sqft:"Square Feet",
+        sqin:"Square Inch",
+        sqm:"Square Meter"
+    };
+
+    return names[unit];
+}
+
+
+/* DECIMAL FORMAT */
+function formatNumber(num){
+
+    return Number(num.toFixed(6)).toLocaleString("en-IN");
+}
+
+</script>
+
+</body>
+</html>
